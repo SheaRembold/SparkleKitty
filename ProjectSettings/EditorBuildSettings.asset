@@ -6,5 +6,5 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Mapbox/Examples/2_LocationProvider/LocationProvider.unity
-    guid: 69bd9826e5ce64552aae5bf0f4e3dc81
+    path: Assets/Scenes/ARTest.unity
+    guid: ad10ded6d1adf7547a78e1c347646862
