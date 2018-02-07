@@ -8,4 +8,4 @@ An AR cat collecting game.
 - Put things in correct folders.
 - Contact Shea.
 
-** More datail to come coming soon.
+**More detail to come coming soon.**
