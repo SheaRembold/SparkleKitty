@@ -7,6 +7,7 @@ Confidential and Proprietary - Protected under copyright and other laws.
 ==============================================================================*/
 
 using UnityEngine;
+#if VUFORIA
 using Vuforia;
 
 /// <summary>
@@ -14,7 +15,7 @@ using Vuforia;
 /// </summary>
 public class DefaultInitializationErrorHandler : MonoBehaviour
 {
-    #region Vuforia_lifecycle_events
+#region Vuforia_lifecycle_events
 
     public void OnVuforiaInitializationError(VuforiaUnity.InitError initError)
     {
@@ -25,9 +26,9 @@ public class DefaultInitializationErrorHandler : MonoBehaviour
         }
     }
 
-    #endregion // Vuforia_lifecycle_events
+#endregion // Vuforia_lifecycle_events
 
-    #region PRIVATE_MEMBER_VARIABLES
+#region PRIVATE_MEMBER_VARIABLES
 
     string mErrorText = "";
     bool mErrorOccurred;
@@ -42,9 +43,9 @@ public class DefaultInitializationErrorHandler : MonoBehaviour
     Texture2D headerTexture;
     Texture2D footerTexture;
 
-    #endregion // PRIVATE_MEMBER_VARIABLES
+#endregion // PRIVATE_MEMBER_VARIABLES
 
-    #region UNTIY_MONOBEHAVIOUR_METHODS
+#region UNTIY_MONOBEHAVIOUR_METHODS
 
     void Awake()
     {
@@ -72,9 +73,9 @@ public class DefaultInitializationErrorHandler : MonoBehaviour
         VuforiaRuntime.Instance.UnregisterVuforiaInitErrorCallback(OnVuforiaInitializationError);
     }
 
-    #endregion // UNTIY_MONOBEHAVIOUR_METHODS
+#endregion // UNTIY_MONOBEHAVIOUR_METHODS
 
-    #region PRIVATE_METHODS
+#region PRIVATE_METHODS
 
     void DrawWindowContent(int id)
     {
@@ -89,7 +90,7 @@ public class DefaultInitializationErrorHandler : MonoBehaviour
         {
 #if UNITY_EDITOR
                     UnityEditor.EditorApplication.isPlaying = false;
-    #else
+#else
             Application.Quit();
 #endif
         }
@@ -233,5 +234,6 @@ public class DefaultInitializationErrorHandler : MonoBehaviour
         return texture;
     }
 
-    #endregion // PRIVATE_METHODS
+#endregion // PRIVATE_METHODS
 }
+#endif

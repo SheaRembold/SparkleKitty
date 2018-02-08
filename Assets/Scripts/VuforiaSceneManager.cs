@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if VUFORIA
 using Vuforia;
 
-public class VuforiaSceneManager : SceneManager
+public class VuforiaSceneManager : SceneController
 {
     public override bool PlaceInScene(GameObject obj)
     {
@@ -14,12 +15,12 @@ public class VuforiaSceneManager : SceneManager
     }
     
 
-    #region PUBLIC_MEMBERS
+#region PUBLIC_MEMBERS
     public PlaneFinderBehaviour m_PlaneFinder;
-    #endregion // PUBLIC_MEMBERS
+#endregion // PUBLIC_MEMBERS
 
 
-    #region PRIVATE_MEMBERS
+#region PRIVATE_MEMBERS
     GameObject m_PlaneAugmentation;
     PositionalDeviceTracker positionalDeviceTracker;
     ContentPositioningBehaviour contentPositioningBehaviour;
@@ -28,10 +29,10 @@ public class VuforiaSceneManager : SceneManager
     StateManager stateManager;
     Camera mainCamera;
     int AutomaticHitTestFrameCount;
-    #endregion // PRIVATE_MEMBERS
+#endregion // PRIVATE_MEMBERS
 
 
-    #region MONOBEHAVIOUR_METHODS
+#region MONOBEHAVIOUR_METHODS
 
     void Start()
     {
@@ -66,9 +67,9 @@ public class VuforiaSceneManager : SceneManager
         DeviceTrackerARController.Instance.UnregisterDevicePoseStatusChangedCallback(OnDevicePoseStatusChanged);
     }
 
-    #endregion // MONOBEHAVIOUR_METHODS
+#endregion // MONOBEHAVIOUR_METHODS
 
-    #region VUFORIA_CALLBACKS
+#region VUFORIA_CALLBACKS
 
     void OnVuforiaStarted()
     {
@@ -82,10 +83,10 @@ public class VuforiaSceneManager : SceneManager
         Debug.Log("OnVuforiaPaused(" + paused.ToString() + ") called.");
     }
 
-    #endregion // VUFORIA_CALLBACKS
+#endregion // VUFORIA_CALLBACKS
 
 
-    #region PRIVATE_METHODS
+#region PRIVATE_METHODS
 
     void SetSurfaceIndicatorVisible(bool isVisible)
     {
@@ -139,9 +140,9 @@ public class VuforiaSceneManager : SceneManager
         augmentation.transform.rotation = rotation;
     }
 
-    #endregion // PRIVATE_METHODS
+#endregion // PRIVATE_METHODS
 
-    #region PUBLIC_METHODS
+#region PUBLIC_METHODS
 
     public void HandleAutomaticHitTest(HitTestResult result)
     {
@@ -179,10 +180,10 @@ public class VuforiaSceneManager : SceneManager
         RotateTowardCamera(m_PlaneAugmentation);
     }
     
-    #endregion // PUBLIC_METHODS
+#endregion // PUBLIC_METHODS
 
 
-    #region DEVICE_TRACKER_CALLBACKS
+#region DEVICE_TRACKER_CALLBACKS
 
     void OnTrackerStarted()
     {
@@ -204,5 +205,6 @@ public class VuforiaSceneManager : SceneManager
         Debug.Log("OnDevicePoseStatusChanged(" + status.ToString() + ")");
     }
 
-    #endregion // DEVICE_TRACKER_CALLBACK_METHODS
+#endregion // DEVICE_TRACKER_CALLBACK_METHODS
 }
+#endif

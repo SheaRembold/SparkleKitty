@@ -9,6 +9,7 @@ countries.
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+#if VUFORIA
 using Vuforia;
 using Vuforia.EditorClasses;
 
@@ -63,3 +64,4 @@ public static class OpenSourceInitializer
         }
     }
 }
+#endif

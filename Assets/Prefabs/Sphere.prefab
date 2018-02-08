@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33813256144573838}
   - component: {fileID: 135271127228692322}
   - component: {fileID: 23688142197106162}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,7 +37,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4524157197217594}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}

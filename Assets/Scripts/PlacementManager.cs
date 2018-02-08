@@ -1,28 +1,45 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlacementManager : MonoBehaviour
 {
     public static PlacementManager Instance;
+    public GameObject PlayArea;
     public TestSceneManager TestScene;
+    public ARSceneManager ARScene;
+#if VUFORIA
     public VuforiaSceneManager VuforiaScene;
-    SceneManager sceneManager;
+#endif
+    SceneController sceneManager;
     GameObject currentPlacing;
     Vector3? lastPos;
     bool placed;
+    bool placingArea = true;
 
     private void Awake()
     {
         Instance = this;
 #if UNITY_EDITOR
         sceneManager = TestScene;
+        ARScene.gameObject.SetActive(false);
+#if VUFORIA
         VuforiaScene.gameObject.SetActive(false);
+#endif
         TestScene.gameObject.SetActive(true);
-#else
+#elif VUFORIA
         sceneManager = VuforiaScene;
         TestScene.gameObject.SetActive(false);
+        ARScene.gameObject.SetActive(false);
         VuforiaScene.gameObject.SetActive(true);
+#else
+        sceneManager = ARScene;
+        TestScene.gameObject.SetActive(false);
+#if VUFORIA
+        VuforiaScene.gameObject.SetActive(false);
+#endif
+        ARScene.gameObject.SetActive(true);
 #endif
     }
 
@@ -47,7 +64,27 @@ public class PlacementManager : MonoBehaviour
 
     void Update()
     {
-        if (currentPlacing == null)
+        if (placingArea)
+        {
+            UnityARInterface.BoundedPlane plane;
+            if (sceneManager.GetPlane(out plane))
+            {
+                PlayArea.transform.position = plane.center;
+                PlayArea.transform.rotation = plane.rotation;
+                float scale = Mathf.Min(1f, plane.extents.x, plane.extents.y);
+                PlayArea.transform.localScale = Vector3.one * scale;
+                PlayArea.SetActive(true);
+                if (Input.GetMouseButtonDown(0))
+                {
+                    placingArea = false;
+                }
+            }
+            else
+            {
+                PlayArea.SetActive(false);
+            }
+        }
+        else if (currentPlacing == null)
         {
             if (Input.GetMouseButtonDown(0))
             {

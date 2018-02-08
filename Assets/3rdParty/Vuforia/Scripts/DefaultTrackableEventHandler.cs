@@ -7,6 +7,7 @@ Confidential and Proprietary - Protected under copyright and other laws.
 ==============================================================================*/
 
 using UnityEngine;
+#if VUFORIA
 using Vuforia;
 
 /// <summary>
@@ -14,13 +15,13 @@ using Vuforia;
 /// </summary>
 public class DefaultTrackableEventHandler : MonoBehaviour, ITrackableEventHandler
 {
-    #region PRIVATE_MEMBER_VARIABLES
+#region PRIVATE_MEMBER_VARIABLES
 
     protected TrackableBehaviour mTrackableBehaviour;
 
-    #endregion // PRIVATE_MEMBER_VARIABLES
+#endregion // PRIVATE_MEMBER_VARIABLES
 
-    #region UNTIY_MONOBEHAVIOUR_METHODS
+#region UNTIY_MONOBEHAVIOUR_METHODS
 
     protected virtual void Start()
     {
@@ -29,9 +30,9 @@ public class DefaultTrackableEventHandler : MonoBehaviour, ITrackableEventHandle
             mTrackableBehaviour.RegisterTrackableEventHandler(this);
     }
 
-    #endregion // UNTIY_MONOBEHAVIOUR_METHODS
+#endregion // UNTIY_MONOBEHAVIOUR_METHODS
 
-    #region PUBLIC_METHODS
+#region PUBLIC_METHODS
 
     /// <summary>
     ///     Implementation of the ITrackableEventHandler function called when the
@@ -63,9 +64,9 @@ public class DefaultTrackableEventHandler : MonoBehaviour, ITrackableEventHandle
         }
     }
 
-    #endregion // PUBLIC_METHODS
+#endregion // PUBLIC_METHODS
 
-    #region PRIVATE_METHODS
+#region PRIVATE_METHODS
 
     protected virtual void OnTrackingFound()
     {
@@ -106,5 +107,6 @@ public class DefaultTrackableEventHandler : MonoBehaviour, ITrackableEventHandle
             component.enabled = false;
     }
 
-    #endregion // PRIVATE_METHODS
+#endregion // PRIVATE_METHODS
 }
+#endif
