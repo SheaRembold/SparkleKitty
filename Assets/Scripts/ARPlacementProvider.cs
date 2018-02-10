@@ -3,20 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityARInterface;
 
-public class ARSceneManager : SceneController
+public class ARPlacementProvider : PlacementProvider
 {
-    public override bool PlaceInScene(GameObject obj)
+    public ARPlacementProvider()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Ground")))
-        {
-            obj.transform.position = hit.point;
-            obj.transform.rotation = hit.transform.rotation;
-            obj.transform.localScale = hit.transform.parent.localScale;
-            return true;
-        }
-
-        return false;
+        GameObject obj = GameObject.Instantiate(Resources.Load<GameObject>("ARScene"));
     }
 
     public override bool GetPlane(out BoundedPlane plane)
@@ -29,6 +20,7 @@ public class ARSceneManager : SceneController
             return true;
         }
 
-        return base.GetPlane(out plane);
+        plane = new BoundedPlane();
+        return false;
     }
 }
