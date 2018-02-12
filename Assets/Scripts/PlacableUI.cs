@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class PlacableUI : MonoBehaviour
 {
-    public Transform ContentParent;
+    public RectTransform ContentParent;
     public GameObject PlacableButtonPrefab;
     public PlacableData[] Placables;
 
@@ -18,5 +18,7 @@ public class PlacableUI : MonoBehaviour
             (obj.transform as RectTransform).anchoredPosition = new Vector2(200 * i + 100, 0);
             obj.GetComponent<PlacableButton>().SetPlacable(Placables[i]);
         }
+        ContentParent.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 200 * Placables.Length - 1000);
+        ContentParent.anchoredPosition = Vector2.zero;
     }
 }

@@ -9,7 +9,7 @@ public class TestPlacementProvider : PlacementProvider
     {
         GameObject obj = GameObject.Instantiate(Resources.Load<GameObject>("TestScene"));
     }
-
+    
     public override bool GetPlane(out BoundedPlane plane)
     {
         RaycastHit hit;

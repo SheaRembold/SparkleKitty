@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de8f34063753e8d42ad4ae36f1ddf9cf, type: 3}
+  m_Name: TabbyCat
+  m_EditorClassIdentifier: 
+  Name: Tabby Cat
+  Prefab: {fileID: 1106871712860804, guid: 42d48003e195e274680b98c080d35e5a, type: 2}
+  RequiredTowerType: 1
+  RequiredTowerLevel: 2
+  OtherRequirements:
+  - {fileID: 11400000, guid: 8e9819dafa0d5374e950f02404ff2251, type: 2}
+  - {fileID: 11400000, guid: 7eca27cb3845b4542acd4890a770279c, type: 2}

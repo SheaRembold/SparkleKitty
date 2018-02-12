@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93e18d950f74e3949a677fe4ce3e1e1c, type: 3}
+  m_Name: BasicKibble
+  m_EditorClassIdentifier: 
+  Name: Basic Kibble
+  Prefab: {fileID: 1299546934261784, guid: c6f2b787bb198414e93c99c9610394aa, type: 2}
+  BuildRequirements:
+  - {fileID: 11400000, guid: 16447e4cce6384b469fe5697c93bc7d5, type: 2}
+  - {fileID: 11400000, guid: 16447e4cce6384b469fe5697c93bc7d5, type: 2}
+  - {fileID: 11400000, guid: 846eafd11b1502d4eb9fcd599f106779, type: 2}

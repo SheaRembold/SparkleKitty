@@ -6,10 +6,20 @@ using UnityEngine.UI;
 public class PlacementManager : MonoBehaviour
 {
     public static PlacementManager Instance;
-    public GameObject PlayAreaPrefab;
+
+    public delegate void OnPlaced(Placable placable);
+    public OnPlaced onPlaced;
+    public delegate void OnMoved(Placable placable);
+    public OnMoved onMoved;
+    public delegate void OnRemoved(Placable placable);
+    public OnMoved onRemoved;
+
+    [SerializeField]
+    GameObject PlayAreaPrefab;
+
     GameObject playArea;
-    PlacementProvider sceneManager;
-    GameObject currentPlacing;
+    PlacementProvider provider;
+    Placable currentPlacing;
     Vector3? lastPos;
     bool placed;
     bool placingArea = true;
@@ -18,11 +28,11 @@ public class PlacementManager : MonoBehaviour
     {
         Instance = this;
 #if UNITY_EDITOR
-        sceneManager = new TestPlacementProvider();
+        provider = new TestPlacementProvider();
 #elif VUFORIA
-        sceneManager = new VuforiaPlacementProvider();
+        provider = new VuforiaPlacementProvider();
 #else
-        sceneManager = new ARPlacementProvider();
+        provider = new ARPlacementProvider();
 #endif
     }
 
@@ -33,7 +43,8 @@ public class PlacementManager : MonoBehaviour
 
     public void StartPlacing(PlacableData placable)
     {
-        currentPlacing = Instantiate(placable.Prefab);
+        currentPlacing = Instantiate(placable.Prefab).GetComponent<Placable>();
+        currentPlacing.Data = placable;
         lastPos = null;
         PlaceCurrent();
     }
@@ -63,7 +74,7 @@ public class PlacementManager : MonoBehaviour
         if (placingArea)
         {
             UnityARInterface.BoundedPlane plane;
-            if (sceneManager.GetPlane(out plane))
+            if (provider.GetPlane(out plane))
             {
                 playArea.transform.position = plane.center;
                 playArea.transform.rotation = plane.rotation;
@@ -73,6 +84,7 @@ public class PlacementManager : MonoBehaviour
                 if (Input.GetMouseButtonDown(0))
                 {
                     placingArea = false;
+                    UIManager.Instance.ResetToMainUI();
                 }
             }
             else
@@ -87,7 +99,7 @@ public class PlacementManager : MonoBehaviour
                 RaycastHit hit;
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Placable")))
                 {
-                    currentPlacing = hit.transform.root.gameObject;
+                    currentPlacing = hit.transform.root.GetComponent<Placable>();
                     lastPos = currentPlacing.transform.position;
                 }
             }
@@ -100,7 +112,20 @@ public class PlacementManager : MonoBehaviour
             }
             else
             {
-                if (!placed)
+                if (placed)
+                {
+                    if (lastPos.HasValue)
+                    {
+                        if (onMoved != null)
+                            onMoved(currentPlacing);
+                    }
+                    else
+                    {
+                        if (onPlaced != null)
+                            onPlaced(currentPlacing);
+                    }
+                }
+                else
                 {
                     if (lastPos.HasValue)
                         currentPlacing.transform.position = lastPos.Value;

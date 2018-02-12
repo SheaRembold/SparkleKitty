@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e0f7b2da4c80c419c5bb1418fd7f42, type: 3}
+  m_Name: CardboardTower3
+  m_EditorClassIdentifier: 
+  Name: Cardboard Tower 3
+  Prefab: {fileID: 1088473405056456, guid: 94c65fbc5a4b60940a960f3957532bdd, type: 2}
+  BuildRequirements: []
+  MaterialType: 1
+  Level: 3
+  UpgradeRequirements:
+  - {fileID: 11400000, guid: e1f67c4d836710b4cb0d538e1cb790f9, type: 2}
+  - {fileID: 11400000, guid: e1f67c4d836710b4cb0d538e1cb790f9, type: 2}
+  Ugrade: {fileID: 11400000, guid: 1b1cb341c23e76840820497a4c10c49d, type: 2}
