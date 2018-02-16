@@ -775,6 +775,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 365429563}
+  - component: {fileID: 365429565}
   - component: {fileID: 365429562}
   - component: {fileID: 365429564}
   m_Layer: 0
@@ -823,6 +824,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingInArea: []
   startingInventory: []
+--- !u!114 &365429565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 365429561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 594aacb0a38edbf40bc6bc6abc1e349d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Cats:
+  - {fileID: 11400000, guid: 4c232766767050448934bf826d836a4f, type: 2}
+  - {fileID: 11400000, guid: 297963d93e0254b498f3d79171eef67d, type: 2}
+  Towers:
+  - {fileID: 11400000, guid: 27b93504ea182e240b5d6a89b34e5817, type: 2}
+  - {fileID: 11400000, guid: e87ccd300ee987044b6a2a5b1b145447, type: 2}
+  - {fileID: 11400000, guid: 0a1686a42d5da584aaf4b750ecbcd530, type: 2}
+  - {fileID: 11400000, guid: 1b1cb341c23e76840820497a4c10c49d, type: 2}
+  - {fileID: 11400000, guid: 587df912c048d514196c0cb77b7c0220, type: 2}
+  Toys:
+  - {fileID: 11400000, guid: 7eca27cb3845b4542acd4890a770279c, type: 2}
+  - {fileID: 11400000, guid: 4e432c76d712eaf4bbf61786ecc32b1e, type: 2}
+  Treats:
+  - {fileID: 11400000, guid: 8e9819dafa0d5374e950f02404ff2251, type: 2}
+  - {fileID: 11400000, guid: db4792c77108bb64293e0aabb11c858f, type: 2}
+  Components:
+  - {fileID: 11400000, guid: e1f67c4d836710b4cb0d538e1cb790f9, type: 2}
+  - {fileID: 11400000, guid: 45205ae5da1979e419e860c21625fdd1, type: 2}
+  - {fileID: 11400000, guid: db54f92e652b01f4dbe5df8633a42d6d, type: 2}
+  - {fileID: 11400000, guid: c37f3da60a4aba04e9f942dcad924c67, type: 2}
+  - {fileID: 11400000, guid: de47dd02f39edc94daa0ac1b27d7939c, type: 2}
+  - {fileID: 11400000, guid: 16447e4cce6384b469fe5697c93bc7d5, type: 2}
+  - {fileID: 11400000, guid: 846eafd11b1502d4eb9fcd599f106779, type: 2}
+  - {fileID: 11400000, guid: db4792c77108bb64293e0aabb11c858f, type: 2}
 --- !u!1 &376303093
 GameObject:
   m_ObjectHideFlags: 0
