@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: TabbyCat
   m_EditorClassIdentifier: 
   Name: Tabby Cat
-  Prefab: {fileID: 1106871712860804, guid: 42d48003e195e274680b98c080d35e5a, type: 2}
+  Prefab: {fileID: 1140038241474068, guid: 59d4cc5561ab98142ac255e710281324, type: 2}
   RequiredTowerType: 1
   RequiredTowerLevel: 2
   OtherRequirements:

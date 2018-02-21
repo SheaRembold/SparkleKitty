@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: SparkleKitty
   m_EditorClassIdentifier: 
   Name: Sparkle Kitty
-  Prefab: {fileID: 1865480506751040, guid: f9d402814ee9e7241b274637e63392f7, type: 2}
+  Prefab: {fileID: 1912451599880968, guid: f3977a8d56cde334b8860832c4bb5a97, type: 2}
   RequiredTowerType: 0
   RequiredTowerLevel: 0
   OtherRequirements: []

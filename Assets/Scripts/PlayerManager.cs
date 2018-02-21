@@ -27,14 +27,6 @@ public class PlayerManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-
-        for (int i = 0; i < startingInArea.Length; i++)
-        {
-            Placable inst = Instantiate(startingInArea[i].Placable.Prefab).GetComponent<Placable>();
-            inst.Data = startingInArea[i].Placable;
-            inst.transform.position = startingInArea[i].Position;
-        }
-        inventory.AddRange(startingInventory);
     }
 
     private void Start()
@@ -42,6 +34,12 @@ public class PlayerManager : MonoBehaviour
         PlacementManager.Instance.onPlaced += OnPlacedPlacable;
         PlacementManager.Instance.onMoved += OnMovedPlacable;
         PlacementManager.Instance.onRemoved += OnRemovedPlacable;
+        
+        for (int i = 0; i < startingInArea.Length; i++)
+        {
+            PlacementManager.Instance.PlacingAt(startingInArea[i].Placable, startingInArea[i].Position);
+        }
+        inventory.AddRange(startingInventory);
     }
 
     void OnPlacedPlacable(Placable placable)

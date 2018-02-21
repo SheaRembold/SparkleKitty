@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: AlleyCat
   m_EditorClassIdentifier: 
   Name: Alley Cat
-  Prefab: {fileID: 1106871712860804, guid: 70d75828a226f2d42a1aba0a08a0002d, type: 2}
+  Prefab: {fileID: 1448322649715380, guid: 294a5b50e5b574b4e89dab06b35d02ff, type: 2}
   RequiredTowerType: 1
   RequiredTowerLevel: 4
   OtherRequirements:

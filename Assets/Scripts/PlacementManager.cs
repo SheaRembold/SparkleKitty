@@ -49,14 +49,27 @@ public class PlacementManager : MonoBehaviour
         PlaceCurrent();
     }
 
+    public void PlacingAt(PlacableData placable, Vector3 position)
+    {
+        currentPlacing = Instantiate(placable.Prefab).GetComponent<Placable>();
+        currentPlacing.Data = placable;
+        currentPlacing.transform.SetParent(playArea.transform);
+        currentPlacing.transform.localPosition = position;
+        currentPlacing.transform.localRotation = Quaternion.identity;
+        currentPlacing.transform.localScale = Vector3.one;
+        if (onPlaced != null)
+            onPlaced(currentPlacing);
+    }
+
     void PlaceCurrent()
     {
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Ground")))
         {
+            currentPlacing.transform.SetParent(hit.transform.parent);
             currentPlacing.transform.position = hit.point;
-            currentPlacing.transform.rotation = hit.transform.rotation;
-            currentPlacing.transform.localScale = hit.transform.parent.localScale;
+            currentPlacing.transform.localRotation = Quaternion.identity;
+            currentPlacing.transform.localScale = Vector3.one;
             placed = true;
         }
         else
@@ -99,8 +112,8 @@ public class PlacementManager : MonoBehaviour
                 RaycastHit hit;
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Placable")))
                 {
-                    currentPlacing = hit.transform.root.GetComponent<Placable>();
-                    lastPos = currentPlacing.transform.position;
+                    currentPlacing = hit.transform.GetComponentInParent<Placable>();
+                    lastPos = currentPlacing.transform.localPosition;
                 }
             }
         }
@@ -128,7 +141,7 @@ public class PlacementManager : MonoBehaviour
                 else
                 {
                     if (lastPos.HasValue)
-                        currentPlacing.transform.position = lastPos.Value;
+                        currentPlacing.transform.localPosition = lastPos.Value;
                     else
                         Destroy(currentPlacing);
                 }
