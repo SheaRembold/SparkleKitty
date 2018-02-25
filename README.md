@@ -2,7 +2,7 @@
 An AR cat collecting game.
 
 ## Prerequisites
-- [Unity 2017.3.0p2](https://unity3d.com/unity/qa/patch-releases?version=2017.3)
+- [Unity 2017.3.1f1](https://store.unity.com/download)
 
 ## Basic stuff
 - Scene called "Main" is where game is being built.
