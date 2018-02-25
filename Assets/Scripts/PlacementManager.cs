@@ -13,6 +13,8 @@ public class PlacementManager : MonoBehaviour
     public OnMoved onMoved;
     public delegate void OnRemoved(Placable placable);
     public OnMoved onRemoved;
+    public delegate void OnAreaSet();
+    public OnAreaSet onAreaSet;
 
     [SerializeField]
     GameObject PlayAreaPrefab;
@@ -61,6 +63,16 @@ public class PlacementManager : MonoBehaviour
             onPlaced(currentPlacing);
     }
 
+    public Vector3 GetRandomInArea()
+    {
+        return new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f));
+    }
+
+    public Vector3 GetWorldPos(Vector3 areaPos)
+    {
+        return playArea.transform.TransformPoint(areaPos);
+    }
+
     void PlaceCurrent()
     {
         RaycastHit hit;
@@ -98,6 +110,8 @@ public class PlacementManager : MonoBehaviour
                 {
                     placingArea = false;
                     UIManager.Instance.ResetToMainUI();
+                    if (onAreaSet != null)
+                        onAreaSet();
                 }
             }
             else
@@ -143,7 +157,7 @@ public class PlacementManager : MonoBehaviour
                     if (lastPos.HasValue)
                         currentPlacing.transform.localPosition = lastPos.Value;
                     else
-                        Destroy(currentPlacing);
+                        Destroy(currentPlacing.gameObject);
                 }
                 currentPlacing = null;
             }

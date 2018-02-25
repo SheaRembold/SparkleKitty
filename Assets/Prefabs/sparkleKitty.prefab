@@ -772,6 +772,7 @@ GameObject:
   - component: {fileID: 4144188373406112}
   - component: {fileID: 95976657267745336}
   - component: {fileID: 114188521203817430}
+  - component: {fileID: 114344781843803968}
   m_Layer: 0
   m_Name: sparkleKitty
   m_TagString: Untagged
@@ -1694,6 +1695,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0698264ae42ef3b4ebe7f0cd23504ba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114344781843803968
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1912451599880968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2ffe9a79eefdf9429aa02c11163373a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WalkSpeed: 1
+  SitTime: 5
+  StopDistance: 0.1
+  InteractTime: 5
 --- !u!137 &137390647712034350
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

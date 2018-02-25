@@ -18,7 +18,7 @@ public class PlacableUI : MonoBehaviour
             (obj.transform as RectTransform).anchoredPosition = new Vector2(200 * i + 100, 0);
             obj.GetComponent<PlacableButton>().SetPlacable(Placables[i]);
         }
-        ContentParent.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 200 * Placables.Length - 1000);
+        ContentParent.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, 200 * Placables.Length);
         ContentParent.anchoredPosition = Vector2.zero;
     }
 }

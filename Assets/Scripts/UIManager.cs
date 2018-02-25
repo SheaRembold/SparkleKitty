@@ -10,6 +10,8 @@ public class UIManager : MonoBehaviour
     GameObject startingUI;
     [SerializeField]
     GameObject mainUI;
+    [SerializeField]
+    SpeechUI speechUI;
 
     GameObject currentUI;
     Stack<GameObject> uiStack = new Stack<GameObject>();
@@ -67,5 +69,10 @@ public class UIManager : MonoBehaviour
             currentUI = uiStack.Pop();
             currentUI.SetActive(true);
         }
+    }
+
+    public void ShowSpeechUI(Transform target)
+    {
+        speechUI.ShowSpeech(target);
     }
 }

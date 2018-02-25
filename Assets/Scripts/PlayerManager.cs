@@ -20,7 +20,7 @@ public class PlayerManager : MonoBehaviour
 
     List<Placable> placedInArea = new List<Placable>();
     List<PlacableData> inventory = new List<PlacableData>();
-    
+
     public int InventoryCount { get { return inventory.Count; } }
     public PlacableData GetInventory(int index) { return inventory[index]; }
 
@@ -31,15 +31,31 @@ public class PlayerManager : MonoBehaviour
 
     private void Start()
     {
+        PlacementManager.Instance.onAreaSet += OnAreaSet;
         PlacementManager.Instance.onPlaced += OnPlacedPlacable;
         PlacementManager.Instance.onMoved += OnMovedPlacable;
         PlacementManager.Instance.onRemoved += OnRemovedPlacable;
-        
+
         for (int i = 0; i < startingInArea.Length; i++)
         {
             PlacementManager.Instance.PlacingAt(startingInArea[i].Placable, startingInArea[i].Position);
         }
         inventory.AddRange(startingInventory);
+    }
+
+    void OnAreaSet()
+    {
+        UIManager.Instance.ShowSpeechUI(GetInArea("SparkleKitty").transform);
+    }
+
+    Placable GetInArea(string name)
+    {
+        for (int i=0;i< placedInArea.Count;i++)
+        {
+            if (placedInArea[i].Data.name == name)
+                return placedInArea[i];
+        }
+        return null;
     }
 
     void OnPlacedPlacable(Placable placable)
@@ -64,5 +80,20 @@ public class PlayerManager : MonoBehaviour
     public void RemoveInventory(PlacableData item)
     {
         inventory.Remove(item);
+    }
+
+    List<Placable> validPlacables = new List<Placable>();
+    public Placable GetRandomInArea<T>() where T : PlacableData
+    {
+        validPlacables.Clear();
+        for (int i = 0; i < placedInArea.Count; i++)
+        {
+            if (placedInArea[i].Data is T)
+                validPlacables.Add(placedInArea[i]);
+        }
+        if (validPlacables.Count > 0)
+            return validPlacables[Random.Range(0, validPlacables.Count)];
+
+        return null;
     }
 }
