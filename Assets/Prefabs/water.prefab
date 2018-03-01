@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4670628354936658}
   - component: {fileID: 114968651413062694}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: water
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,7 +37,7 @@ GameObject:
   - component: {fileID: 4599176517518866}
   - component: {fileID: 33209705426595712}
   - component: {fileID: 23863803326390788}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: water
   m_TagString: Untagged
   m_Icon: {fileID: 0}

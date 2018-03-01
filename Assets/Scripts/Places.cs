@@ -72,7 +72,9 @@ public class Places : MonoBehaviour
         Debug.Log(response.results.Length);
         for (int i = 0; i < response.results.Length; i++)
         {
-            Instantiate(markerPrefab).GetComponent<MapMarker>().Init(_map, new Mapbox.Utils.Vector2d(response.results[i].geometry.location.lat, response.results[i].geometry.location.lng), response.results[i].name);
+            GameObject obj = Instantiate(markerPrefab);
+            obj.transform.SetParent(transform.parent);
+            obj.GetComponent<MapMarker>().Init(_map, new Mapbox.Utils.Vector2d(response.results[i].geometry.location.lat, response.results[i].geometry.location.lng), response.results[i].name);
         }
     }
 }

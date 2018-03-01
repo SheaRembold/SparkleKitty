@@ -10,7 +10,7 @@ public class GameSparksSettings : ScriptableObject
 {
 
     public const string gamesparksSettingsAssetName = "GameSparksSettings";
-    public const string gamesparksSettingsPath = "GameSparks/Resources";
+    public const string gamesparksSettingsPath = "3rdParty/GameSparks/Resources";
     public const string gamesparksSettingsAssetExtension = ".asset";
 	private static readonly string liveServiceUrlBase = "wss://live-{0}.ws.gamesparks.net/ws/{1}/{0}";
 	private static readonly string previewServiceUrlBase = "wss://preview-{0}.ws.gamesparks.net/ws/{1}/{0}";

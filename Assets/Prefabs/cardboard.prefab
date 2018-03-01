@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4098408447479594}
   - component: {fileID: 33128748502505700}
   - component: {fileID: 23771944244415700}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: default
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4697724689439208}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: carboard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,7 +51,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4043404522773018}
-  m_Layer: 0
+  - component: {fileID: 114703681209078364}
+  m_Layer: 10
   m_Name: cardboard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,3 +141,14 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1324947232556340}
   m_Mesh: {fileID: 4300000, guid: 4330a176dc2122143a8bcb1cfd2d9f22, type: 3}
+--- !u!114 &114703681209078364
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1999871299950470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0698264ae42ef3b4ebe7f0cd23504ba0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
