@@ -4,5 +4,17 @@ using UnityEngine;
 
 public abstract class PlacementProvider
 {
+    protected GameObject sceneObj;
+
+    public virtual void TurnOff()
+    {
+        sceneObj.SetActive(false);
+    }
+
+    public virtual void TurnOn()
+    {
+        sceneObj.SetActive(true);
+    }
+
     public abstract bool GetPlane(out UnityARInterface.BoundedPlane plane);
 }

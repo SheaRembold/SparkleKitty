@@ -15,8 +15,8 @@ public class VuforiaPlacementProvider : PlacementProvider
     
     public VuforiaPlacementProvider()
     {
-        GameObject obj = GameObject.Instantiate(Resources.Load<GameObject>("VuforiaScene"));
-        planeFinder = obj.GetComponentInChildren<PlaneFinderBehaviour>();
+        sceneObj = GameObject.Instantiate(Resources.Load<GameObject>("VuforiaScene"));
+        planeFinder = sceneObj.GetComponentInChildren<PlaneFinderBehaviour>();
         planeFinder.OnAutomaticHitTest.AddListener(HandleAutomaticHitTest);
 
         VuforiaARController.Instance.RegisterVuforiaStartedCallback(OnVuforiaStarted);

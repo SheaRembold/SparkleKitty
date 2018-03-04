@@ -7,7 +7,7 @@ public class ARPlacementProvider : PlacementProvider
 {
     public ARPlacementProvider()
     {
-        GameObject obj = GameObject.Instantiate(Resources.Load<GameObject>("ARScene"));
+        sceneObj = GameObject.Instantiate(Resources.Load<GameObject>("ARScene"));
     }
 
     public override bool GetPlane(out BoundedPlane plane)

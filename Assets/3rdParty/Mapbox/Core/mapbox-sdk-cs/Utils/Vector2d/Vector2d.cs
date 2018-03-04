@@ -191,6 +191,11 @@ namespace Mapbox.Utils
             return string.Format(NumberFormatInfo.InvariantInfo, "{0:F5},{1:F5}", this.y, this.x);
         }
 
+        public string ToStringInv()
+        {
+            return string.Format(NumberFormatInfo.InvariantInfo, "{0:F5},{1:F5}", this.x, this.y);
+        }
+
         public override int GetHashCode()
         {
             return this.x.GetHashCode() ^ this.y.GetHashCode() << 2;

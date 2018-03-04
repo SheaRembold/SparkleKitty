@@ -43,6 +43,18 @@ public class PlacementManager : MonoBehaviour
         playArea = Instantiate(PlayAreaPrefab);
     }
 
+    public void TurnOff()
+    {
+        provider.TurnOff();
+        playArea.SetActive(false);
+    }
+
+    public void TurnOn()
+    {
+        provider.TurnOn();
+        playArea.SetActive(true);
+    }
+
     public void StartPlacing(PlacableData placable)
     {
         currentPlacing = Instantiate(placable.Prefab).GetComponent<Placable>();

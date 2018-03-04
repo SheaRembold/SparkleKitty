@@ -7,7 +7,7 @@ public class TestPlacementProvider : PlacementProvider
 {
     public TestPlacementProvider()
     {
-        GameObject obj = GameObject.Instantiate(Resources.Load<GameObject>("TestScene"));
+        sceneObj = GameObject.Instantiate(Resources.Load<GameObject>("TestScene"));
     }
     
     public override bool GetPlane(out BoundedPlane plane)

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Name: Cardboard
   m_EditorClassIdentifier: 
   Name: Cardboard
-  Prefab: {fileID: 1758301118215260, guid: 9b58787e4fb415645a71dd4a9409a976, type: 2}
+  Prefab: {fileID: 1999871299950470, guid: cb5b8c9d7313fab4ba2c313ffddc87fc, type: 2}

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Name: Fabric
   m_EditorClassIdentifier: 
   Name: Fabric
-  Prefab: {fileID: 1758301118215260, guid: 9b58787e4fb415645a71dd4a9409a976, type: 2}
+  Prefab: {fileID: 1805756084259656, guid: 38b34e2dd85f3954492eb6434c5b3df8, type: 2}
