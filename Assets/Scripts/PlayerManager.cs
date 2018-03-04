@@ -96,4 +96,8 @@ public class PlayerManager : MonoBehaviour
 
         return null;
     }
+
+	public void CheckCats(){
+
+	}
 }
