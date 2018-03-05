@@ -37,6 +37,7 @@ GameObject:
   - component: {fileID: 4599176517518866}
   - component: {fileID: 33209705426595712}
   - component: {fileID: 23863803326390788}
+  - component: {fileID: 65283244554911252}
   m_Layer: 10
   m_Name: water
   m_TagString: Untagged
@@ -51,7 +52,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1802065950204664}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.141, y: -0.409, z: -0.146}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4670628354936658}
@@ -114,6 +115,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1802065950204664}
   m_Mesh: {fileID: 4300000, guid: 422bfb8f04b76e2438fded2cdeb5cbf7, type: 3}
+--- !u!65 &65283244554911252
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1802065950204664}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.07200003, y: 0.2519999, z: 0.072000034}
+  m_Center: {x: 0.14581192, y: 0.53579795, z: 0.14134116}
 --- !u!114 &114968651413062694
 MonoBehaviour:
   m_ObjectHideFlags: 1

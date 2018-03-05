@@ -6,10 +6,10 @@ public class DataManager : MonoBehaviour
 {
     public static DataManager Instance;
     
-    public PlacableData[] Cats;
+    public CatData[] Cats;
     public PlacableData[] Towers;
-    public PlacableData[] Toys;
-    public PlacableData[] Treats;
+    public BuildableData[] Toys;
+    public BuildableData[] Treats;
     public PlacableData[] Components;
     
     private void Awake()

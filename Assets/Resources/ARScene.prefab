@@ -152,7 +152,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -259,6 +259,7 @@ MonoBehaviour:
   m_PlaneDetection: 1
   m_LightEstimation: 0
   m_PointCloud: 1
+  m_BackgroundRendering: 1
   m_Scale: 1
   pointOfInterest: {x: 0, y: 0, z: 0}
   m_SendVideo: 1
@@ -277,6 +278,7 @@ MonoBehaviour:
   m_PlaneDetection: 1
   m_LightEstimation: 1
   m_PointCloud: 1
+  m_BackgroundRendering: 1
   m_Scale: 1
   pointOfInterest: {x: 0, y: 0, z: 0}
 --- !u!114 &114751647035988408

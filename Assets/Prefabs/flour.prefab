@@ -37,6 +37,7 @@ GameObject:
   - component: {fileID: 4808402465591734}
   - component: {fileID: 33092006065039128}
   - component: {fileID: 23566787121652152}
+  - component: {fileID: 65622163847887912}
   m_Layer: 10
   m_Name: flour
   m_TagString: Untagged
@@ -65,7 +66,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1615417454617844}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: -0, y: -0.16, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4517436807306992}
@@ -114,6 +115,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1615417454617844}
   m_Mesh: {fileID: 4300000, guid: fbbf304a0c591d84594960132d4f948b, type: 3}
+--- !u!65 &65622163847887912
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1615417454617844}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.084000245, y: 0.18767117, z: 0.15510431}
+  m_Center: {x: 0.00060024124, y: 0.2525352, z: -0.0017666337}
 --- !u!114 &114518290136054732
 MonoBehaviour:
   m_ObjectHideFlags: 1

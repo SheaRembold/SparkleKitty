@@ -20,6 +20,7 @@ public class Places : MonoBehaviour
     public class Response
     {
         public Result[] results;
+        public string next_page_token;
     }
 
     [System.Serializable]
@@ -52,17 +53,14 @@ public class Places : MonoBehaviour
         Mapbox.Unity.Location.Location loc = LocationProviderFactory.Instance.DefaultLocationProvider.CurrentLocation;
         if (_isInitialized && loc.Timestamp > 0 && !searchHasRun)
         {
-            StartCoroutine(RunSearch());
+            string url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + loc.LatitudeLongitude.ToStringInv() + "&radius=100&key=" + apiKey;
+            StartCoroutine(RunSearch(url));
             searchHasRun = true;
         }
     }
 
-    IEnumerator RunSearch()
+    IEnumerator RunSearch(string url)
     {
-        Mapbox.Unity.Location.Location loc = LocationProviderFactory.Instance.DefaultLocationProvider.CurrentLocation;
-        string url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + loc.LatitudeLongitude.ToStringInv() + "&radius=500&key=" + apiKey;
-        Debug.Log(url);
-
         UnityWebRequest request = new UnityWebRequest(url, "GET");
         request.downloadHandler = new DownloadHandlerBuffer();
         yield return request.SendWebRequest();
@@ -75,6 +73,16 @@ public class Places : MonoBehaviour
             GameObject obj = Instantiate(markerPrefab);
             obj.transform.SetParent(transform.parent);
             obj.GetComponent<MapMarker>().Init(_map, new Mapbox.Utils.Vector2d(response.results[i].geometry.location.lat, response.results[i].geometry.location.lng), response.results[i].name);
+        }
+
+        yield return new WaitForSeconds(2);
+
+        if (!string.IsNullOrEmpty(response.next_page_token))
+        {
+            Debug.Log(response.next_page_token);
+            Mapbox.Unity.Location.Location loc = LocationProviderFactory.Instance.DefaultLocationProvider.CurrentLocation;
+            string nextUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + loc.LatitudeLongitude.ToStringInv() + "&radius=100&pagetoken=" + response.next_page_token + "&key=" + apiKey;
+            StartCoroutine(RunSearch(nextUrl));
         }
     }
 }

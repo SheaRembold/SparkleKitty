@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum AreaType { None, Play, Build }
+
 public class PlacementManager : MonoBehaviour
 {
     public static PlacementManager Instance;
@@ -17,44 +19,105 @@ public class PlacementManager : MonoBehaviour
     public OnAreaSet onAreaSet;
 
     [SerializeField]
+    GameObject Loading;
+    [SerializeField]
     GameObject PlayAreaPrefab;
+    [SerializeField]
+    GameObject BuildAreaPrefab;
 
     GameObject playArea;
+    GameObject buildArea;
     PlacementProvider provider;
     Placable currentPlacing;
     Vector3? lastPos;
     bool placed;
     bool placingArea = true;
+    PlacementArea currentArea;
 
     private void Awake()
     {
         Instance = this;
-#if UNITY_EDITOR
-        provider = new TestPlacementProvider();
-#elif VUFORIA
-        provider = new VuforiaPlacementProvider();
-#else
-        provider = new ARPlacementProvider();
-#endif
     }
 
     private void Start()
     {
+#if UNITY_EDITOR
+        provider = new TestPlacementProvider();
+        StartPlacement();
+#elif VUFORIA
+        provider = new VuforiaPlacementProvider();
+        StartPlacement();
+#else
+        StartCoroutine(WaitToStart());
+#endif
+    }
+
+    IEnumerator WaitToStart()
+    {
+        GoogleARCore.AsyncTask<GoogleARCore.ApkAvailabilityStatus> availTask = GoogleARCore.Session.CheckApkAvailability();
+        yield return availTask.WaitForCompletion();
+
+        if (availTask.Result == GoogleARCore.ApkAvailabilityStatus.SupportedInstalled)
+        {
+            provider = new ARPlacementProvider();
+            StartPlacement();
+        }
+        else if (availTask.Result == GoogleARCore.ApkAvailabilityStatus.SupportedApkTooOld || availTask.Result == GoogleARCore.ApkAvailabilityStatus.SupportedNotInstalled)
+        {
+            GoogleARCore.AsyncTask<GoogleARCore.ApkInstallationStatus> installTask = GoogleARCore.Session.RequestApkInstallation(false);
+            yield return installTask.WaitForCompletion();
+
+            if (installTask.Result == GoogleARCore.ApkInstallationStatus.Success)
+            {
+                provider = new ARPlacementProvider();
+                StartPlacement();
+            }
+            else
+            {
+                provider = new TestPlacementProvider();
+                StartPlacement();
+            }
+        }
+        else
+        {
+            provider = new TestPlacementProvider();
+            StartPlacement();
+        }
+    }
+
+    private void StartPlacement()
+    {
+        Loading.SetActive(false);
         playArea = Instantiate(PlayAreaPrefab);
+        currentArea = playArea.GetComponent<PlacementArea>();
+        buildArea = BuildAreaPrefab;
     }
 
-    public void TurnOff()
+    public void SetArea(AreaType areaType)
     {
-        provider.TurnOff();
-        playArea.SetActive(false);
+        switch (areaType)
+        {
+            case AreaType.None:
+                provider.TurnOff();
+                playArea.SetActive(false);
+                buildArea.SetActive(false);
+                currentArea = null;
+                break;
+            case AreaType.Play:
+                provider.TurnOn();
+                playArea.SetActive(true);
+                buildArea.SetActive(false);
+                currentArea = playArea.GetComponent<PlacementArea>();
+                break;
+            case AreaType.Build:
+                provider.TurnOff();
+                playArea.SetActive(false);
+                buildArea.SetActive(true);
+                currentArea = buildArea.GetComponent<PlacementArea>();
+                break;
+        }
     }
-
-    public void TurnOn()
-    {
-        provider.TurnOn();
-        playArea.SetActive(true);
-    }
-
+    
     public void StartPlacing(PlacableData placable)
     {
         currentPlacing = Instantiate(placable.Prefab).GetComponent<Placable>();
@@ -71,8 +134,11 @@ public class PlacementManager : MonoBehaviour
         currentPlacing.transform.localPosition = position;
         currentPlacing.transform.localRotation = Quaternion.identity;
         currentPlacing.transform.localScale = Vector3.one;
+        if (currentArea != null)
+            currentArea.AddToArea(currentPlacing);
         if (onPlaced != null)
             onPlaced(currentPlacing);
+        currentPlacing = null;
     }
 
     public Vector3 GetRandomInArea()
@@ -108,6 +174,9 @@ public class PlacementManager : MonoBehaviour
 
     void Update()
     {
+        if (provider == null)
+            return;
+
         if (placingArea)
         {
             UnityARInterface.BoundedPlane plane;
@@ -160,16 +229,22 @@ public class PlacementManager : MonoBehaviour
                     }
                     else
                     {
+                        if (currentArea != null)
+                            currentArea.AddToArea(currentPlacing);
                         if (onPlaced != null)
                             onPlaced(currentPlacing);
                     }
                 }
                 else
                 {
-                    if (lastPos.HasValue)
+                    /*if (lastPos.HasValue)
                         currentPlacing.transform.localPosition = lastPos.Value;
-                    else
-                        Destroy(currentPlacing.gameObject);
+                    else*/
+                    if (currentArea != null)
+                        currentArea.RemoveFromArea(currentPlacing);
+                    if (onRemoved != null)
+                        onRemoved(currentPlacing);
+                    Destroy(currentPlacing.gameObject);
                 }
                 currentPlacing = null;
             }

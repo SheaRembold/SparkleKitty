@@ -381,6 +381,7 @@ GameObject:
   - component: {fileID: 4743163229335294}
   - component: {fileID: 95855806876374988}
   - component: {fileID: 114568443782075860}
+  - component: {fileID: 114946625499914452}
   m_Layer: 0
   m_Name: alleyCat
   m_TagString: Untagged
@@ -1694,6 +1695,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0698264ae42ef3b4ebe7f0cd23504ba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114946625499914452
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1448322649715380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2ffe9a79eefdf9429aa02c11163373a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WalkSpeed: 1
+  SitTime: 5
+  StopDistance: 0.1
+  InteractTime: 5
 --- !u!137 &137640084102413566
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

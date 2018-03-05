@@ -201,6 +201,7 @@ GameObject:
   - component: {fileID: 4564337274504906}
   - component: {fileID: 95861316085866052}
   - component: {fileID: 114975753078944660}
+  - component: {fileID: 114756419295188774}
   m_Layer: 0
   m_Name: tabbyCat
   m_TagString: Untagged
@@ -1683,6 +1684,21 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114756419295188774
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1140038241474068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2ffe9a79eefdf9429aa02c11163373a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WalkSpeed: 1
+  SitTime: 5
+  StopDistance: 0.1
+  InteractTime: 5
 --- !u!114 &114975753078944660
 MonoBehaviour:
   m_ObjectHideFlags: 1

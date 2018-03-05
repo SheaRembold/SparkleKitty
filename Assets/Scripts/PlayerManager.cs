@@ -36,16 +36,16 @@ public class PlayerManager : MonoBehaviour
         PlacementManager.Instance.onMoved += OnMovedPlacable;
         PlacementManager.Instance.onRemoved += OnRemovedPlacable;
 
-        for (int i = 0; i < startingInArea.Length; i++)
-        {
-            PlacementManager.Instance.PlacingAt(startingInArea[i].Placable, startingInArea[i].Position);
-        }
         inventory.AddRange(startingInventory);
     }
 
     void OnAreaSet()
     {
-        UIManager.Instance.ShowSpeechUI(GetInArea("SparkleKitty").transform);
+        for (int i = 0; i < startingInArea.Length; i++)
+        {
+            PlacementManager.Instance.PlacingAt(startingInArea[i].Placable, startingInArea[i].Position);
+        }
+        //UIManager.Instance.ShowSpeechUI(GetInArea("SparkleKitty").transform);
     }
 
     Placable GetInArea(string name)
@@ -60,7 +60,8 @@ public class PlayerManager : MonoBehaviour
 
     void OnPlacedPlacable(Placable placable)
     {
-        placedInArea.Add(placable);
+        if (!placedInArea.Contains(placable))
+            placedInArea.Add(placable);
     }
 
     void OnMovedPlacable(Placable placable)

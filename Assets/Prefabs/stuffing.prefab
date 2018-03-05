@@ -207,6 +207,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4382416878755062}
+  - component: {fileID: 65617520284373914}
   m_Layer: 10
   m_Name: cotton
   m_TagString: Untagged
@@ -2019,7 +2020,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1118659453282138}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1, z: 0}
+  m_LocalPosition: {x: 0.082, y: 0.0866, z: 0.103}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4253584674696294}
@@ -5017,6 +5018,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1666005659628658}
   m_Mesh: {fileID: 4300104, guid: 5142923c01ae1a74ab7cfad59635cd3c, type: 3}
+--- !u!65 &65617520284373914
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1118659453282138}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.24647647, y: 0.25090444, z: 0.17211545}
+  m_Center: {x: -0.079318225, y: 0.034726325, z: -0.101626575}
 --- !u!114 &114162945417962238
 MonoBehaviour:
   m_ObjectHideFlags: 1

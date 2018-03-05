@@ -9,12 +9,12 @@ public class MapUI : MonoBehaviour
     private void OnEnable()
     {
         Map.SetActive(true);
-        PlacementManager.Instance.TurnOff();
+        PlacementManager.Instance.SetArea(AreaType.None);
     }
 
     private void OnDisable()
     {
         Map.SetActive(false);
-        PlacementManager.Instance.TurnOn();
+        PlacementManager.Instance.SetArea(AreaType.Play);
     }
 }

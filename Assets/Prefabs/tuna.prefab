@@ -36,6 +36,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4465041133592456}
+  - component: {fileID: 65037407655552344}
   m_Layer: 10
   m_Name: tuna
   m_TagString: Untagged
@@ -160,7 +161,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1262960852585146}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.016, y: -0.194, z: -0.046}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4037443159434826}
@@ -440,6 +441,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1294180545175514}
   m_Mesh: {fileID: 4300006, guid: e1977ec6fcdda884d830eaf42f427120, type: 3}
+--- !u!65 &65037407655552344
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1262960852585146}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.14688314, y: 0.050729513, z: 0.2194126}
+  m_Center: {x: 0.041803442, y: 0.2204014, z: 0.014691919}
 --- !u!114 &114238600362309084
 MonoBehaviour:
   m_ObjectHideFlags: 1
