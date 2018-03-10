@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Name: Flour
   m_EditorClassIdentifier: 
   Name: Flour
+  Icon: {fileID: 21300000, guid: 229c7ecddcc17af4ca355da00736e06c, type: 3}
   Prefab: {fileID: 1090246142875158, guid: 869242b913ac3ea46b7cefe937a6f81b, type: 2}
