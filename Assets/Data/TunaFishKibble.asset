@@ -9,12 +9,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 93e18d950f74e3949a677fe4ce3e1e1c, type: 3}
-  m_Name: BasicKibble
+  m_Name: TunaFishKibble
   m_EditorClassIdentifier: 
-  Name: Basic Kibble
-  Icon: {fileID: 21300000, guid: 354af896b6a15d044806642e546a3a69, type: 3}
-  Prefab: {fileID: 1299546934261784, guid: c6f2b787bb198414e93c99c9610394aa, type: 2}
+  Name: Tuna Fish Kibble
+  Icon: {fileID: 21300000, guid: a3bd2cf5954e5174587330453131b11a, type: 3}
+  Prefab: {fileID: 1323498488211722, guid: 7ee9a8549968e0c41bc9bc15a2dce2e3, type: 2}
   BuildRequirements:
+  - {fileID: 11400000, guid: db4792c77108bb64293e0aabb11c858f, type: 2}
+  - {fileID: 11400000, guid: db4792c77108bb64293e0aabb11c858f, type: 2}
   - {fileID: 11400000, guid: 16447e4cce6384b469fe5697c93bc7d5, type: 2}
   - {fileID: 11400000, guid: 16447e4cce6384b469fe5697c93bc7d5, type: 2}
   - {fileID: 11400000, guid: 846eafd11b1502d4eb9fcd599f106779, type: 2}

@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Name: String
   m_EditorClassIdentifier: 
   Name: String
+  Icon: {fileID: 21300000, guid: 1936060a9a11cf04ca3894e87c411390, type: 3}
   Prefab: {fileID: 1000531808409622, guid: f5f62263685a2a54fb33cb42cbc51753, type: 2}

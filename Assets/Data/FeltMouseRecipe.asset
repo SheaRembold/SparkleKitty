@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7168b9a948c6a14080248447c1d0294, type: 3}
+  m_Name: FeltMouseRecipe
+  m_EditorClassIdentifier: 
+  Name: Felt Mouse Recipe
+  Icon: {fileID: 21300000, guid: 626e364066c05204c9731566b6711243, type: 3}
+  Prefab: {fileID: 0}
+  Product: {fileID: 11400000, guid: 7eca27cb3845b4542acd4890a770279c, type: 2}

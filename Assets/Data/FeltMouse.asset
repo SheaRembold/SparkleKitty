@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: FeltMouse
   m_EditorClassIdentifier: 
   Name: Felt Mouse
+  Icon: {fileID: 21300000, guid: 522a91859f909fe47bb9d8e0a73d94c7, type: 3}
   Prefab: {fileID: 1503557152046656, guid: 0a5dea58657a95b4c871fb2c40541b5f, type: 2}
   BuildRequirements:
   - {fileID: 11400000, guid: db54f92e652b01f4dbe5df8633a42d6d, type: 2}

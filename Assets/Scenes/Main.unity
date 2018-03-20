@@ -1765,8 +1765,10 @@ MonoBehaviour:
   fillImage: {fileID: 479680936}
   itemImage: {fileID: 580229879}
   resources:
+  - {fileID: 11400000, guid: f9c95f5276d7b9b4e8ba816830bee121, type: 2}
+  - {fileID: 11400000, guid: 529c7218c45d3f141b693aa10b5a5e38, type: 2}
   - {fileID: 11400000, guid: 4e432c76d712eaf4bbf61786ecc32b1e, type: 2}
-  - {fileID: 11400000, guid: 7eca27cb3845b4542acd4890a770279c, type: 2}
+  - {fileID: 11400000, guid: 5e30062e81c9dde47854e4dd5dd3c766, type: 2}
 --- !u!1 &297080642
 GameObject:
   m_ObjectHideFlags: 0
@@ -2395,6 +2397,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 16447e4cce6384b469fe5697c93bc7d5, type: 2}
   - {fileID: 11400000, guid: 846eafd11b1502d4eb9fcd599f106779, type: 2}
   - {fileID: 11400000, guid: db4792c77108bb64293e0aabb11c858f, type: 2}
+  ToyRecipes:
+  - {fileID: 11400000, guid: 5e30062e81c9dde47854e4dd5dd3c766, type: 2}
+  - {fileID: 11400000, guid: eee656f0d523b6944820e36f2809f4c8, type: 2}
+  TreatRecipes:
+  - {fileID: 11400000, guid: f9c95f5276d7b9b4e8ba816830bee121, type: 2}
+  - {fileID: 11400000, guid: 529c7218c45d3f141b693aa10b5a5e38, type: 2}
 --- !u!114 &365429566
 MonoBehaviour:
   m_ObjectHideFlags: 0

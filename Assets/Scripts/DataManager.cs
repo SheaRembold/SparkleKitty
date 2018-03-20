@@ -11,6 +11,8 @@ public class DataManager : MonoBehaviour
     public BuildableData[] Toys;
     public BuildableData[] Treats;
     public PlacableData[] Components;
+    public RecipeData[] ToyRecipes;
+    public RecipeData[] TreatRecipes;
     
     private void Awake()
     {
