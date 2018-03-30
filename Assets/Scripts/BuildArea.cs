@@ -7,16 +7,21 @@ public class BuildArea : PlacementArea
     List<Placable> available = new List<Placable>();
     GameObject builtObj;
 
-    public void TryBuild()
+    public virtual void TryBuild()
     {
-        for (int i = 0; i < DataManager.Instance.Toys.Length; i++)
+        CheckBuildables(DataManager.Instance.Toys);
+    }
+
+    protected void CheckBuildables(BuildableData[] buildables)
+    {
+        for (int i = 0; i < buildables.Length; i++)
         {
             available.Clear();
             available.AddRange(placedInArea);
             bool requMissing = false;
-            for (int j = 0; j < DataManager.Instance.Toys[i].BuildRequirements.Length; j++)
+            for (int j = 0; j < buildables[i].BuildRequirements.Length; j++)
             {
-                int index = available.FindIndex((x) => { return x.Data == DataManager.Instance.Toys[i].BuildRequirements[j]; });
+                int index = available.FindIndex((x) => { return x.Data == buildables[i].BuildRequirements[j]; });
                 if (index != -1)
                 {
                     available.RemoveAt(index);
@@ -29,7 +34,7 @@ public class BuildArea : PlacementArea
             }
             if (!requMissing && available.Count == 0)
             {
-                Build(DataManager.Instance.Toys[i]);
+                Build(buildables[i]);
                 break;
             }
         }

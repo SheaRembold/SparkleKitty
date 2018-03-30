@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum AreaType { None, Play, Build }
+public enum AreaType { None, Play, Build, Cook }
 
 public class PlacementManager : MonoBehaviour
 {
@@ -18,9 +18,12 @@ public class PlacementManager : MonoBehaviour
     GameObject PlayAreaPrefab;
     [SerializeField]
     GameObject BuildAreaPrefab;
+    [SerializeField]
+    GameObject CookAreaPrefab;
 
     PlacementArea playArea;
     PlacementArea buildArea;
+    PlacementArea cookArea;
     PlacementProvider provider;
     Placable currentPlacing;
     Vector3? lastPos;
@@ -88,6 +91,7 @@ public class PlacementManager : MonoBehaviour
         playArea = Instantiate(PlayAreaPrefab).GetComponent<PlacementArea>();
         currentArea = playArea;
         buildArea = BuildAreaPrefab.GetComponent<PlacementArea>();
+        cookArea = CookAreaPrefab.GetComponent<PlacementArea>();
     }
 
     public PlacementArea GetPlayArea()
@@ -97,27 +101,29 @@ public class PlacementManager : MonoBehaviour
 
     public void SetArea(AreaType areaType)
     {
+        if (currentArea != null)
+            currentArea.gameObject.SetActive(false);
         switch (areaType)
         {
             case AreaType.None:
                 provider.TurnOff();
-                playArea.gameObject.SetActive(false);
-                buildArea.gameObject.SetActive(false);
                 currentArea = null;
                 break;
             case AreaType.Play:
                 provider.TurnOn();
-                playArea.gameObject.SetActive(true);
-                buildArea.gameObject.SetActive(false);
                 currentArea = playArea;
                 break;
             case AreaType.Build:
                 provider.TurnOff();
-                playArea.gameObject.SetActive(false);
-                buildArea.gameObject.SetActive(true);
                 currentArea = buildArea;
                 break;
+            case AreaType.Cook:
+                provider.TurnOff();
+                currentArea = cookArea;
+                break;
         }
+        if (currentArea != null)
+            currentArea.gameObject.SetActive(true);
     }
     
     public void StartPlacing(PlacableData placable)
