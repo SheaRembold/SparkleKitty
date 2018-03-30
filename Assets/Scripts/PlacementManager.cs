@@ -9,12 +9,6 @@ public class PlacementManager : MonoBehaviour
 {
     public static PlacementManager Instance;
 
-    public delegate void OnPlaced(Placable placable);
-    public OnPlaced onPlaced;
-    public delegate void OnMoved(Placable placable);
-    public OnMoved onMoved;
-    public delegate void OnRemoved(Placable placable);
-    public OnMoved onRemoved;
     public delegate void OnAreaSet();
     public OnAreaSet onAreaSet;
 
@@ -25,8 +19,8 @@ public class PlacementManager : MonoBehaviour
     [SerializeField]
     GameObject BuildAreaPrefab;
 
-    GameObject playArea;
-    GameObject buildArea;
+    PlacementArea playArea;
+    PlacementArea buildArea;
     PlacementProvider provider;
     Placable currentPlacing;
     Vector3? lastPos;
@@ -47,8 +41,11 @@ public class PlacementManager : MonoBehaviour
 #elif VUFORIA
         provider = new VuforiaPlacementProvider();
         StartPlacement();
-#else
+#elif UNITY_ANDROID
         StartCoroutine(WaitToStart());
+#else
+        provider = new ARPlacementProvider();
+        StartPlacement();
 #endif
     }
 
@@ -88,9 +85,14 @@ public class PlacementManager : MonoBehaviour
     private void StartPlacement()
     {
         Loading.SetActive(false);
-        playArea = Instantiate(PlayAreaPrefab);
-        currentArea = playArea.GetComponent<PlacementArea>();
-        buildArea = BuildAreaPrefab;
+        playArea = Instantiate(PlayAreaPrefab).GetComponent<PlacementArea>();
+        currentArea = playArea;
+        buildArea = BuildAreaPrefab.GetComponent<PlacementArea>();
+    }
+
+    public PlacementArea GetPlayArea()
+    {
+        return playArea;
     }
 
     public void SetArea(AreaType areaType)
@@ -99,21 +101,21 @@ public class PlacementManager : MonoBehaviour
         {
             case AreaType.None:
                 provider.TurnOff();
-                playArea.SetActive(false);
-                buildArea.SetActive(false);
+                playArea.gameObject.SetActive(false);
+                buildArea.gameObject.SetActive(false);
                 currentArea = null;
                 break;
             case AreaType.Play:
                 provider.TurnOn();
-                playArea.SetActive(true);
-                buildArea.SetActive(false);
-                currentArea = playArea.GetComponent<PlacementArea>();
+                playArea.gameObject.SetActive(true);
+                buildArea.gameObject.SetActive(false);
+                currentArea = playArea;
                 break;
             case AreaType.Build:
                 provider.TurnOff();
-                playArea.SetActive(false);
-                buildArea.SetActive(true);
-                currentArea = buildArea.GetComponent<PlacementArea>();
+                playArea.gameObject.SetActive(false);
+                buildArea.gameObject.SetActive(true);
+                currentArea = buildArea;
                 break;
         }
     }
@@ -126,7 +128,7 @@ public class PlacementManager : MonoBehaviour
         PlaceCurrent();
     }
 
-    public void PlacingAt(PlacableData placable, Vector3 position)
+    public void PlaceAt(PlacableData placable, Vector3 position)
     {
         currentPlacing = Instantiate(placable.Prefab).GetComponent<Placable>();
         currentPlacing.Data = placable;
@@ -136,11 +138,9 @@ public class PlacementManager : MonoBehaviour
         currentPlacing.transform.localScale = Vector3.one;
         if (currentArea != null)
             currentArea.AddToArea(currentPlacing);
-        if (onPlaced != null)
-            onPlaced(currentPlacing);
         currentPlacing = null;
     }
-
+    
     public Vector3 GetRandomInArea()
     {
         return new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f));
@@ -148,7 +148,7 @@ public class PlacementManager : MonoBehaviour
 
     public Vector3 GetWorldPos(Vector3 areaPos)
     {
-        return playArea.transform.TransformPoint(areaPos);
+        return currentArea.transform.TransformPoint(areaPos);
     }
 
     void PlaceCurrent()
@@ -186,7 +186,7 @@ public class PlacementManager : MonoBehaviour
                 playArea.transform.rotation = plane.rotation;
                 float scale = Mathf.Min(1f, plane.extents.x, plane.extents.y);
                 playArea.transform.localScale = Vector3.one * scale;
-                playArea.SetActive(true);
+                playArea.gameObject.SetActive(true);
                 if (Input.GetMouseButtonDown(0))
                 {
                     placingArea = false;
@@ -197,7 +197,7 @@ public class PlacementManager : MonoBehaviour
             }
             else
             {
-                playArea.SetActive(false);
+                playArea.gameObject.SetActive(false);
             }
         }
         else if (currentPlacing == null)
@@ -224,15 +224,13 @@ public class PlacementManager : MonoBehaviour
                 {
                     if (lastPos.HasValue)
                     {
-                        if (onMoved != null)
-                            onMoved(currentPlacing);
+                        if (currentArea != null)
+                            currentArea.MoveInArea(currentPlacing);
                     }
                     else
                     {
                         if (currentArea != null)
                             currentArea.AddToArea(currentPlacing);
-                        if (onPlaced != null)
-                            onPlaced(currentPlacing);
                     }
                 }
                 else
@@ -242,8 +240,7 @@ public class PlacementManager : MonoBehaviour
                     else*/
                     if (currentArea != null)
                         currentArea.RemoveFromArea(currentPlacing);
-                    if (onRemoved != null)
-                        onRemoved(currentPlacing);
+                    PlayerManager.Instance.AddInventory(currentPlacing.Data);
                     Destroy(currentPlacing.gameObject);
                 }
                 currentPlacing = null;

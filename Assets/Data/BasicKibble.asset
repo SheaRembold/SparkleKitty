@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: BasicKibble
   m_EditorClassIdentifier: 
   Name: Basic Kibble
+  DataType: 3
   Icon: {fileID: 21300000, guid: 354af896b6a15d044806642e546a3a69, type: 3}
   Prefab: {fileID: 1299546934261784, guid: c6f2b787bb198414e93c99c9610394aa, type: 2}
   BuildRequirements:

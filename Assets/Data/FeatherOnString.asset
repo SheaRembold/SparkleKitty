@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: FeatherOnString
   m_EditorClassIdentifier: 
   Name: Feather on a String
+  DataType: 2
   Icon: {fileID: 21300000, guid: 6d27d751ae82a054f954b29050a6ca73, type: 3}
   Prefab: {fileID: 1023022131551718, guid: e4174db301e008a4b9090f71191e7760, type: 2}
   BuildRequirements:

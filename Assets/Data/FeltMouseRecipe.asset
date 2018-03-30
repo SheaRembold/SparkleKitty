@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: FeltMouseRecipe
   m_EditorClassIdentifier: 
   Name: Felt Mouse Recipe
+  DataType: 5
   Icon: {fileID: 21300000, guid: 626e364066c05204c9731566b6711243, type: 3}
   Prefab: {fileID: 0}
   Product: {fileID: 11400000, guid: 7eca27cb3845b4542acd4890a770279c, type: 2}

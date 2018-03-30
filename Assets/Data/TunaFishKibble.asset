@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Name: TunaFishKibble
   m_EditorClassIdentifier: 
   Name: Tuna Fish Kibble
+  DataType: 3
   Icon: {fileID: 21300000, guid: a3bd2cf5954e5174587330453131b11a, type: 3}
   Prefab: {fileID: 1323498488211722, guid: 7ee9a8549968e0c41bc9bc15a2dce2e3, type: 2}
   BuildRequirements:

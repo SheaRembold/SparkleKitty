@@ -42,11 +42,21 @@ public class CatController : MonoBehaviour
             base.OnUpdate();
             if (stateTime > controller.SitTime)
             {
-                controller.target = PlayerManager.Instance.GetRandomInArea<BuildableData>();
-                if (controller.target != null)
+                List<Placable> favorites = controller.playArea.GetInArea(controller.data.OtherRequirements);
+                if (favorites.Count > 0)
+                {
+                    controller.target = favorites[Random.Range(0, favorites.Count)];
                     controller.targetPos = controller.target.transform.localPosition;
+                }
                 else
-                    controller.targetPos = PlacementManager.Instance.GetRandomInArea();
+                {
+                    controller.target = null;
+                    controller.isLeaving = !controller.StayForever;
+                    if (controller.isLeaving)
+                        controller.targetPos = controller.playArea.CatSpawnPoint.localPosition;
+                    else
+                        controller.targetPos = PlacementManager.Instance.GetRandomInArea();
+                }
                 controller.SetState<WalkState>();
             }
         }
@@ -72,9 +82,18 @@ public class CatController : MonoBehaviour
             if (Mathf.Abs(distToTarget - worldStopDist) < 0.01f)
             {
                 if (controller.target != null)
+                {
                     controller.SetState<InteractState>();
+                }
+                else if (controller.isLeaving)
+                {
+                    controller.playArea.RemoveFromArea(controller.GetComponent<Placable>());
+                    Destroy(controller.gameObject);
+                }
                 else
+                {
                     controller.SetState<SitState>();
+                }
             }
             else
             {
@@ -109,11 +128,14 @@ public class CatController : MonoBehaviour
     public float SitTime = 5f;
     public float StopDistance = 1f;
     public float InteractTime = 5f;
+    public bool StayForever;
 
     protected CatData data;
     protected Animator animator;
+    protected PlayArea playArea;
     protected Placable target;
     protected Vector3 targetPos;
+    protected bool isLeaving;
     List<CatState> states = new List<CatState>();
     CatState currentState;
 
@@ -135,7 +157,6 @@ public class CatController : MonoBehaviour
 
     protected virtual void Awake()
     {
-        data = GetComponent<Placable>().Data as CatData;
         animator = GetComponent<Animator>();
 
         AddState<SitState>();
@@ -143,6 +164,12 @@ public class CatController : MonoBehaviour
         AddState<InteractState>();
 
         SetState<SitState>();
+    }
+
+    protected virtual void Start()
+    {
+        playArea = GetComponentInParent<PlayArea>();
+        data = GetComponent<Placable>().Data as CatData;
     }
 
     protected virtual void Update()

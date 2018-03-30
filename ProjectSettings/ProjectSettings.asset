@@ -243,8 +243,8 @@ PlayerSettings:
   AndroidTargetDevice: 3
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: 
-  AndroidKeyaliasName: 
+  AndroidKeystoreName: D:/unity/Dreams/purrody.keystore
+  AndroidKeyaliasName: purrody
   AndroidTVCompatibility: 0
   AndroidIsGame: 1
   AndroidEnableTango: 1

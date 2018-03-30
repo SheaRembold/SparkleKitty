@@ -17,12 +17,14 @@ public class PlayerManager : MonoBehaviour
     PlacedInst[] startingInArea;
     [SerializeField]
     PlacableData[] startingInventory;
-
-    List<Placable> placedInArea = new List<Placable>();
+    
     List<PlacableData> inventory = new List<PlacableData>();
 
     public int InventoryCount { get { return inventory.Count; } }
     public PlacableData GetInventory(int index) { return inventory[index]; }
+
+    public delegate void OnInventoryChange();
+    public event OnInventoryChange onInventoryChange;
 
     private void Awake()
     {
@@ -32,9 +34,6 @@ public class PlayerManager : MonoBehaviour
     private void Start()
     {
         PlacementManager.Instance.onAreaSet += OnAreaSet;
-        PlacementManager.Instance.onPlaced += OnPlacedPlacable;
-        PlacementManager.Instance.onMoved += OnMovedPlacable;
-        PlacementManager.Instance.onRemoved += OnRemovedPlacable;
 
         inventory.AddRange(startingInventory);
     }
@@ -43,62 +42,32 @@ public class PlayerManager : MonoBehaviour
     {
         for (int i = 0; i < startingInArea.Length; i++)
         {
-            PlacementManager.Instance.PlacingAt(startingInArea[i].Placable, startingInArea[i].Position);
+            PlacementManager.Instance.PlaceAt(startingInArea[i].Placable, startingInArea[i].Position);
         }
         //UIManager.Instance.ShowSpeechUI(GetInArea("SparkleKitty").transform);
-    }
-
-    Placable GetInArea(string name)
-    {
-        for (int i=0;i< placedInArea.Count;i++)
-        {
-            if (placedInArea[i].Data.name == name)
-                return placedInArea[i];
-        }
-        return null;
-    }
-
-    void OnPlacedPlacable(Placable placable)
-    {
-        if (!placedInArea.Contains(placable))
-            placedInArea.Add(placable);
-    }
-
-    void OnMovedPlacable(Placable placable)
-    {
-    }
-
-    void OnRemovedPlacable(Placable placable)
-    {
-        placedInArea.Remove(placable);
     }
 
     public void AddInventory(PlacableData item)
     {
         inventory.Add(item);
+        onInventoryChange();
     }
 
     public void RemoveInventory(PlacableData item)
     {
         inventory.Remove(item);
+        onInventoryChange();
     }
-
-    List<Placable> validPlacables = new List<Placable>();
-    public Placable GetRandomInArea<T>() where T : PlacableData
+    
+    List<PlacableData> tempPlacableDatas = new List<PlacableData>();
+    public List<PlacableData> GetInventoryItems(PlacableDataType dataType)
     {
-        validPlacables.Clear();
-        for (int i = 0; i < placedInArea.Count; i++)
+        tempPlacableDatas.Clear();
+        for (int i = 0; i < inventory.Count; i++)
         {
-            if (placedInArea[i].Data is T)
-                validPlacables.Add(placedInArea[i]);
+            if (inventory[i].DataType == dataType)
+                tempPlacableDatas.Add(inventory[i]);
         }
-        if (validPlacables.Count > 0)
-            return validPlacables[Random.Range(0, validPlacables.Count)];
-
-        return null;
+        return tempPlacableDatas;
     }
-
-	public void CheckCats(){
-
-	}
 }

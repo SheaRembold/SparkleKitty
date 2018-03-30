@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Name: CardboardTower5
   m_EditorClassIdentifier: 
   Name: Cardboard Tower 5
+  DataType: 1
+  Icon: {fileID: 0}
   Prefab: {fileID: 1453534631422286, guid: 88e01909ff77e234eaa1730cc20e890e, type: 2}
   BuildRequirements: []
   MaterialType: 1

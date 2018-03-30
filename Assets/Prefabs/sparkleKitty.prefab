@@ -1710,6 +1710,7 @@ MonoBehaviour:
   SitTime: 5
   StopDistance: 0.1
   InteractTime: 5
+  StayForever: 1
 --- !u!137 &137390647712034350
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1
