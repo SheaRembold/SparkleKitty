@@ -22,6 +22,9 @@ namespace UnityARInterface
             ARInterface.planeAdded += PlaneAddedHandler;
             ARInterface.planeUpdated += PlaneUpdatedHandler;
             ARInterface.planeRemoved += PlaneRemovedHandler;
+
+            foreach (KeyValuePair<string, GameObject> pair in m_Planes)
+                pair.Value.SetActive(true);
         }
 
         void OnDisable()
@@ -29,6 +32,9 @@ namespace UnityARInterface
             ARInterface.planeAdded -= PlaneAddedHandler;
             ARInterface.planeUpdated -= PlaneUpdatedHandler;
             ARInterface.planeRemoved -= PlaneRemovedHandler;
+
+            foreach (KeyValuePair<string, GameObject> pair in m_Planes)
+                pair.Value.SetActive(false);
         }
 
         protected virtual void CreateOrUpdateGameObject(BoundedPlane plane)

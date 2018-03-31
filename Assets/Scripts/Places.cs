@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 using Mapbox.Unity.Map;
 using Mapbox.Unity.Location;
 using Mapbox.Examples;
+using Mapbox.Utils;
 using UnityEngine.EventSystems;
 
 public enum ResourceType { Recipe, Tower, Toy, Treat }
@@ -36,6 +37,9 @@ public class Places : MonoBehaviour
 
     int resourceIndex;
     int locationIndex;
+
+    List<GameObject> placeMarkers = new List<GameObject>();
+    Vector2d lastLoc;
 
     public class Response
     {
@@ -78,10 +82,15 @@ public class Places : MonoBehaviour
     void LateUpdate()
     {
         Mapbox.Unity.Location.Location loc = LocationProviderFactory.Instance.DefaultLocationProvider.CurrentLocation;
-        if (_isInitialized && loc.Timestamp > 0 && !searchHasRun)
+        if (_isInitialized && loc.Timestamp > 0 && (!searchHasRun || Vector2d.Distance(lastLoc, Mapbox.Unity.Utilities.Conversions.LatLonToMeters(loc.LatitudeLongitude)) > radius / 2f))
         {
+            StopAllCoroutines();
+            for (int i = 0; i < placeMarkers.Count; i++)
+                Destroy(placeMarkers[i]);
+            placeMarkers.Clear();
             string url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + loc.LatitudeLongitude.ToStringInv() + "&radius=" + radius + "&type=" + resourceLocationData[resourceIndex].LocTypes[locationIndex] + "&key=" + apiKey;
             StartCoroutine(RunSearch(url));
+            lastLoc = Mapbox.Unity.Utilities.Conversions.LatLonToMeters(loc.LatitudeLongitude);
             searchHasRun = true;
         }
     }
@@ -101,6 +110,7 @@ public class Places : MonoBehaviour
             GameObject obj = Instantiate(resourceLocationData[resourceIndex].MarkerPrefab);
             obj.transform.SetParent(transform.parent);
             obj.GetComponent<MapMarker>().Init(this, _map, new Mapbox.Utils.Vector2d(response.results[i].geometry.location.lat, response.results[i].geometry.location.lng), response.results[i].name);
+            placeMarkers.Add(obj);
         }
 
         if (!string.IsNullOrEmpty(response.next_page_token))
@@ -140,7 +150,12 @@ public class Places : MonoBehaviour
 
     public void CompleteInteraction()
     {
-        Destroy(activeMarker.gameObject);
+        if (activeMarker != null)
+        {
+            placeMarkers.Remove(activeMarker.gameObject);
+            Destroy(activeMarker.gameObject);
+            activeMarker = null;
+        }
     }
 
     public void HideInteraction()

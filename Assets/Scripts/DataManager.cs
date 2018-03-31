@@ -9,19 +9,45 @@ public class DataManager : MonoBehaviour
     public static DataManager Instance;
     
     public CatData[] Cats;
-    public PlacableData[] Towers;
+    public UpgradableData[] Towers;
     public BuildableData[] Toys;
     public BuildableData[] Treats;
     public PlacableData[] Components;
     public RecipeData[] ToyRecipes;
     public RecipeData[] TreatRecipes;
-    
+
+    Dictionary<string, PlacableData> allData = new Dictionary<string, PlacableData>();
+
     private void Awake()
     {
         Instance = this;
+
+        AddData(Cats);
+        AddData(Towers);
+        AddData(Toys);
+        AddData(Treats);
+        AddData(Components);
+        AddData(ToyRecipes);
+        AddData(TreatRecipes);
     }
 
-    public PlacableData[] GetData(PlacableDataType dataType)
+    void AddData(PlacableData[] dataArray)
+    {
+        for (int i = 0; i < dataArray.Length; i++)
+        {
+            allData.Add(dataArray[i].name, dataArray[i]);
+        }
+    }
+
+    public PlacableData GetData(string name)
+    {
+        if (allData.ContainsKey(name))
+            return allData[name];
+
+        return null;
+    }
+
+    public PlacableData[] GetAllData(PlacableDataType dataType)
     {
         if (dataType == PlacableDataType.Cat)
             return Cats;

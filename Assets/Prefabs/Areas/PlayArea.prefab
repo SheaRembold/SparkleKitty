@@ -28,7 +28,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1060960991091254
 GameObject:
   m_ObjectHideFlags: 0
@@ -507,4 +507,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9f7e76fa5ed4e24590e3b09e12a3db9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startingInArea:
+  - Placable: {fileID: 11400000, guid: 27b93504ea182e240b5d6a89b34e5817, type: 2}
+    Position: {x: 0, y: 0, z: 0.5}
+  - Placable: {fileID: 11400000, guid: 3a21f05b68df3684bbcaf0c79432e9fa, type: 2}
+    Position: {x: 0, y: 0, z: 0}
   CatSpawnPoint: {fileID: 4629243851409828}
+  SpawnDelay: 5

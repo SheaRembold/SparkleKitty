@@ -16,5 +16,10 @@ public abstract class PlacementProvider
         sceneObj.SetActive(true);
     }
 
+    public virtual void FinishInit()
+    {
+
+    }
+
     public abstract bool GetPlane(out UnityARInterface.BoundedPlane plane);
 }

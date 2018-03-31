@@ -57,7 +57,7 @@ public class PlayArea : PlacementArea
     void UpdateValidCats()
     {
         validCats.Clear();
-        for (int i = 0; i < DataManager.Instance.Cats.Length; i++)
+        for (int i = 1; i < DataManager.Instance.Cats.Length; i++)
         {
             if (HasRequ(DataManager.Instance.Cats[i]))
             {

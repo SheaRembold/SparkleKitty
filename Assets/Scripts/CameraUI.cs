@@ -24,5 +24,6 @@ public class CameraUI : MonoBehaviour
 
         byte[] bytes = screenShot.EncodeToPNG();
         File.WriteAllBytes(Application.persistentDataPath + "/" + catName + ".png", bytes);
+        PlayerManager.Instance.AddCatPhoto(cats[cats.Count - 1].Data, screenShot);
     }
 }

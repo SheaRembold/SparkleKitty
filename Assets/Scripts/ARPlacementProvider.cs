@@ -5,9 +5,15 @@ using UnityARInterface;
 
 public class ARPlacementProvider : PlacementProvider
 {
+    GameObject cameraObj;
+    GameObject lightObj;
+
     public ARPlacementProvider()
     {
         sceneObj = GameObject.Instantiate(Resources.Load<GameObject>("ARScene"));
+
+        cameraObj = sceneObj.GetComponentInChildren<Camera>().gameObject;
+        lightObj = sceneObj.GetComponentInChildren<Light>().gameObject;
     }
 
     public override bool GetPlane(out BoundedPlane plane)
@@ -22,5 +28,25 @@ public class ARPlacementProvider : PlacementProvider
 
         plane = new BoundedPlane();
         return false;
+    }
+
+    public override void FinishInit()
+    {
+        base.FinishInit();
+
+        sceneObj.GetComponentInChildren<ARPlaneVisualizer>().enabled = false;
+        sceneObj.GetComponentInChildren<ARPointCloudVisualizer>().enabled = false;
+    }
+
+    public override void TurnOff()
+    {
+        cameraObj.SetActive(false);
+        lightObj.SetActive(false);
+    }
+
+    public override void TurnOn()
+    {
+        cameraObj.SetActive(true);
+        lightObj.SetActive(true);
     }
 }

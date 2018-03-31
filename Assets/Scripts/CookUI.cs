@@ -5,13 +5,15 @@ using UnityEngine.UI;
 
 public class CookUI : MonoBehaviour
 {
-    private void OnEnable()
+    public void ShowCook()
     {
         PlacementManager.Instance.SetArea(AreaType.Cook);
+        UIManager.Instance.ShowUI(gameObject);
     }
 
-    private void OnDisable()
+    public void HideCook()
     {
         PlacementManager.Instance.SetArea(AreaType.Play);
+        UIManager.Instance.GoBack();
     }
 }

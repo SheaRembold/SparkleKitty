@@ -8,10 +8,7 @@ public enum AreaType { None, Play, Build, Cook }
 public class PlacementManager : MonoBehaviour
 {
     public static PlacementManager Instance;
-
-    public delegate void OnAreaSet();
-    public OnAreaSet onAreaSet;
-
+    
     [SerializeField]
     GameObject Loading;
     [SerializeField]
@@ -209,12 +206,25 @@ public class PlacementManager : MonoBehaviour
                 float scale = Mathf.Min(1f, plane.extents.x, plane.extents.y);
                 playArea.transform.localScale = Vector3.one * scale;
                 playArea.gameObject.SetActive(true);
+
+                Vector3 forword = -playArea.transform.forward;
+                forword.y = 0f;
+                Vector3 look = Camera.main.transform.position - playArea.transform.position;
+                look.y = 0f;
+                float angle = Vector3.SignedAngle(look, forword, Vector3.up);
+                if (angle > 135f || angle < -135f)
+                    playArea.transform.Rotate(playArea.transform.up, 180f);
+                else if (angle > 45f)
+                    playArea.transform.Rotate(playArea.transform.up, -90f);
+                else if (angle < -45f)
+                    playArea.transform.Rotate(playArea.transform.up, 90f);
+
                 if (Input.GetMouseButtonDown(0))
                 {
                     placingArea = false;
                     UIManager.Instance.ResetToMainUI();
-                    if (onAreaSet != null)
-                        onAreaSet();
+                    playArea.SetArea();
+                    provider.FinishInit();
                 }
             }
             else

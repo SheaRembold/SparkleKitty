@@ -1,20 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
-
-[System.Serializable]
-public struct PlacedInst
-{
-    public PlacableData Placable;
-    public Vector3 Position;
-}
 
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance;
-
-    [SerializeField]
-    PlacedInst[] startingInArea;
+    
     [SerializeField]
     PlacableData[] startingInventory;
     
@@ -25,6 +17,9 @@ public class PlayerManager : MonoBehaviour
 
     public delegate void OnInventoryChange();
     public event OnInventoryChange onInventoryChange;
+    bool invDirty;
+
+    Dictionary<PlacableData, Texture2D> catPhotos = new Dictionary<PlacableData, Texture2D>();
 
     private void Awake()
     {
@@ -33,18 +28,20 @@ public class PlayerManager : MonoBehaviour
 
     private void Start()
     {
-        PlacementManager.Instance.onAreaSet += OnAreaSet;
-
-        inventory.AddRange(startingInventory);
-    }
-
-    void OnAreaSet()
-    {
-        for (int i = 0; i < startingInArea.Length; i++)
+        if (File.Exists(Application.persistentDataPath + "/inventory.txt"))
         {
-            PlacementManager.Instance.PlaceAt(startingInArea[i].Placable, startingInArea[i].Position);
+            string[] invNames = File.ReadAllLines(Application.persistentDataPath + "/inventory.txt");
+            for (int i = 0; i < invNames.Length; i++)
+            {
+                PlacableData item = DataManager.Instance.GetData(invNames[i]);
+                if (item != null)
+                    inventory.Add(item);
+            }
         }
-        //UIManager.Instance.ShowSpeechUI(GetInArea("SparkleKitty").transform);
+        else
+        {
+            inventory.AddRange(startingInventory);
+        }
     }
 
     public void AddInventory(PlacableData item)
@@ -52,6 +49,7 @@ public class PlayerManager : MonoBehaviour
         inventory.Add(item);
         if (onInventoryChange != null)
             onInventoryChange();
+        invDirty = true;
     }
 
     public void RemoveInventory(PlacableData item)
@@ -59,6 +57,7 @@ public class PlayerManager : MonoBehaviour
         inventory.Remove(item);
         if (onInventoryChange != null)
             onInventoryChange();
+        invDirty = true;
     }
     
     List<PlacableData> tempPlacableDatas = new List<PlacableData>();
@@ -82,5 +81,47 @@ public class PlayerManager : MonoBehaviour
                 count++;
         }
         return count;
+    }
+
+    private void LateUpdate()
+    {
+        if (invDirty)
+            Save();
+    }
+
+    void Save()
+    {
+        System.Text.StringBuilder builder = new System.Text.StringBuilder();
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            builder.AppendLine(inventory[i].name);
+        }
+        File.WriteAllText(Application.persistentDataPath + "/inventory.txt", builder.ToString());
+
+        invDirty = false;
+    }
+
+    public void AddCatPhoto(PlacableData data, Texture2D photo)
+    {
+        if (catPhotos.ContainsKey(data))
+            catPhotos[data] = photo;
+        else
+            catPhotos.Add(data, photo);
+    }
+    
+    public Texture2D GetCatPhoto(PlacableData data)
+    {
+        if (catPhotos.ContainsKey(data))
+            return catPhotos[data];
+
+        if (File.Exists(Application.persistentDataPath + "/" + data.name + ".png"))
+        {
+            Texture2D photo = new Texture2D(2, 2, TextureFormat.RGB24, false);
+            photo.LoadImage(File.ReadAllBytes(Application.persistentDataPath + "/" + data.name + ".png"));
+            catPhotos.Add(data, photo);
+            return photo;
+        }
+
+        return null;
     }
 }

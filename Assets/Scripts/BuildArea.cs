@@ -7,6 +7,11 @@ public class BuildArea : PlacementArea
     List<Placable> available = new List<Placable>();
     GameObject builtObj;
 
+    protected void Start()
+    {
+        SetArea();
+    }
+
     public virtual void TryBuild()
     {
         CheckBuildables(DataManager.Instance.Toys);

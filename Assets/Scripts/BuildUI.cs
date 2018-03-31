@@ -5,13 +5,15 @@ using UnityEngine.UI;
 
 public class BuildUI : MonoBehaviour
 {
-    private void OnEnable()
+    public void ShowBuild()
     {
         PlacementManager.Instance.SetArea(AreaType.Build);
+        UIManager.Instance.ShowUI(gameObject);
     }
 
-    private void OnDisable()
+    public void HideBuild()
     {
         PlacementManager.Instance.SetArea(AreaType.Play);
+        UIManager.Instance.GoBack();
     }
 }
