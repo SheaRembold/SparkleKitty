@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayArea : PlacementArea
 {
     public Transform CatSpawnPoint;
+    public float SpawnDelay = 5f;
 
     List<CatData> validCats = new List<CatData>();
     CatData waitingCat;
@@ -47,7 +48,7 @@ public class PlayArea : PlacementArea
 
     IEnumerator WaitToSpawnCat()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(SpawnDelay);
 
         PlacementManager.Instance.PlaceAt(waitingCat, CatSpawnPoint.localPosition);
         waitingCat = null;
@@ -71,8 +72,8 @@ public class PlayArea : PlacementArea
         bool hasTower = false;
         for (int i = 0; i < towers.Count; i++)
         {
-            if ((towers[i].Data as UgradableData).MaterialType == cat.RequiredTowerType
-                && (towers[i].Data as UgradableData).Level >= cat.RequiredTowerLevel)
+            if ((towers[i].Data as UpgradableData).MaterialType == cat.RequiredTowerType
+                && (towers[i].Data as UpgradableData).Level >= cat.RequiredTowerLevel)
             {
                 hasTower = true;
                 break;

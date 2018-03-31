@@ -50,13 +50,15 @@ public class PlayerManager : MonoBehaviour
     public void AddInventory(PlacableData item)
     {
         inventory.Add(item);
-        onInventoryChange();
+        if (onInventoryChange != null)
+            onInventoryChange();
     }
 
     public void RemoveInventory(PlacableData item)
     {
         inventory.Remove(item);
-        onInventoryChange();
+        if (onInventoryChange != null)
+            onInventoryChange();
     }
     
     List<PlacableData> tempPlacableDatas = new List<PlacableData>();
@@ -69,5 +71,16 @@ public class PlayerManager : MonoBehaviour
                 tempPlacableDatas.Add(inventory[i]);
         }
         return tempPlacableDatas;
+    }
+
+    public int GetInventoryCount(PlacableData data)
+    {
+        int count = 0;
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            if (inventory[i] == data)
+                count++;
+        }
+        return count;
     }
 }

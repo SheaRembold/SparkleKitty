@@ -12,6 +12,8 @@ public class UIManager : MonoBehaviour
     GameObject mainUI;
     [SerializeField]
     SpeechUI speechUI;
+    [SerializeField]
+    UpgradeUI upgradeUI;
 
     GameObject currentUI;
     Stack<GameObject> uiStack = new Stack<GameObject>();
@@ -32,7 +34,7 @@ public class UIManager : MonoBehaviour
     {
         GoBackToUI(mainUI);
     }
-
+    
     public void ShowUI(GameObject uiObj)
     {
         if (uiObj != currentUI)
@@ -74,5 +76,11 @@ public class UIManager : MonoBehaviour
     public void ShowSpeechUI(Transform target)
     {
         speechUI.ShowSpeech(target);
+    }
+
+    public void ShowUpgradeUI(UpgradeClickable upgradable)
+    {
+        upgradeUI.ShowUpgrade(upgradable);
+        ShowUI(upgradeUI.gameObject);
     }
 }

@@ -21,4 +21,4 @@ MonoBehaviour:
   UpgradeRequirements:
   - {fileID: 11400000, guid: e1f67c4d836710b4cb0d538e1cb790f9, type: 2}
   - {fileID: 11400000, guid: e1f67c4d836710b4cb0d538e1cb790f9, type: 2}
-  Ugrade: {fileID: 11400000, guid: 1b1cb341c23e76840820497a4c10c49d, type: 2}
+  Upgrade: {fileID: 11400000, guid: 1b1cb341c23e76840820497a4c10c49d, type: 2}

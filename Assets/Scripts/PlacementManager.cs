@@ -21,15 +21,16 @@ public class PlacementManager : MonoBehaviour
     [SerializeField]
     GameObject CookAreaPrefab;
 
-    PlacementArea playArea;
-    PlacementArea buildArea;
-    PlacementArea cookArea;
+    PlayArea playArea;
+    BuildArea buildArea;
+    CookArea cookArea;
     PlacementProvider provider;
     Placable currentPlacing;
     Vector3? lastPos;
     bool placed;
     bool placingArea = true;
     PlacementArea currentArea;
+    Clickable currentClickable;
 
     private void Awake()
     {
@@ -88,13 +89,13 @@ public class PlacementManager : MonoBehaviour
     private void StartPlacement()
     {
         Loading.SetActive(false);
-        playArea = Instantiate(PlayAreaPrefab).GetComponent<PlacementArea>();
+        playArea = Instantiate(PlayAreaPrefab).GetComponent<PlayArea>();
         currentArea = playArea;
-        buildArea = BuildAreaPrefab.GetComponent<PlacementArea>();
-        cookArea = CookAreaPrefab.GetComponent<PlacementArea>();
+        buildArea = BuildAreaPrefab.GetComponent<BuildArea>();
+        cookArea = CookAreaPrefab.GetComponent<CookArea>();
     }
 
-    public PlacementArea GetPlayArea()
+    public PlayArea GetPlayArea()
     {
         return playArea;
     }
@@ -138,12 +139,27 @@ public class PlacementManager : MonoBehaviour
     {
         currentPlacing = Instantiate(placable.Prefab).GetComponent<Placable>();
         currentPlacing.Data = placable;
-        currentPlacing.transform.SetParent(playArea.transform);
+        currentPlacing.transform.SetParent(currentArea.transform);
         currentPlacing.transform.localPosition = position;
         currentPlacing.transform.localRotation = Quaternion.identity;
         currentPlacing.transform.localScale = Vector3.one;
-        if (currentArea != null)
-            currentArea.AddToArea(currentPlacing);
+
+        currentArea.AddToArea(currentPlacing);
+        currentPlacing = null;
+    }
+
+    public void Replace(Placable oldPlacable, PlacableData newData)
+    {
+        currentPlacing = Instantiate(newData.Prefab).GetComponent<Placable>();
+        currentPlacing.Data = newData;
+        currentPlacing.transform.SetParent(currentArea.transform);
+        currentPlacing.transform.localPosition = oldPlacable.transform.localPosition;
+        currentPlacing.transform.localRotation = oldPlacable.transform.localRotation;
+        currentPlacing.transform.localScale = oldPlacable.transform.localScale;
+
+        currentArea.RemoveFromArea(oldPlacable);
+        Destroy(oldPlacable.gameObject);
+        currentArea.AddToArea(currentPlacing);
         currentPlacing = null;
     }
     
@@ -206,16 +222,34 @@ public class PlacementManager : MonoBehaviour
                 playArea.gameObject.SetActive(false);
             }
         }
-        else if (currentPlacing == null)
+        else if (currentPlacing == null && currentClickable == null)
         {
             if (Input.GetMouseButtonDown(0))
             {
                 RaycastHit hit;
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Placable")))
                 {
-                    currentPlacing = hit.transform.GetComponentInParent<Placable>();
-                    lastPos = currentPlacing.transform.localPosition;
+                    currentClickable = hit.transform.GetComponentInParent<Clickable>();
+                    if (currentClickable == null)
+                    {
+                        currentPlacing = hit.transform.GetComponentInParent<Placable>();
+                        lastPos = currentPlacing.transform.localPosition;
+                    }
                 }
+            }
+        }
+        else if (currentClickable != null)
+        {
+            if (Input.GetMouseButtonUp(0))
+            {
+                RaycastHit hit;
+                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Placable")))
+                {
+                    Clickable upClickable = hit.transform.GetComponentInParent<Clickable>();
+                    if (upClickable == currentClickable)
+                        currentClickable.Click();
+                }
+                currentClickable = null;
             }
         }
         else
