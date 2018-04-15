@@ -4,35 +4,37 @@ using UnityEngine;
 using Mapbox.Unity.Map;
 using Mapbox.Utils;
 using UnityEngine.EventSystems;
+using Mapbox.Unity.MeshGeneration.Interfaces;
 
-public class MapMarker : MonoBehaviour, IPointerClickHandler
+public class MapMarker : MonoBehaviour, IPointerClickHandler, IFeaturePropertySettable
 {
+    public SpriteRenderer icon;
+    public SpriteRenderer back;
+    [System.NonSerialized]
     public ResourceType resourceType;
-    Places _places;
-    private AbstractMap _map;
-    Vector2d _latLng;
-    string _name;
-    bool _isInitialized;
-
-    public void Init(Places places, AbstractMap map, Vector2d latLng, string name)
+    [System.NonSerialized]
+    public ulong featureID;
+    
+    Dictionary<string, object> _props;
+    public void Set(Dictionary<string, object> props)
     {
-        _places = places;
-        _map = map;
-        _latLng = latLng;
-        _name = name;
-        _isInitialized = true;
+        _props = props;
     }
 
-    void LateUpdate()
+    public void Init(ulong id, ResourceType type, Sprite iconSprite, Color backColor)
     {
-        if (_isInitialized)
-        {
-            transform.localPosition = _map.GeoToWorldPosition(_latLng);
-        }
+        featureID = id;
+        resourceType = type;
+        icon.sprite = iconSprite;
+        back.color = backColor;
     }
-
+    
     public void OnPointerClick(PointerEventData eventData)
     {
-        _places.ShowInteraction(this);
+        PlacesManager.Instance.ShowInteraction(this);
+        /*foreach (var prop in _props)
+        {
+            Debug.Log(prop.Key + ":" + prop.Value);
+        }*/
     }
 }

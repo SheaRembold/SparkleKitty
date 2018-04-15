@@ -10,10 +10,26 @@ public class PlayArea : PlacementArea
     List<CatData> validCats = new List<CatData>();
     CatData waitingCat;
 
+    bool finishedLoading;
+
+    public override void SetArea()
+    {
+        base.SetArea();
+
+        finishedLoading = true;
+        CheckForCats();
+    }
+
     public override void AddToArea(Placable placable)
     {
         base.AddToArea(placable);
 
+        if (finishedLoading)
+            CheckForCats();
+    }
+
+    void CheckForCats()
+    {
         if (GetInArea(PlacableDataType.Cat).Count < 2 && waitingCat == null)
         {
             UpdateValidCats();

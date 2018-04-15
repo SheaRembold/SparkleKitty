@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c60db1cafaf54e44aa692d2860df709, type: 3}
+  m_Name: New Places Modifier
+  m_EditorClassIdentifier: 
+  Active: 1
+  MarkerPrefab: {fileID: 1972219096798866, guid: 7ec4262650983aa42b3f6fab313079a9,
+    type: 2}
+  resourceLocationData:
+  - ResourceType: 0
+    LocTypes:
+    - School
+    - Library
+    InteractUI: {fileID: 0}
+    Icon: {fileID: 21300000, guid: bf358129dbb6e924db44cc6557df9d5b, type: 3}
+    BackColor: {r: 0.3254902, g: 0.59607846, b: 0.7176471, a: 1}
+  - ResourceType: 1
+    LocTypes:
+    - Park
+    - PostOffice
+    InteractUI: {fileID: 0}
+    Icon: {fileID: 21300000, guid: bf26d166f9b76af4c81b561ee109f641, type: 3}
+    BackColor: {r: 0.49803922, g: 0.32156864, b: 0.6, a: 1}
+  - ResourceType: 2
+    LocTypes:
+    - ShoppingMall
+    - ConvenienceStore
+    InteractUI: {fileID: 0}
+    Icon: {fileID: 21300000, guid: 3922cf85e4d15c147b5bc5e58447e3f0, type: 3}
+    BackColor: {r: 0.91764706, g: 0.34901962, b: 0.34901962, a: 1}
+  - ResourceType: 3
+    LocTypes:
+    - Restaurant
+    - Supermarket
+    InteractUI: {fileID: 0}
+    Icon: {fileID: 21300000, guid: 5c2784e2e3ae9f34cb989cb2135e0f23, type: 3}
+    BackColor: {r: 0.32941177, g: 0.6039216, b: 0.5019608, a: 1}
+  _scaleDownWithWorld: 1

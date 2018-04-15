@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public enum AreaType { None, Play, Build, Cook }
 
@@ -11,6 +12,8 @@ public class PlacementManager : MonoBehaviour
     
     [SerializeField]
     GameObject Loading;
+    [SerializeField]
+    PlacementUI HelpUI;
     [SerializeField]
     GameObject PlayAreaPrefab;
     [SerializeField]
@@ -90,6 +93,7 @@ public class PlacementManager : MonoBehaviour
         currentArea = playArea;
         buildArea = BuildAreaPrefab.GetComponent<BuildArea>();
         cookArea = CookAreaPrefab.GetComponent<CookArea>();
+        UIManager.Instance.ShowUI(HelpUI.gameObject);
     }
 
     public PlayArea GetPlayArea()
@@ -219,6 +223,8 @@ public class PlacementManager : MonoBehaviour
                 else if (angle < -45f)
                     playArea.transform.Rotate(playArea.transform.up, 90f);
 
+                HelpUI.ShowPlace();
+
                 if (Input.GetMouseButtonDown(0))
                 {
                     placingArea = false;
@@ -230,11 +236,12 @@ public class PlacementManager : MonoBehaviour
             else
             {
                 playArea.gameObject.SetActive(false);
+                HelpUI.ShowLooking();
             }
         }
         else if (currentPlacing == null && currentClickable == null)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
             {
                 RaycastHit hit;
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Placable")))

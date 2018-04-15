@@ -15,16 +15,14 @@ public class MapInteractUI : MonoBehaviour
     Image itemImage;
     [SerializeField]
     PlacableData[] resources; 
-
-    Places _places;
+    
     int starsAdded;
     float percentComplete;
     float percentShown;
     bool awarded;
 
-    public void Show(Places places)
+    public void Show()
     {
-        _places = places;
         for (int i = 0; i < stars.Length; i++)
             stars[i].Init(this);
         starsAdded = 0;
@@ -58,7 +56,7 @@ public class MapInteractUI : MonoBehaviour
                 itemImage.sprite = resource.Icon;
                 itemImage.gameObject.SetActive(true);
                 PlayerManager.Instance.AddInventory(resource);
-                _places.CompleteInteraction();
+                PlacesManager.Instance.CompleteInteraction();
                 awarded = true;
             }
         }
@@ -66,7 +64,7 @@ public class MapInteractUI : MonoBehaviour
 
     public void CollectItem()
     {
-        _places.HideInteraction();
+        PlacesManager.Instance.HideInteraction();
         gameObject.SetActive(false);
     }
 }

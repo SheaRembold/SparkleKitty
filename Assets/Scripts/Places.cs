@@ -8,7 +8,7 @@ using Mapbox.Examples;
 using Mapbox.Utils;
 using UnityEngine.EventSystems;
 
-public enum ResourceType { Recipe, Tower, Toy, Treat }
+//public enum ResourceType { Recipe, Tower, Toy, Treat }
 
 public class Places : MonoBehaviour
 {
@@ -109,7 +109,7 @@ public class Places : MonoBehaviour
         {
             GameObject obj = Instantiate(resourceLocationData[resourceIndex].MarkerPrefab);
             obj.transform.SetParent(transform.parent);
-            obj.GetComponent<MapMarker>().Init(this, _map, new Mapbox.Utils.Vector2d(response.results[i].geometry.location.lat, response.results[i].geometry.location.lng), response.results[i].name);
+            //obj.GetComponent<MapMarker>().Init(this, _map, new Mapbox.Utils.Vector2d(response.results[i].geometry.location.lat, response.results[i].geometry.location.lng), response.results[i].name);
             placeMarkers.Add(obj);
         }
 
@@ -145,7 +145,7 @@ public class Places : MonoBehaviour
         activeMarker = marker;
         raycaster.eventMask = LayerMask.GetMask();
         _mapMovement.enabled = false;
-        resourceLocationData.Find((x) => { return x.ResourceType == marker.resourceType; }).InteractUI.Show(this);
+        //resourceLocationData.Find((x) => { return x.ResourceType == marker.resourceType; }).InteractUI.Show(this);
     }
 
     public void CompleteInteraction()

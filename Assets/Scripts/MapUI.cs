@@ -6,6 +6,12 @@ public class MapUI : MonoBehaviour
 {
     public GameObject Map;
 
+    private void Awake()
+    {
+        if (!GoogleARCore.AndroidPermissionsManager.IsPermissionGranted("android.permission.ACCESS_FINE_LOCATION"))
+            GoogleARCore.AndroidPermissionsManager.RequestPermission("android.permission.ACCESS_FINE_LOCATION");
+    }
+
     private void OnEnable()
     {
         Map.SetActive(true);

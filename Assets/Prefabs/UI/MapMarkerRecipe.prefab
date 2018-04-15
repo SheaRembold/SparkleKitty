@@ -125,6 +125,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceType: 0
+  icon: {fileID: 212215480360488284}
+  back: {fileID: 212650601577740434}
 --- !u!212 &212215480360488284
 SpriteRenderer:
   m_ObjectHideFlags: 1

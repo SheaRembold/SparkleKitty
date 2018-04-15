@@ -5,9 +5,7 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
-
-    [SerializeField]
-    GameObject startingUI;
+    
     [SerializeField]
     GameObject mainUI;
     [SerializeField]
@@ -21,15 +19,11 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-    }
 
-    private void Start()
-    {
         for (int i = 0; i < transform.childCount; i++)
             transform.GetChild(i).gameObject.SetActive(false);
-        ShowUI(startingUI);
     }
-
+    
     public void ResetToMainUI()
     {
         GoBackToUI(mainUI);
