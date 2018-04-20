@@ -19,20 +19,53 @@ MonoBehaviour:
     LocTypes:
     - School
     - Library
+    - Police
+    - Church
+    - Museum
+    - Arts Centre
+    - Bank
+    - University
+    - College
+    - Books
+    - Fire Station
+    - Hospital
+    - Place Of Worship
     InteractUI: {fileID: 0}
     Icon: {fileID: 21300000, guid: bf358129dbb6e924db44cc6557df9d5b, type: 3}
     BackColor: {r: 0.3254902, g: 0.59607846, b: 0.7176471, a: 1}
   - ResourceType: 1
     LocTypes:
     - Park
-    - PostOffice
+    - Cemetery
+    - Memorial
+    - Construction
+    - Hotel
+    - Monument
+    - Attraction
+    - Grave Yard
+    - Wood
+    - Playground
+    - Fuel
     InteractUI: {fileID: 0}
     Icon: {fileID: 21300000, guid: bf26d166f9b76af4c81b561ee109f641, type: 3}
     BackColor: {r: 0.49803922, g: 0.32156864, b: 0.6, a: 1}
   - ResourceType: 2
     LocTypes:
-    - ShoppingMall
-    - ConvenienceStore
+    - Mall
+    - Convenience
+    - Gift
+    - Retail
+    - Theatre
+    - Clothes
+    - Hairdresser
+    - Department Store
+    - Jewelry
+    - Electronics
+    - Sports
+    - Beauty
+    - Stationery
+    - Houseware
+    - Variety Store
     InteractUI: {fileID: 0}
     Icon: {fileID: 21300000, guid: 3922cf85e4d15c147b5bc5e58447e3f0, type: 3}
     BackColor: {r: 0.91764706, g: 0.34901962, b: 0.34901962, a: 1}
@@ -40,6 +73,14 @@ MonoBehaviour:
     LocTypes:
     - Restaurant
     - Supermarket
+    - Bar
+    - Pub
+    - Bakery
+    - Marketplace
+    - Fast Food
+    - Deli
+    - Cafe
+    - Pharmacy
     InteractUI: {fileID: 0}
     Icon: {fileID: 21300000, guid: 5c2784e2e3ae9f34cb989cb2135e0f23, type: 3}
     BackColor: {r: 0.32941177, g: 0.6039216, b: 0.5019608, a: 1}

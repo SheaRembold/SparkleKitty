@@ -37,6 +37,8 @@ public class PlacesModifier : GameObjectModifier
 
     private Dictionary<GameObject, GameObject> _objects;
     List<ulong> collected = new List<ulong>();
+    List<string> allTypes = new List<string>() { "Memorial", "Construction", "Park", "Common", "Apartments", "Church", "Bus Station", "Police", "Public Building", "Hotel", "Bar", "Restaurant", "Gift", "Library", "Monument", "Museum", "Pub", "Bakery", "Yes", "Convenience", "Arts Centre", "Commercial", "Lawyer", "Marketplace", "Bank", "Government", "Drinking Water", "Sports Centre", "Place Of Worship", "Retail", "Theatre", "Clothes", "Fast Food", "Deli", "School", "Attraction", "Stadium", "Community Centre", "Mall", "Residential", "Industrial", "University", "College", "Playground", "House", "Farmyard", "Hairdresser", "Cafe", "Shelter", "Social Facility", "Cemetery", "Farmland", "Doityourself", "Department Store", "Supermarket", "Golf Course", "Jewelry", "Electronics", "Sports", "Pharmacy", "Fuel", "Books", "Beauty", "Stationery", "Houseware", "Made Mine", "Grave Yard", "Wood", "Second Hand", "Variety Store", "Alcohol", "Fire Station", "Hospital", };
+    //"Common", "Apartments", "Bus Station", "Public Building", "Yes", "Commercial", "Lawyer", "Government", "Drinking Water", "Sports Centre", "Stadium", "Community Centre", "Residential", "Industrial", "House", "Farmyard", "Shelter", "Social Facility", "Farmland", "Doityourself", "Golf Course", "Made Mine", "Second Hand", "Alcohol", 
 
     public override void Initialize()
     {
@@ -54,6 +56,9 @@ public class PlacesModifier : GameObjectModifier
 
         IFeaturePropertySettable settable = null;
         GameObject go = null;
+
+        if (!allTypes.Contains(ve.Feature.Properties["type"] as string))
+            allTypes.Add(ve.Feature.Properties["type"] as string);
 
         if (_objects.ContainsKey(ve.GameObject))
         {
@@ -126,5 +131,40 @@ public class PlacesModifier : GameObjectModifier
         marker.gameObject.SetActive(false);
         if (!collected.Contains(marker.featureID))
             collected.Add(marker.featureID);
+    }
+
+    bool anyContain(string type)
+    {
+        for (int i = 0; i < resourceLocationData.Count; i++)
+        {
+            if (resourceLocationData[i].LocTypes.Contains(type))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void LogAllTypes()
+    {
+        string allStr = "";
+        for (int i = 0; i < allTypes.Count; i++)
+            allStr += "\"" + allTypes[i] + "\", ";
+        Debug.Log(allTypes.Count);
+        Debug.Log(allStr);
+
+        allStr = "";
+        for (int i = 0; i < allTypes.Count; i++)
+            if (!anyContain(allTypes[i]))
+                allStr += "\"" + allTypes[i] + "\", ";
+        Debug.Log(allStr);
+
+
+        allStr = "";
+        for (int i = 0; i < resourceLocationData.Count; i++)
+            for (int j = 0; j < resourceLocationData[i].LocTypes.Count; j++)
+                if (!allTypes.Contains(resourceLocationData[i].LocTypes[j]))
+                    allStr += "\"" + resourceLocationData[i].LocTypes[j] + "\", ";
+        Debug.Log(allStr);
     }
 }
