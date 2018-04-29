@@ -13,11 +13,14 @@ public struct PlacedInst
 
 public class PlacementArea : MonoBehaviour
 {
+    protected static int saveVersion = 1;
     [SerializeField]
-    PlacedInst[] startingInArea;
+    protected PlacedInst[] startingInArea;
+    public Transform Contents;
+    public bool AllowMovement = true;
 
     protected List<Placable> placedInArea = new List<Placable>();
-    bool areaDirty;
+    protected bool areaDirty;
 
     public virtual void AddToArea(Placable placable)
     {
@@ -39,9 +42,9 @@ public class PlacementArea : MonoBehaviour
     
     public virtual void SetArea()
     {
-        if (File.Exists(Application.persistentDataPath + "/" + gameObject.name + ".txt"))
+        if (File.Exists(Application.persistentDataPath + "/" + gameObject.name + "_" + saveVersion + ".txt"))
         {
-            string[] placedNames = File.ReadAllLines(Application.persistentDataPath + "/" + gameObject.name + ".txt");
+            string[] placedNames = File.ReadAllLines(Application.persistentDataPath + "/" + gameObject.name + "_" + saveVersion + ".txt");
             for (int i = 0; i < placedNames.Length; i+= 4)
             {
                 PlacableData item = DataManager.Instance.GetData(placedNames[i]);
@@ -59,7 +62,6 @@ public class PlacementArea : MonoBehaviour
                 PlacementManager.Instance.PlaceAt(startingInArea[i].Placable, startingInArea[i].Position);
             }
         }
-        //UIManager.Instance.ShowSpeechUI(GetInArea("SparkleKitty").transform);
     }
 
     protected virtual void LateUpdate()
@@ -78,7 +80,7 @@ public class PlacementArea : MonoBehaviour
             builder.AppendLine(placedInArea[i].transform.localPosition.y.ToString());
             builder.AppendLine(placedInArea[i].transform.localPosition.z.ToString());
         }
-        File.WriteAllText(Application.persistentDataPath + "/" + gameObject.name + ".txt", builder.ToString());
+        File.WriteAllText(Application.persistentDataPath + "/" + gameObject.name + "_" + saveVersion + ".txt", builder.ToString());
 
         areaDirty = false;
     }

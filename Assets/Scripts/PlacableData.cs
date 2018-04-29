@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlacableData : ScriptableObject
 {
     public string Name;
-    public PlacableDataType DataType = PlacableDataType.Component;
+    public PlacableDataType DataType = PlacableDataType.Cat;
     public Sprite Icon;
     public GameObject Prefab;
 }

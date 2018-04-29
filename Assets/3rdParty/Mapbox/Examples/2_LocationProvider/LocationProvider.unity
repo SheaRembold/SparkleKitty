@@ -573,8 +573,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   apiKey: AIzaSyBhjmOkAQmXDCpGg3HPSKOEt2RO1eSQNpo
   _map: {fileID: 114606471}
-  markerPrefab: {fileID: 1972219096798866, guid: 7ec4262650983aa42b3f6fab313079a9,
-    type: 2}
+  radius: 100
+  resourceLocationData: []
 --- !u!1 &952834216
 GameObject:
   m_ObjectHideFlags: 0

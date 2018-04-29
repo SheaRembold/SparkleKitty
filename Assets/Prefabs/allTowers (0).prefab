@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4774719570830056}
-  - component: {fileID: 114211764756966710}
+  - component: {fileID: 114241427080000374}
   m_Layer: 10
   m_Name: allTowers (0)
   m_TagString: Untagged
@@ -125,7 +125,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.7042074, y: 0.39364672, z: 0.7100506}
   m_Center: {x: -1.2009981, y: 1.7888765, z: -3.2535732}
---- !u!114 &114211764756966710
+--- !u!114 &114241427080000374
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -133,6 +133,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1895401431971024}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1f9ffec9f2a82b4fbcc8ac32d03edfb, type: 3}
+  m_Script: {fileID: 11500000, guid: 0698264ae42ef3b4ebe7f0cd23504ba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

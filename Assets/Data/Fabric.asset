@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Name: Fabric
   m_EditorClassIdentifier: 
   Name: Fabric
+  DataType: 5
   Icon: {fileID: 21300000, guid: 3bdc60b647e076e4f836654158324489, type: 3}
   Prefab: {fileID: 1805756084259656, guid: 38b34e2dd85f3954492eb6434c5b3df8, type: 2}

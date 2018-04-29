@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PlacableDataType { Cat, Tower, Toy, Treat, Component, ToyRecipe, TreatRecipe }
+public enum PlacableDataType { Cat, Tower, Toy, Treat, TowerComponent, ToyComponent, TreatComponent, TowerRecipe, ToyRecipe, TreatRecipe }
 
 public class DataManager : MonoBehaviour
 {
@@ -12,7 +12,10 @@ public class DataManager : MonoBehaviour
     public UpgradableData[] Towers;
     public BuildableData[] Toys;
     public BuildableData[] Treats;
-    public PlacableData[] Components;
+    public PlacableData[] TowerComponents;
+    public PlacableData[] ToyComponents;
+    public PlacableData[] TreatComponents;
+    public RecipeData[] TowerRecipes;
     public RecipeData[] ToyRecipes;
     public RecipeData[] TreatRecipes;
 
@@ -26,7 +29,10 @@ public class DataManager : MonoBehaviour
         AddData(Towers);
         AddData(Toys);
         AddData(Treats);
-        AddData(Components);
+        AddData(TowerComponents);
+        AddData(ToyComponents);
+        AddData(TreatComponents);
+        AddData(TowerRecipes);
         AddData(ToyRecipes);
         AddData(TreatRecipes);
     }
@@ -57,8 +63,14 @@ public class DataManager : MonoBehaviour
             return Toys;
         else if (dataType == PlacableDataType.Treat)
             return Treats;
-        else if (dataType == PlacableDataType.Component)
-            return Components;
+        else if (dataType == PlacableDataType.TowerComponent)
+            return TowerComponents;
+        else if (dataType == PlacableDataType.ToyComponent)
+            return ToyComponents;
+        else if (dataType == PlacableDataType.TreatComponent)
+            return TreatComponents;
+        else if (dataType == PlacableDataType.TowerRecipe)
+            return TowerRecipes;
         else if (dataType == PlacableDataType.ToyRecipe)
             return ToyRecipes;
         else if (dataType == PlacableDataType.TreatRecipe)

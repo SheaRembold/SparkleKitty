@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: TunaFishKibbleRecipe
   m_EditorClassIdentifier: 
   Name: Tuna Fish Kibble Recipe
-  DataType: 6
+  DataType: 9
   Icon: {fileID: 21300000, guid: f9ddf5c48c71fc24fbe83329e05493a2, type: 3}
   Prefab: {fileID: 0}
   Product: {fileID: 11400000, guid: 63980fdac7da4534e8fb2a413adf6a74, type: 2}

@@ -1,20 +1,49 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SpeechUI : MonoBehaviour
 {
+    [SerializeField]
+    RectTransform bubble;
+    [SerializeField]
+    HelpTextData helpTextData;
+    [SerializeField]
+    Text text;
     Transform target;
-    
-    public void ShowSpeech(Transform target)
+    string speechName;
+    string[] lines;
+    int current;
+
+    private void Awake()
     {
-        this.target = target;
+        helpTextData.Init();
+    }
+
+    public void ShowSpeech(Transform target, string speech)
+    {
         gameObject.SetActive(true);
+        this.target = target;
+        speechName = speech;
+        lines = helpTextData.GetHelpText(speech);
+        current = 0;
+        text.text = lines[current];
     }
 
     public void NextSpeech()
     {
-        gameObject.SetActive(false);
+        current++;
+        if (current < lines.Length)
+        {
+            text.text = lines[current];
+        }
+        else
+        {
+            UIManager.Instance.HideSpeechUI();
+            gameObject.SetActive(false);
+            PlayerManager.Instance.ShowHelp(speechName);
+        }
     }
 
     private void LateUpdate()
@@ -23,12 +52,12 @@ public class SpeechUI : MonoBehaviour
         if (screenPos.x >= 0f && screenPos.x <= 1f && screenPos.y >= 0f && screenPos.y <= 1f && screenPos.z > 0f)
         {
             screenPos.y *= 1080f / Screen.width * Screen.height;
-            (transform as RectTransform).anchoredPosition = new Vector2(0f, screenPos.y);
-            transform.GetChild(0).gameObject.SetActive(true);
+            bubble.anchoredPosition = new Vector2(0f, screenPos.y);
+            bubble.gameObject.SetActive(true);
         }
         else
         {
-            transform.GetChild(0).gameObject.SetActive(false);
+            bubble.gameObject.SetActive(false);
         }
     }
 }

@@ -32,6 +32,10 @@ public class PlacesManager : MonoBehaviour
 
     PhysicsRaycaster raycaster;
     private QuadTreeCameraMovement _mapMovement;
+
+    [SerializeField]
+    GameObject Help;
+    bool helpShown;
     
     private void Awake()
     {
@@ -53,6 +57,14 @@ public class PlacesManager : MonoBehaviour
         raycaster.eventMask = LayerMask.GetMask();
         _mapMovement.enabled = false;
         resourceLocationData.Find((x) => { return x.ResourceType == marker.resourceType; }).InteractUI.Show();
+        if (!helpShown)
+            Help.SetActive(true);
+    }
+
+    public void CompleteStep()
+    {
+        Help.SetActive(false);
+        helpShown = true;
     }
 
     public void CompleteInteraction()
@@ -68,5 +80,7 @@ public class PlacesManager : MonoBehaviour
     {
         raycaster.eventMask = LayerMask.GetMask("MapMarker");
         _mapMovement.enabled = true;
+        activeMarker = null;
+        Help.SetActive(false);
     }
 }

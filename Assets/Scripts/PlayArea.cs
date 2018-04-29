@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class PlayArea : PlacementArea
 {
+    [SerializeField]
+    PlacementLocation[] placementLocations;
     public Transform CatSpawnPoint;
     public float SpawnDelay = 5f;
 
@@ -14,10 +17,45 @@ public class PlayArea : PlacementArea
 
     public override void SetArea()
     {
-        base.SetArea();
+        if (File.Exists(Application.persistentDataPath + "/" + gameObject.name + "_" + saveVersion + ".txt"))
+        {
+            string[] placedNames = File.ReadAllLines(Application.persistentDataPath + "/" + gameObject.name + "_" + saveVersion + ".txt");
+            for (int i = 0; i < placementLocations.Length; i++)
+            {
+                PlacableData item = DataManager.Instance.GetData(placedNames[i]);
+                if (item != null)
+                {
+                    placementLocations[i].SetPlacable(item);
+                }
+            }
+            for (int i = placementLocations.Length; i < placedNames.Length; i += 4)
+            {
+                PlacableData item = DataManager.Instance.GetData(placedNames[i]);
+                if (item != null)
+                {
+                    Vector3 pos = new Vector3(float.Parse(placedNames[i + 1]), float.Parse(placedNames[i + 2]), float.Parse(placedNames[i + 3]));
+                    PlacementManager.Instance.PlaceAt(item, pos);
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < placementLocations.Length; i++)
+            {
+                placementLocations[i].SetPlacable(placementLocations[i].StartingPlacable);
+            }
+            for (int i = 0; i < startingInArea.Length; i++)
+            {
+                PlacementManager.Instance.PlaceAt(startingInArea[i].Placable, startingInArea[i].Position);
+            }
+        }
 
         finishedLoading = true;
         CheckForCats();
+        if (!PlayerManager.Instance.HasShownHelp("Intro"))
+        {
+            UIManager.Instance.ShowSpeechUI(GetInArea("SparkleKitty").transform, "Intro");
+        }
     }
 
     public override void AddToArea(Placable placable)
@@ -36,7 +74,7 @@ public class PlayArea : PlacementArea
             if (validCats.Count > 0)
             {
                 waitingCat = validCats[Random.Range(0, validCats.Count)];
-                StartCoroutine(WaitToSpawnCat());
+                PlacementManager.Instance.StartCoroutine(WaitToSpawnCat());
             }
         }
     }
@@ -56,7 +94,7 @@ public class PlayArea : PlacementArea
                 }
                 else
                 {
-                    StopAllCoroutines();
+                    PlacementManager.Instance.StopAllCoroutines();
                 }
             }
         }
@@ -153,5 +191,37 @@ public class PlayArea : PlacementArea
             }
         }
         return tempPlacables;
+    }
+
+    bool IsAtLoc(Placable placable)
+    {
+        for (int i = 0; i < placementLocations.Length; i++)
+        {
+            if (placementLocations[i].CurrentPlacable == placable)
+                return true;
+        }
+        return false;
+    }
+    
+    protected override void Save()
+    {
+        System.Text.StringBuilder builder = new System.Text.StringBuilder();
+        for (int i = 0; i < placementLocations.Length; i++)
+        {
+            builder.AppendLine(placementLocations[i].CurrentPlacable == null ? "NULL" : placementLocations[i].CurrentPlacable.Data.name);
+        }
+        for (int i = 0; i < placedInArea.Count; i++)
+        {
+            if (!IsAtLoc(placedInArea[i]))
+            {
+                builder.AppendLine(placedInArea[i].Data.name);
+                builder.AppendLine(placedInArea[i].transform.localPosition.x.ToString());
+                builder.AppendLine(placedInArea[i].transform.localPosition.y.ToString());
+                builder.AppendLine(placedInArea[i].transform.localPosition.z.ToString());
+            }
+        }
+        File.WriteAllText(Application.persistentDataPath + "/" + gameObject.name + "_" + saveVersion + ".txt", builder.ToString());
+
+        areaDirty = false;
     }
 }

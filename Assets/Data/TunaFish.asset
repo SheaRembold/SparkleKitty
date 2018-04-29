@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Name: TunaFish
   m_EditorClassIdentifier: 
   Name: Tuna Fish
+  DataType: 6
   Icon: {fileID: 21300000, guid: adb2db0fa6226a74f93148f08dc6c8dd, type: 3}
   Prefab: {fileID: 1410443744155528, guid: 4d4e0e30027be2a4c80118c5713f3191, type: 2}

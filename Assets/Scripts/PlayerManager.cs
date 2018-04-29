@@ -20,6 +20,7 @@ public class PlayerManager : MonoBehaviour
     bool invDirty;
 
     Dictionary<PlacableData, Texture2D> catPhotos = new Dictionary<PlacableData, Texture2D>();
+    List<string> shownHelp = new List<string>();
 
     private void Awake()
     {
@@ -42,6 +43,32 @@ public class PlayerManager : MonoBehaviour
         {
             inventory.AddRange(startingInventory);
         }
+
+        if (File.Exists(Application.persistentDataPath + "/help.txt"))
+        {
+            string[] helpNames = File.ReadAllLines(Application.persistentDataPath + "/help.txt");
+            shownHelp.AddRange(helpNames);
+        }
+    }
+
+    public void ShowHelp(string name)
+    {
+        if (!shownHelp.Contains(name))
+        {
+            shownHelp.Add(name);
+
+            System.Text.StringBuilder builder = new System.Text.StringBuilder();
+            for (int i = 0; i < shownHelp.Count; i++)
+            {
+                builder.AppendLine(shownHelp[i]);
+            }
+            File.WriteAllText(Application.persistentDataPath + "/help.txt", builder.ToString());
+        }
+    }
+
+    public bool HasShownHelp(string name)
+    {
+        return shownHelp.Contains(name);
     }
 
     public void AddInventory(PlacableData item)

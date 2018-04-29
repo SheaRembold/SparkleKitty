@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -10,8 +11,6 @@ public class UIManager : MonoBehaviour
     GameObject mainUI;
     [SerializeField]
     SpeechUI speechUI;
-    [SerializeField]
-    UpgradeUI upgradeUI;
 
     GameObject currentUI;
     Stack<GameObject> uiStack = new Stack<GameObject>();
@@ -67,14 +66,35 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ShowSpeechUI(Transform target)
+    public void ShowSpeechUI(Transform target, string speech)
     {
-        speechUI.ShowSpeech(target);
+        speechUI.ShowSpeech(target, speech);
+        Selectable[] selectables = currentUI.GetComponentsInChildren<Selectable>();
+        for (int i = 0; i < selectables.Length; i++)
+        {
+            selectables[i].interactable = false;
+        }
     }
 
-    public void ShowUpgradeUI(UpgradeClickable upgradable)
+    public void HideSpeechUI()
     {
-        upgradeUI.ShowUpgrade(upgradable);
-        ShowUI(upgradeUI.gameObject);
+        Selectable[] selectables = currentUI.GetComponentsInChildren<Selectable>();
+        for (int i = 0; i < selectables.Length; i++)
+        {
+            selectables[i].interactable = true;
+        }
+    }
+
+    public BuildUI GetBuildUI(string name)
+    {
+        Transform uiObj = transform.Find(name);
+        if (uiObj == null)
+            return null;
+        return uiObj.GetComponent<BuildUI>();
+    }
+
+    public BuildUI GetCurrentBuildUI()
+    {
+        return currentUI.GetComponent<BuildUI>();
     }
 }

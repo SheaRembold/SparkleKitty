@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Name: Stuffing
   m_EditorClassIdentifier: 
   Name: Stuffing
+  DataType: 5
   Icon: {fileID: 21300000, guid: 12f3de7caf98a9442907aa2c7003a872, type: 3}
   Prefab: {fileID: 1955117283149690, guid: 4959375d841067444953aeff58b08c74, type: 2}

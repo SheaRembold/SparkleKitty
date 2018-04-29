@@ -40,6 +40,7 @@ public class MapInteractUI : MonoBehaviour
     {
         starsAdded++;
         percentComplete = (float)starsAdded / stars.Length;
+        PlacesManager.Instance.CompleteStep();
     }
 
     private void Update()

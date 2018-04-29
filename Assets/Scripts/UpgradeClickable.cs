@@ -8,6 +8,5 @@ public class UpgradeClickable : Clickable
 {
     public override void Click()
     {
-        UIManager.Instance.ShowUpgradeUI(this);
     }
 }

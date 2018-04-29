@@ -101,6 +101,16 @@ public class PlacementManager : MonoBehaviour
         return playArea;
     }
 
+    public BuildArea GetBuildArea()
+    {
+        return buildArea;
+    }
+
+    public BuildArea GetCookArea()
+    {
+        return cookArea;
+    }
+
     public void SetArea(AreaType areaType)
     {
         if (currentArea != null)
@@ -136,24 +146,58 @@ public class PlacementManager : MonoBehaviour
         PlaceCurrent();
     }
 
-    public void PlaceAt(PlacableData placable, Vector3 position)
+    PlacementArea tempArea;
+    public void SetTempArea(AreaType areaType)
     {
-        currentPlacing = Instantiate(placable.Prefab).GetComponent<Placable>();
+        tempArea = currentArea;
+        switch (areaType)
+        {
+            case AreaType.None:
+                currentArea = null;
+                break;
+            case AreaType.Play:
+                currentArea = playArea;
+                break;
+            case AreaType.Build:
+                currentArea = buildArea;
+                break;
+            case AreaType.Cook:
+                currentArea = cookArea;
+                break;
+        }
+    }
+
+    public void RestoreArea()
+    {
+        currentArea = tempArea;
+    }
+
+    public Placable PlaceAt(PlacableData placable, Vector3 position)
+    {
+        Placable newPlacable = currentPlacing = Instantiate(placable.Prefab).GetComponent<Placable>();
         currentPlacing.Data = placable;
-        currentPlacing.transform.SetParent(currentArea.transform);
+        currentPlacing.transform.SetParent(currentArea.Contents);
         currentPlacing.transform.localPosition = position;
         currentPlacing.transform.localRotation = Quaternion.identity;
         currentPlacing.transform.localScale = Vector3.one;
-
+        
         currentArea.AddToArea(currentPlacing);
         currentPlacing = null;
+
+        return newPlacable;
+    }
+
+    public void Remove(Placable oldPlacable)
+    {
+        currentArea.RemoveFromArea(oldPlacable);
+        Destroy(oldPlacable.gameObject);
     }
 
     public void Replace(Placable oldPlacable, PlacableData newData)
     {
         currentPlacing = Instantiate(newData.Prefab).GetComponent<Placable>();
         currentPlacing.Data = newData;
-        currentPlacing.transform.SetParent(currentArea.transform);
+        currentPlacing.transform.SetParent(oldPlacable.transform.parent);
         currentPlacing.transform.localPosition = oldPlacable.transform.localPosition;
         currentPlacing.transform.localRotation = oldPlacable.transform.localRotation;
         currentPlacing.transform.localScale = oldPlacable.transform.localScale;
@@ -247,7 +291,8 @@ public class PlacementManager : MonoBehaviour
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Placable")))
                 {
                     currentClickable = hit.transform.GetComponentInParent<Clickable>();
-                    if (currentClickable == null)
+
+                    if (currentClickable == null && currentArea.AllowMovement)
                     {
                         currentPlacing = hit.transform.GetComponentInParent<Placable>();
                         lastPos = currentPlacing.transform.localPosition;
