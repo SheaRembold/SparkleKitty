@@ -203,7 +203,7 @@ ModelImporter:
       name: Armature|OnlySitting
       takeName: Armature|OnlySitting
       firstFrame: 0
-      lastFrame: 70
+      lastFrame: 1
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
