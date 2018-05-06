@@ -5,8 +5,27 @@ using UnityEngine;
 
 public class CameraUI : MonoBehaviour
 {
+    [SerializeField]
+    GameObject shutter;
+    [SerializeField]
+    float shutterTime;
+
+    private void OnEnable()
+    {
+        shutter.SetActive(false);
+    }
+
     public void TakePhoto()
     {
+        StartCoroutine(ShowShutter());
+    }
+
+    IEnumerator ShowShutter()
+    {
+        shutter.SetActive(true);
+
+        yield return null;
+
         List<Placable> cats = PlacementManager.Instance.GetPlayArea().GetInArea(PlacableDataType.Cat);
         string catName = cats[cats.Count - 1].Data.name;
 
@@ -25,5 +44,9 @@ public class CameraUI : MonoBehaviour
         byte[] bytes = screenShot.EncodeToPNG();
         File.WriteAllBytes(Application.persistentDataPath + "/" + catName + ".png", bytes);
         PlayerManager.Instance.AddCatPhoto(cats[cats.Count - 1].Data, screenShot);
+
+        yield return new WaitForSeconds(shutterTime);
+
+        shutter.SetActive(false);
     }
 }

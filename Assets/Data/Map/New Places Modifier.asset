@@ -31,7 +31,7 @@ MonoBehaviour:
     - Hospital
     - Place Of Worship
     InteractUI: {fileID: 0}
-    Icon: {fileID: 21300000, guid: bf358129dbb6e924db44cc6557df9d5b, type: 3}
+    Icon: {fileID: 21300000, guid: 4e40c15a21cf193448eec407153585ec, type: 3}
     BackColor: {r: 0.3254902, g: 0.59607846, b: 0.7176471, a: 1}
   - ResourceType: 1
     LocTypes:
@@ -47,7 +47,7 @@ MonoBehaviour:
     - Playground
     - Fuel
     InteractUI: {fileID: 0}
-    Icon: {fileID: 21300000, guid: bf26d166f9b76af4c81b561ee109f641, type: 3}
+    Icon: {fileID: 21300000, guid: fd92b5d24b972d34e854287a5318aecf, type: 3}
     BackColor: {r: 0.49803922, g: 0.32156864, b: 0.6, a: 1}
   - ResourceType: 2
     LocTypes:
@@ -67,7 +67,7 @@ MonoBehaviour:
     - Houseware
     - Variety Store
     InteractUI: {fileID: 0}
-    Icon: {fileID: 21300000, guid: 3922cf85e4d15c147b5bc5e58447e3f0, type: 3}
+    Icon: {fileID: 21300000, guid: de0a4fb5ccb89b44aa7671a38c668c58, type: 3}
     BackColor: {r: 0.91764706, g: 0.34901962, b: 0.34901962, a: 1}
   - ResourceType: 3
     LocTypes:
@@ -82,6 +82,6 @@ MonoBehaviour:
     - Cafe
     - Pharmacy
     InteractUI: {fileID: 0}
-    Icon: {fileID: 21300000, guid: 5c2784e2e3ae9f34cb989cb2135e0f23, type: 3}
+    Icon: {fileID: 21300000, guid: 38bdc715896b6fa4487c1cf1a6bcf954, type: 3}
     BackColor: {r: 0.32941177, g: 0.6039216, b: 0.5019608, a: 1}
   _scaleDownWithWorld: 1

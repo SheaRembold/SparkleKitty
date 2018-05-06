@@ -14,8 +14,18 @@ MonoBehaviour:
   helpTexts:
   - Name: Intro
     Lines:
-    - I love my new home! Thank you so much for the special house.
-    - I need to be fed and played with regularly, so make sure to come visit!
+    - Hi friend! I'm Sparkle Kitty and I'm so happy to be your new pet!
+    - If you want, you can use your camera to make me a place in your house!
+  - Name: IntroAR
+    Lines:
+    - I love my new home! Thank you so much for the special house, bowl, and...
+    - '...toy mat. I need to be fed and played with regularly, so make sure to come
+      visit!'
+    - If you want to upgrade any of my stuff, all you have to do is select them.
+    - The more you upgrade, the more my friends will want to come and play!
   - Name: WrongRecipe
     Lines:
     - I don't think that will make anything.
+  - Name: TooFar
+    Lines:
+    - Too far away.

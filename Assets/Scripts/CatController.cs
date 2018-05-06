@@ -83,7 +83,10 @@ public class CatController : MonoBehaviour
             {
                 if (controller.target != null)
                 {
-                    controller.SetState<InteractState>();
+                    if (controller.target.Data.DataType == PlacableDataType.Treat)
+                        controller.SetState<EatState>();
+                    else
+                        controller.SetState<PlayState>();
                 }
                 else if (controller.isLeaving)
                 {
@@ -106,12 +109,30 @@ public class CatController : MonoBehaviour
         }
     }
 
-    public class InteractState : CatState
+    public class EatState : CatState
     {
         public override void OnEnter()
         {
             base.OnEnter();
-            controller.animator.SetTrigger("Interact");
+            controller.animator.SetTrigger("Eat");
+        }
+
+        public override void OnUpdate()
+        {
+            base.OnUpdate();
+            if (stateTime > controller.InteractTime)
+            {
+                controller.SetState<SitState>();
+            }
+        }
+    }
+
+    public class PlayState : CatState
+    {
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            controller.animator.SetTrigger("Play");
         }
 
         public override void OnUpdate()
@@ -161,7 +182,8 @@ public class CatController : MonoBehaviour
 
         AddState<SitState>();
         AddState<WalkState>();
-        AddState<InteractState>();
+        AddState<EatState>();
+        AddState<PlayState>();
 
         SetState<SitState>();
     }

@@ -36,7 +36,6 @@ public class PlacesModifier : GameObjectModifier
     private bool _scaleDownWithWorld = false;
 
     private Dictionary<GameObject, GameObject> _objects;
-    List<ulong> collected = new List<ulong>();
     List<string> allTypes = new List<string>() { "Memorial", "Construction", "Park", "Common", "Apartments", "Church", "Bus Station", "Police", "Public Building", "Hotel", "Bar", "Restaurant", "Gift", "Library", "Monument", "Museum", "Pub", "Bakery", "Yes", "Convenience", "Arts Centre", "Commercial", "Lawyer", "Marketplace", "Bank", "Government", "Drinking Water", "Sports Centre", "Place Of Worship", "Retail", "Theatre", "Clothes", "Fast Food", "Deli", "School", "Attraction", "Stadium", "Community Centre", "Mall", "Residential", "Industrial", "University", "College", "Playground", "House", "Farmyard", "Hairdresser", "Cafe", "Shelter", "Social Facility", "Cemetery", "Farmland", "Doityourself", "Department Store", "Supermarket", "Golf Course", "Jewelry", "Electronics", "Sports", "Pharmacy", "Fuel", "Books", "Beauty", "Stationery", "Houseware", "Made Mine", "Grave Yard", "Wood", "Second Hand", "Variety Store", "Alcohol", "Fire Station", "Hospital", };
     //"Common", "Apartments", "Bus Station", "Public Building", "Yes", "Commercial", "Lawyer", "Government", "Drinking Water", "Sports Centre", "Stadium", "Community Centre", "Residential", "Industrial", "House", "Farmyard", "Shelter", "Social Facility", "Farmland", "Doityourself", "Golf Course", "Made Mine", "Second Hand", "Alcohol", 
 
@@ -46,7 +45,6 @@ public class PlacesModifier : GameObjectModifier
         {
             _objects = new Dictionary<GameObject, GameObject>();
         }
-        collected.Clear();
     }
 
     public override void Run(VectorEntity ve, UnityTile tile)
@@ -72,16 +70,17 @@ public class PlacesModifier : GameObjectModifier
                 {
                     if (resourceLocationData[i].LocTypes.Contains(ve.Feature.Properties["type"] as string))
                     {
+                        //go.GetComponent<MapMarker>().Set(ve.Feature.Properties);
                         go.GetComponent<MapMarker>().Init(ve.Feature.Data.Id, resourceLocationData[i].ResourceType, resourceLocationData[i].Icon, resourceLocationData[i].BackColor);
                         usedType = true;
                         break;
                     }
                 }
-                go.SetActive(usedType && !collected.Contains(ve.Feature.Data.Id));
+                go.SetActive(usedType && PlacesManager.Instance.CanAddMarker(ve.Feature.Data.Id));
                 go.name = ve.Feature.Data.Id.ToString();
                 go.transform.localPosition = met;
                 go.transform.localScale = Vector3.one;
-                settable.Set(ve.Feature.Properties);
+                //settable.Set(ve.Feature.Properties);
                 if (!_scaleDownWithWorld)
                 {
                     go.transform.localScale = Vector3.one / tile.TileScale;
@@ -96,28 +95,27 @@ public class PlacesModifier : GameObjectModifier
                 if (resourceLocationData[i].LocTypes.Contains(ve.Feature.Properties["type"] as string))
                 {
                     go = Instantiate(MarkerPrefab);
+                    //go.GetComponent<MapMarker>().Set(ve.Feature.Properties);
                     go.GetComponent<MapMarker>().Init(ve.Feature.Data.Id, resourceLocationData[i].ResourceType, resourceLocationData[i].Icon, resourceLocationData[i].BackColor);
                     _objects.Add(ve.GameObject, go);
                     break;
                 }
             }
-            //go = Instantiate(resourceLocationData[0].MarkerPrefab);
-            //_objects.Add(ve.GameObject, go);
         }
 
         if (go != null && go.activeSelf)
         {
-            go.SetActive(!collected.Contains(ve.Feature.Data.Id));
+            go.SetActive(PlacesManager.Instance.CanAddMarker(ve.Feature.Data.Id));
             go.name = ve.Feature.Data.Id.ToString();
             go.transform.position = met;
             go.transform.SetParent(ve.GameObject.transform, false);
             go.transform.localScale = Vector3.one;
 
-            settable = go.GetComponent<IFeaturePropertySettable>();
+            /*settable = go.GetComponent<IFeaturePropertySettable>();
             if (settable != null)
             {
                 settable.Set(ve.Feature.Properties);
-            }
+            }*/
 
             if (!_scaleDownWithWorld)
             {
@@ -129,8 +127,6 @@ public class PlacesModifier : GameObjectModifier
     public void CollectMarker(MapMarker marker)
     {
         marker.gameObject.SetActive(false);
-        if (!collected.Contains(marker.featureID))
-            collected.Add(marker.featureID);
     }
 
     bool anyContain(string type)

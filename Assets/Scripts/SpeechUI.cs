@@ -48,7 +48,7 @@ public class SpeechUI : MonoBehaviour
 
     private void LateUpdate()
     {
-        Vector3 screenPos = Camera.main.WorldToViewportPoint(target.transform.position);
+        Vector3 screenPos = Camera.main.WorldToViewportPoint(target.position);
         if (screenPos.x >= 0f && screenPos.x <= 1f && screenPos.y >= 0f && screenPos.y <= 1f && screenPos.z > 0f)
         {
             screenPos.y *= 1080f / Screen.width * Screen.height;

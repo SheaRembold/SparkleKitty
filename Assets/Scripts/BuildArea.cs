@@ -63,26 +63,29 @@ public class BuildArea : PlacementArea
     public virtual void TryUpgrade()
     {
         bool validFound = false;
-        available.Clear();
-        available.AddRange(placedInArea);
-        bool requMissing = false;
-        for (int j = 0; j < upgrading.UpgradeRequirements.Length; j++)
+        if (upgrading.Upgrade != null)
         {
-            int index = available.FindIndex((x) => { return x.Data == upgrading.UpgradeRequirements[j]; });
-            if (index != -1)
+            available.Clear();
+            available.AddRange(placedInArea);
+            bool requMissing = false;
+            for (int j = 0; j < upgrading.UpgradeRequirements.Length; j++)
             {
-                available.RemoveAt(index);
+                int index = available.FindIndex((x) => { return x.Data == upgrading.UpgradeRequirements[j]; });
+                if (index != -1)
+                {
+                    available.RemoveAt(index);
+                }
+                else
+                {
+                    requMissing = true;
+                    break;
+                }
             }
-            else
+            if (!requMissing && available.Count == 0)
             {
-                requMissing = true;
-                break;
+                upgradeWorkUI.Show(this, upgrading.Upgrade);
+                validFound = true;
             }
-        }
-        if (!requMissing && available.Count == 0)
-        {
-            upgradeWorkUI.Show(this, upgrading.Upgrade);
-            validFound = true;
         }
         if (!validFound)
         {

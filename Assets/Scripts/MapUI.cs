@@ -20,7 +20,10 @@ public class MapUI : MonoBehaviour
 
     private void OnDisable()
     {
-        Map.SetActive(false);
-        PlacementManager.Instance.SetArea(AreaType.Play);
+        if (Map != null)
+        {
+            Map.SetActive(false);
+            PlacementManager.Instance.ResetLastArea();
+        }
     }
 }

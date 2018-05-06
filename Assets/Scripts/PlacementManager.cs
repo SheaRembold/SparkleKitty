@@ -11,9 +11,11 @@ public class PlacementManager : MonoBehaviour
     public static PlacementManager Instance;
     
     [SerializeField]
-    GameObject Loading;
+    GameObject LoadingUI;
     [SerializeField]
     PlacementUI HelpUI;
+    [SerializeField]
+    GameObject MainUI;
     [SerializeField]
     GameObject PlayAreaPrefab;
     [SerializeField]
@@ -30,6 +32,8 @@ public class PlacementManager : MonoBehaviour
     bool placed;
     bool placingArea = true;
     PlacementArea currentArea;
+    AreaType lastAreaType = AreaType.None;
+    AreaType currentAreaType = AreaType.None;
     Clickable currentClickable;
 
     private void Awake()
@@ -37,24 +41,36 @@ public class PlacementManager : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
+    public void StartPlaying()
     {
+        UIManager.Instance.ShowUI(MainUI);
+        if (provider == null)
+        {
 #if UNITY_EDITOR
-        provider = new TestPlacementProvider();
-        StartPlacement();
+            provider = new TestPlacementProvider();
+            StartPlacement();
 #elif VUFORIA
-        provider = new VuforiaPlacementProvider();
-        StartPlacement();
+            provider = new VuforiaPlacementProvider();
+            StartPlacement();
 #elif UNITY_ANDROID
-        StartCoroutine(WaitToStart());
+            StartCoroutine(WaitToStart());
 #else
-        provider = new ARPlacementProvider();
-        StartPlacement();
+            provider = new ARPlacementProvider();
+            StartPlacement();
 #endif
+        }
+        else
+        {
+            SetArea(AreaType.Play);
+            if (placingArea)
+                UIManager.Instance.ShowUI(HelpUI.gameObject);
+        }
     }
 
     IEnumerator WaitToStart()
     {
+        UIManager.Instance.ShowUI(LoadingUI);
+
         GoogleARCore.AsyncTask<GoogleARCore.ApkAvailabilityStatus> availTask = GoogleARCore.Session.CheckApkAvailability();
         yield return availTask.WaitForCompletion();
 
@@ -88,9 +104,9 @@ public class PlacementManager : MonoBehaviour
 
     private void StartPlacement()
     {
-        Loading.SetActive(false);
         playArea = Instantiate(PlayAreaPrefab).GetComponent<PlayArea>();
         currentArea = playArea;
+        currentAreaType = AreaType.Play;
         buildArea = BuildAreaPrefab.GetComponent<BuildArea>();
         cookArea = CookAreaPrefab.GetComponent<CookArea>();
         UIManager.Instance.ShowUI(HelpUI.gameObject);
@@ -115,29 +131,40 @@ public class PlacementManager : MonoBehaviour
     {
         if (currentArea != null)
             currentArea.gameObject.SetActive(false);
-        switch (areaType)
+        if (provider != null)
         {
-            case AreaType.None:
-                provider.TurnOff();
-                currentArea = null;
-                break;
-            case AreaType.Play:
-                provider.TurnOn();
-                currentArea = playArea;
-                break;
-            case AreaType.Build:
-                provider.TurnOff();
-                currentArea = buildArea;
-                break;
-            case AreaType.Cook:
-                provider.TurnOff();
-                currentArea = cookArea;
-                break;
+            switch (areaType)
+            {
+                case AreaType.None:
+                    provider.TurnOff();
+                    currentArea = null;
+                    break;
+                case AreaType.Play:
+                    provider.TurnOn();
+                    currentArea = playArea;
+                    break;
+                case AreaType.Build:
+                    provider.TurnOff();
+                    currentArea = buildArea;
+                    break;
+                case AreaType.Cook:
+                    provider.TurnOff();
+                    currentArea = cookArea;
+                    break;
+            }
         }
         if (currentArea != null)
             currentArea.gameObject.SetActive(true);
+
+        lastAreaType = currentAreaType;
+        currentAreaType = areaType;
     }
     
+    public void ResetLastArea()
+    {
+        SetArea(lastAreaType);
+    }
+
     public void StartPlacing(PlacableData placable)
     {
         currentPlacing = Instantiate(placable.Prefab).GetComponent<Placable>();
@@ -272,7 +299,7 @@ public class PlacementManager : MonoBehaviour
                 if (Input.GetMouseButtonDown(0))
                 {
                     placingArea = false;
-                    UIManager.Instance.ResetToMainUI();
+                    UIManager.Instance.GoBackToUI(MainUI);
                     playArea.SetArea();
                     provider.FinishInit();
                 }

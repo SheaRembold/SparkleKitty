@@ -26,7 +26,7 @@ public class MapMarker : MonoBehaviour, IPointerClickHandler, IFeaturePropertySe
         featureID = id;
         resourceType = type;
         icon.sprite = iconSprite;
-        back.color = backColor;
+        //back.color = backColor;
     }
     
     public void OnPointerClick(PointerEventData eventData)
@@ -36,5 +36,6 @@ public class MapMarker : MonoBehaviour, IPointerClickHandler, IFeaturePropertySe
         {
             Debug.Log(prop.Key + ":" + prop.Value);
         }*/
+
     }
 }

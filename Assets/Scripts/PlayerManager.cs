@@ -25,10 +25,7 @@ public class PlayerManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-    }
 
-    private void Start()
-    {
         if (File.Exists(Application.persistentDataPath + "/inventory.txt"))
         {
             string[] invNames = File.ReadAllLines(Application.persistentDataPath + "/inventory.txt");

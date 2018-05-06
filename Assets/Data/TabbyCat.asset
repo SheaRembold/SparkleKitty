@@ -14,7 +14,7 @@ MonoBehaviour:
   Name: Tabby Cat
   DataType: 0
   Icon: {fileID: 0}
-  Prefab: {fileID: 1140038241474068, guid: 59d4cc5561ab98142ac255e710281324, type: 2}
+  Prefab: {fileID: 1698703260715998, guid: 0eed56fa13b299246bd72f824815d42c, type: 2}
   RequiredTowerType: 1
   RequiredTowerLevel: 2
   OtherRequirements:

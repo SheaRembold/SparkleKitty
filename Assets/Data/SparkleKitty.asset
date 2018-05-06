@@ -14,7 +14,7 @@ MonoBehaviour:
   Name: Sparkle Kitty
   DataType: 0
   Icon: {fileID: 0}
-  Prefab: {fileID: 1484674343961422, guid: e1d199019feecd54d97e9383054584c2, type: 2}
+  Prefab: {fileID: 1720401851590550, guid: e1d199019feecd54d97e9383054584c2, type: 2}
   RequiredTowerType: 0
   RequiredTowerLevel: 0
   OtherRequirements: []
