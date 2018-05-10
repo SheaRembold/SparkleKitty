@@ -115,6 +115,8 @@ public class CatController : MonoBehaviour
         {
             base.OnEnter();
             controller.animator.SetTrigger("Eat");
+            //added audio
+            controller.EatingAudioMaker();
         }
 
         public override void OnUpdate()
@@ -125,6 +127,8 @@ public class CatController : MonoBehaviour
                 controller.SetState<SitState>();
             }
         }
+
+
     }
 
     public class PlayState : CatState
@@ -159,6 +163,21 @@ public class CatController : MonoBehaviour
     protected bool isLeaving;
     List<CatState> states = new List<CatState>();
     CatState currentState;
+ 
+    // Audio Stuff
+    AudioSource ASource;
+
+
+    public void MeowMaker()
+    {
+        int i = Random.Range(0, data.CatSounds.Count);
+        ASource.PlayOneShot(data.CatSounds[i]);
+    }
+
+    public void EatingAudioMaker()
+    {
+        ASource.PlayOneShot(data.EatingSound);
+    }
 
     protected void AddState<T>() where T : CatState, new()
     {
@@ -179,7 +198,7 @@ public class CatController : MonoBehaviour
     protected virtual void Awake()
     {
         animator = GetComponent<Animator>();
-
+        ASource = GetComponent<AudioSource>();
         AddState<SitState>();
         AddState<WalkState>();
         AddState<EatState>();
