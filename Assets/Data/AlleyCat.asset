@@ -20,3 +20,8 @@ MonoBehaviour:
   OtherRequirements:
   - {fileID: 11400000, guid: 4e432c76d712eaf4bbf61786ecc32b1e, type: 2}
   - {fileID: 11400000, guid: 63980fdac7da4534e8fb2a413adf6a74, type: 2}
+  CatSounds:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  EatingSound: {fileID: 8300000, guid: a5e6acf319e5e86429486dddc2c5b23f, type: 3}
