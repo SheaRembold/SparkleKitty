@@ -14,14 +14,12 @@ MonoBehaviour:
   Name: Alley Cat
   DataType: 0
   Icon: {fileID: 0}
-  Prefab: {fileID: 1436853899390780, guid: 3cc030d35ca5fa946b82c9a247e7aa43, type: 2}
+  Prefab: {fileID: 1720401851590550, guid: 3e06b46700415a140ab03399aecde551, type: 2}
   RequiredTowerType: 1
   RequiredTowerLevel: 4
   OtherRequirements:
   - {fileID: 11400000, guid: 4e432c76d712eaf4bbf61786ecc32b1e, type: 2}
   - {fileID: 11400000, guid: 63980fdac7da4534e8fb2a413adf6a74, type: 2}
   CatSounds:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 7ee783ec0394d244eac9a7edfc842bbf, type: 3}
   EatingSound: {fileID: 8300000, guid: a5e6acf319e5e86429486dddc2c5b23f, type: 3}

@@ -19,3 +19,6 @@ MonoBehaviour:
   RequiredTowerLevel: 0
   OtherRequirements:
   - {fileID: 11400000, guid: 8e9819dafa0d5374e950f02404ff2251, type: 2}
+  CatSounds:
+  - {fileID: 8300000, guid: 7ee783ec0394d244eac9a7edfc842bbf, type: 3}
+  EatingSound: {fileID: 8300000, guid: a5e6acf319e5e86429486dddc2c5b23f, type: 3}

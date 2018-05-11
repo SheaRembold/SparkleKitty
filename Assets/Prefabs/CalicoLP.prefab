@@ -1969,7 +1969,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 243040673621417968, guid: c9ed9539f235c464f8e81a524650b918,
     type: 2}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -2008,7 +2008,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 2
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -2079,10 +2079,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WalkSpeed: 1
-  SitTime: 10
+  SitTime: 5
   StopDistance: 0.15
   InteractTime: 10
   InteractProbability: 0.8
+  MeowProbability: 0.3
   StayForever: 0
 --- !u!137 &137542822034841184
 SkinnedMeshRenderer:

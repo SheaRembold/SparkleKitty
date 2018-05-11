@@ -35,6 +35,8 @@ public class CatController : MonoBehaviour
         {
             base.OnEnter();
             controller.animator.SetTrigger("Sit");
+            if (Random.value < controller.MeowProbability)
+                controller.MeowMaker();
         }
 
         public override void OnUpdate()
@@ -133,7 +135,7 @@ public class CatController : MonoBehaviour
             base.OnEnter();
             controller.animator.SetTrigger("Eat");
             //added audio
-            controller.EatingAudioMaker();
+            controller.StartEatingAudio();
         }
 
         public override void OnUpdate()
@@ -151,7 +153,11 @@ public class CatController : MonoBehaviour
             }
         }
 
-
+        public override void OnExit()
+        {
+            base.OnExit();
+            controller.StopEatingAudio();
+        }
     }
 
     public class PlayState : CatState
@@ -177,6 +183,7 @@ public class CatController : MonoBehaviour
     public float StopDistance = 1f;
     public float InteractTime = 5f;
     public float InteractProbability = 1f;
+    public float MeowProbability = 1f;
     public bool StayForever;
 
     protected CatData data;
@@ -198,9 +205,16 @@ public class CatController : MonoBehaviour
         ASource.PlayOneShot(data.CatSounds[i]);
     }
 
-    public void EatingAudioMaker()
+    public void StartEatingAudio()
     {
-        ASource.PlayOneShot(data.EatingSound);
+        ASource.loop = true;
+        ASource.clip = data.EatingSound;
+        ASource.Play();
+    }
+
+    public void StopEatingAudio()
+    {
+        ASource.Play();
     }
 
     protected void AddState<T>() where T : CatState, new()
