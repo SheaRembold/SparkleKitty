@@ -13,7 +13,7 @@ public struct PlacedInst
 
 public class PlacementArea : MonoBehaviour
 {
-    protected static int saveVersion = 1;
+    protected static int saveVersion = 2;
     [SerializeField]
     protected PlacedInst[] startingInArea;
     public Transform Contents;
@@ -21,6 +21,11 @@ public class PlacementArea : MonoBehaviour
 
     protected List<Placable> placedInArea = new List<Placable>();
     protected bool areaDirty;
+
+    public void MarkAsDirty()
+    {
+        areaDirty = true;
+    }
 
     public virtual void AddToArea(Placable placable)
     {

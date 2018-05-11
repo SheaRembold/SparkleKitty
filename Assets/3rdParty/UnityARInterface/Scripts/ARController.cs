@@ -99,6 +99,8 @@ namespace UnityARInterface
             }
         }
 
+        public bool HasRendered { get; protected set; }
+
         void OnBeforeRender()
         {
             m_ARInterface.UpdateCamera(m_ARCamera);
@@ -112,6 +114,8 @@ namespace UnityARInterface
                 if (parent != null)
                     parent.localScale = Vector3.one * scale;
             }
+
+            HasRendered = true;
         }
 
         protected virtual void SetupARInterface()
@@ -121,6 +125,8 @@ namespace UnityARInterface
 
         private void OnEnable()
         {
+            HasRendered = false;
+
             Application.targetFrameRate = 60;
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
             Input.simulateMouseWithTouches = true;

@@ -1997,9 +1997,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WalkSpeed: 1
-  SitTime: 5
+  SitTime: 10
   StopDistance: 0.15
-  InteractTime: 5
+  InteractTime: 10
+  InteractProbability: 0.8
   StayForever: 0
 --- !u!137 &137542822034841184
 SkinnedMeshRenderer:

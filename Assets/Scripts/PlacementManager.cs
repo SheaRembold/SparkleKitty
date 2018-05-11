@@ -77,7 +77,6 @@ public class PlacementManager : MonoBehaviour
         if (availTask.Result == GoogleARCore.ApkAvailabilityStatus.SupportedInstalled)
         {
             provider = new ARPlacementProvider();
-            StartPlacement();
         }
         else if (availTask.Result == GoogleARCore.ApkAvailabilityStatus.SupportedApkTooOld || availTask.Result == GoogleARCore.ApkAvailabilityStatus.SupportedNotInstalled)
         {
@@ -87,19 +86,22 @@ public class PlacementManager : MonoBehaviour
             if (installTask.Result == GoogleARCore.ApkInstallationStatus.Success)
             {
                 provider = new ARPlacementProvider();
-                StartPlacement();
             }
             else
             {
                 provider = new TestPlacementProvider();
-                StartPlacement();
             }
         }
         else
         {
             provider = new TestPlacementProvider();
-            StartPlacement();
         }
+
+        yield return new WaitUntil(() => provider.IsReady());
+
+        yield return new WaitForEndOfFrame();
+
+        StartPlacement();
     }
 
     private void StartPlacement()
@@ -312,7 +314,11 @@ public class PlacementManager : MonoBehaviour
         }
         else if (currentPlacing == null && currentClickable == null)
         {
+#if UNITY_EDITOR || UNITY_STANDALONE
             if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+#else
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+#endif
             {
                 RaycastHit hit;
                 if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Placable")))

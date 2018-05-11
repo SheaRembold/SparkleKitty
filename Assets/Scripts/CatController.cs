@@ -42,20 +42,37 @@ public class CatController : MonoBehaviour
             base.OnUpdate();
             if (stateTime > controller.SitTime)
             {
-                List<Placable> favorites = controller.playArea.GetInArea(controller.data.OtherRequirements);
-                if (favorites.Count > 0)
+                if (Random.value < controller.InteractProbability)
                 {
-                    controller.target = favorites[Random.Range(0, favorites.Count)];
-                    controller.targetPos = controller.target.transform.localPosition;
+                    List<Placable> favorites = controller.playArea.GetInArea(controller.data.OtherRequirements);
+                    for (int i = 0; i < favorites.Count; i++)
+                    {
+                        if (favorites[i].GetComponent<ItemController>() != null && !favorites[i].GetComponent<ItemController>().AnyLeft())
+                        {
+                            favorites.RemoveAt(i);
+                            i--;
+                        }
+                    }
+                    if (favorites.Count > 0)
+                    {
+                        controller.target = favorites[Random.Range(0, favorites.Count)];
+                        controller.targetPos = controller.target.transform.localPosition;
+                    }
+                    else
+                    {
+                        controller.target = null;
+                        controller.isLeaving = !controller.StayForever;
+                        if (controller.isLeaving)
+                            controller.targetPos = controller.playArea.CatSpawnPoint.localPosition;
+                        else
+                            controller.targetPos = PlacementManager.Instance.GetRandomInArea();
+                    }
                 }
                 else
                 {
                     controller.target = null;
-                    controller.isLeaving = !controller.StayForever;
-                    if (controller.isLeaving)
-                        controller.targetPos = controller.playArea.CatSpawnPoint.localPosition;
-                    else
-                        controller.targetPos = PlacementManager.Instance.GetRandomInArea();
+                    controller.isLeaving = false;
+                    controller.targetPos = PlacementManager.Instance.GetRandomInArea();
                 }
                 controller.SetState<WalkState>();
             }
@@ -120,9 +137,15 @@ public class CatController : MonoBehaviour
         public override void OnUpdate()
         {
             base.OnUpdate();
-            if (stateTime > controller.InteractTime)
+            TreatController treatController = controller.target == null ? null : controller.target.GetComponent<TreatController>();
+            if (treatController == null || !treatController.AnyLeft() || stateTime > controller.InteractTime)
             {
+                PlacementManager.Instance.GetPlayArea().MarkAsDirty();
                 controller.SetState<SitState>();
+            }
+            else
+            {
+                treatController.Eat();
             }
         }
     }
@@ -149,6 +172,7 @@ public class CatController : MonoBehaviour
     public float SitTime = 5f;
     public float StopDistance = 1f;
     public float InteractTime = 5f;
+    public float InteractProbability = 1f;
     public bool StayForever;
 
     protected CatData data;

@@ -21,5 +21,10 @@ public abstract class PlacementProvider
 
     }
 
+    public virtual bool IsReady()
+    {
+        return true;
+    }
+
     public abstract bool GetPlane(out UnityARInterface.BoundedPlane plane);
 }

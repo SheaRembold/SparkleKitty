@@ -7,6 +7,7 @@ public class ARPlacementProvider : PlacementProvider
 {
     GameObject cameraObj;
     GameObject lightObj;
+    ARController controller;
 
     public ARPlacementProvider()
     {
@@ -14,6 +15,12 @@ public class ARPlacementProvider : PlacementProvider
 
         cameraObj = sceneObj.GetComponentInChildren<Camera>().gameObject;
         lightObj = sceneObj.GetComponentInChildren<Light>().gameObject;
+        controller = sceneObj.GetComponentInChildren<ARController>();
+    }
+
+    public override bool IsReady()
+    {
+        return controller.HasRendered;
     }
 
     public override bool GetPlane(out BoundedPlane plane)

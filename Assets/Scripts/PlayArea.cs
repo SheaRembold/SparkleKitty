@@ -22,13 +22,15 @@ public class PlayArea : PlacementArea
             string[] placedNames = File.ReadAllLines(Application.persistentDataPath + "/" + gameObject.name + "_" + saveVersion + ".txt");
             for (int i = 0; i < placementLocations.Length; i++)
             {
-                PlacableData item = DataManager.Instance.GetData(placedNames[i]);
+                PlacableData item = DataManager.Instance.GetData(placedNames[2 * i]);
                 if (item != null)
                 {
                     placementLocations[i].SetPlacable(item);
+                    if (placementLocations[i].CurrentPlacable.GetComponent<ItemController>() != null)
+                        placementLocations[i].CurrentPlacable.GetComponent<ItemController>().SetAmountLeft(float.Parse(placedNames[2 * i + 1]));
                 }
             }
-            for (int i = placementLocations.Length; i < placedNames.Length; i += 4)
+            for (int i = placementLocations.Length * 2; i < placedNames.Length; i += 4)
             {
                 PlacableData item = DataManager.Instance.GetData(placedNames[i]);
                 if (item != null)
@@ -141,7 +143,8 @@ public class PlayArea : PlacementArea
             bool hasRequ = false;
             for (int j = 0; j < placedInArea.Count; j++)
             {
-                if (placedInArea[j].Data == cat.OtherRequirements[i])
+                if (placedInArea[j].Data == cat.OtherRequirements[i]
+                    && (placedInArea[i].GetComponent<ItemController>() == null || placedInArea[i].GetComponent<ItemController>().AnyLeft()))
                 {
                     hasRequ = true;
                     break;
@@ -209,6 +212,10 @@ public class PlayArea : PlacementArea
         for (int i = 0; i < placementLocations.Length; i++)
         {
             builder.AppendLine(placementLocations[i].CurrentPlacable == null ? "NULL" : placementLocations[i].CurrentPlacable.Data.name);
+            if (placementLocations[i].CurrentPlacable == null || placementLocations[i].CurrentPlacable.GetComponent<ItemController>() == null)
+                builder.AppendLine("1");
+            else
+                builder.AppendLine(placementLocations[i].CurrentPlacable.GetComponent<ItemController>().AmountLeft.ToString());
         }
         for (int i = 0; i < placedInArea.Count; i++)
         {

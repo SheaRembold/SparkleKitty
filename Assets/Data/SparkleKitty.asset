@@ -17,4 +17,5 @@ MonoBehaviour:
   Prefab: {fileID: 1720401851590550, guid: e1d199019feecd54d97e9383054584c2, type: 2}
   RequiredTowerType: 0
   RequiredTowerLevel: 0
-  OtherRequirements: []
+  OtherRequirements:
+  - {fileID: 11400000, guid: 8e9819dafa0d5374e950f02404ff2251, type: 2}

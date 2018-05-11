@@ -2100,7 +2100,8 @@ MonoBehaviour:
   WalkSpeed: 1
   SitTime: 5
   StopDistance: 0.15
-  InteractTime: 5
+  InteractTime: 10
+  InteractProbability: 0.2
   StayForever: 1
 --- !u!137 &137600044336046650
 SkinnedMeshRenderer:
