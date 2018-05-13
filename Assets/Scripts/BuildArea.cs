@@ -89,7 +89,7 @@ public class BuildArea : PlacementArea
         }
         if (!validFound)
         {
-            UIManager.Instance.ShowSpeechUI(upgradeLocation, "WrongRecipe");
+            UIManager.Instance.ShowSpeechUI(upgradeLocation, "WrongRecipe", false);
         }
     }
 
@@ -123,7 +123,7 @@ public class BuildArea : PlacementArea
         }
         if (!validFound)
         {
-            UIManager.Instance.ShowSpeechUI(upgradeLocation, "WrongRecipe");
+            UIManager.Instance.ShowSpeechUI(upgradeLocation, "WrongRecipe", false);
         }
     }
     

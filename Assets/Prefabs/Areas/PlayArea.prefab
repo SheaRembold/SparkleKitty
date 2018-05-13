@@ -4199,7 +4199,7 @@ MeshRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1062112255912840}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -4207,7 +4207,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9adfecf3d83307743bf6d20f38374e31, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -6131,6 +6131,7 @@ MonoBehaviour:
   startingInArea:
   - Placable: {fileID: 11400000, guid: 3a21f05b68df3684bbcaf0c79432e9fa, type: 2}
     Position: {x: 0, y: 0, z: 0}
+    Rotation: {x: 0, y: 180, z: 0}
   Contents: {fileID: 4159619629188436}
   AllowMovement: 0
   placementLocations:

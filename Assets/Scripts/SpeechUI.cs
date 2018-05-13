@@ -8,6 +8,8 @@ public class SpeechUI : MonoBehaviour
     [SerializeField]
     RectTransform bubble;
     [SerializeField]
+    RectTransform arrow;
+    [SerializeField]
     HelpTextData helpTextData;
     [SerializeField]
     Text text;
@@ -15,16 +17,19 @@ public class SpeechUI : MonoBehaviour
     string speechName;
     string[] lines;
     int current;
+    bool isOnscreen;
 
     private void Awake()
     {
         helpTextData.Init();
     }
 
-    public void ShowSpeech(Transform target, string speech)
+    public void ShowSpeech(Transform target, string speech, bool isOnscreen)
     {
         gameObject.SetActive(true);
+        arrow.gameObject.SetActive(isOnscreen);
         this.target = target;
+        this.isOnscreen = isOnscreen;
         speechName = speech;
         lines = helpTextData.GetHelpText(speech);
         current = 0;
@@ -49,15 +54,15 @@ public class SpeechUI : MonoBehaviour
     private void LateUpdate()
     {
         Vector3 screenPos = Camera.main.WorldToViewportPoint(target.position);
-        if (screenPos.x >= 0f && screenPos.x <= 1f && screenPos.y >= 0f && screenPos.y <= 1f && screenPos.z > 0f)
+        bubble.anchoredPosition = new Vector2(0f, Mathf.Clamp(screenPos.y* 1080f / Screen.width * Screen.height, -200f, 1420f));
+        if (isOnscreen && screenPos.x >= 0f && screenPos.x <= 1f && screenPos.y >= 0f && screenPos.y <= 1f && screenPos.z > 0f)
         {
-            screenPos.y *= 1080f / Screen.width * Screen.height;
-            bubble.anchoredPosition = new Vector2(0f, screenPos.y);
-            bubble.gameObject.SetActive(true);
+            arrow.anchoredPosition = new Vector2(Mathf.Clamp(screenPos.x * 1080f - 540f, -310, 310), arrow.anchoredPosition.y);
+            arrow.gameObject.SetActive(true);
         }
         else
         {
-            bubble.gameObject.SetActive(false);
+            arrow.gameObject.SetActive(false);
         }
     }
 }

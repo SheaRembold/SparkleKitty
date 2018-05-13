@@ -14,7 +14,7 @@ public class PlacableUI : MonoBehaviour
         for (int i = 0; i < Placables.Length; i++)
         {
             GameObject obj = Instantiate(PlacableButtonPrefab);
-            obj.transform.SetParent(ContentParent);
+            obj.transform.SetParent(ContentParent, false);
             (obj.transform as RectTransform).anchoredPosition = new Vector2(200 * i + 100, 0);
             obj.GetComponent<PlacableButton>().SetPlacable(Placables[i]);
         }

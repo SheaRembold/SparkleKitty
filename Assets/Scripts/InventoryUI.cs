@@ -30,7 +30,7 @@ public class InventoryUI : MonoBehaviour
         for (int i = 0; i < placables.Count; i++)
         {
             GameObject obj = Instantiate(PlacableButtonPrefab);
-            obj.transform.SetParent(ContentParent);
+            obj.transform.SetParent(ContentParent, false);
             (obj.transform as RectTransform).anchoredPosition = new Vector2(200 * i + 100, 0);
             obj.GetComponent<PlacableButton>().SetPlacable(placables[i]);
         }

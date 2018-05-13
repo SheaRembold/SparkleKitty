@@ -14,7 +14,7 @@ public class IntroUI : MonoBehaviour
         PlacementManager.Instance.SetArea(AreaType.None);
         introScene.SetActive(true);
         if (!PlayerManager.Instance.HasShownHelp("Intro"))
-            UIManager.Instance.ShowSpeechUI(sparkleKitty.transform, "Intro");
+            UIManager.Instance.ShowSpeechUI(sparkleKitty.transform, "Intro", true);
     }
 
     private void OnDisable()

@@ -237,18 +237,19 @@ public class CatController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         ASource = GetComponent<AudioSource>();
-        AddState<SitState>();
-        AddState<WalkState>();
-        AddState<EatState>();
-        AddState<PlayState>();
-
-        SetState<SitState>();
     }
 
     protected virtual void Start()
     {
         playArea = GetComponentInParent<PlayArea>();
         data = GetComponent<Placable>().Data as CatData;
+
+        AddState<SitState>();
+        AddState<WalkState>();
+        AddState<EatState>();
+        AddState<PlayState>();
+
+        SetState<SitState>();
     }
 
     protected virtual void Update()

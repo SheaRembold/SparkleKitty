@@ -84,7 +84,7 @@ public class PlacesManager : MonoBehaviour
     {
         if (Vector3.Distance(player.position, marker.transform.position) / _map.WorldRelativeScale > maxDistance)
         {
-            UIManager.Instance.ShowSpeechUI(_map.transform, "TooFar");
+            UIManager.Instance.ShowSpeechUI(_map.transform, "TooFar", false);
         }
         else
         {

@@ -49,6 +49,24 @@ public class RecipeUI : MonoBehaviour
         UpdateRecipe();
     }
 
+    public void SetRecipeType(PlacableDataType type)
+    {
+        TreatTab.isOn = false;
+        ToyTab.isOn = false;
+        TowerTab.isOn = false;
+
+        if (type == PlacableDataType.Treat)
+            TreatTab.isOn = true;
+        else if (type == PlacableDataType.Toy)
+            ToyTab.isOn = true;
+        else if (type == PlacableDataType.Tower)
+            TowerTab.isOn = true;
+
+        currentType = type;
+        if (gameObject.activeSelf)
+            UpdateRecipe();
+    }
+
     void UpdateRecipe()
     {
         if (currentType == PlacableDataType.Treat)
@@ -105,7 +123,7 @@ public class RecipeUI : MonoBehaviour
                 else
                 {
                     requObj = Instantiate(RequPrefab);
-                    requObj.transform.SetParent(transform);
+                    requObj.transform.SetParent(transform, false);
                     (requObj.transform as RectTransform).anchoredPosition = new Vector2(-300, 500 - 200 * requIndex);
                     requs.Add(requObj);
                 }
@@ -153,7 +171,7 @@ public class RecipeUI : MonoBehaviour
             else
             {
                 requObj = Instantiate(RequPrefab);
-                requObj.transform.SetParent(transform);
+                requObj.transform.SetParent(transform, false);
                 (requObj.transform as RectTransform).anchoredPosition = new Vector2(-300, 500 - 200 * requIndex);
                 requs.Add(requObj);
             }
@@ -173,8 +191,9 @@ public class RecipeUI : MonoBehaviour
                 else
                 {
                     requObj = Instantiate(RequPrefab);
-                    requObj.transform.SetParent(transform);
+                    requObj.transform.SetParent(transform, false);
                     (requObj.transform as RectTransform).anchoredPosition = new Vector2(-300, 500 - 200 * requIndex);
+                    requs.Add(requObj);
                 }
                 int invCount = PlayerManager.Instance.GetInventoryCount(pair.Key);
                 requObj.GetComponentInChildren<Image>().sprite = pair.Key.Icon;

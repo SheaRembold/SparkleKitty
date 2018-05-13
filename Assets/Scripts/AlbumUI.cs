@@ -24,15 +24,21 @@ public class AlbumUI : MonoBehaviour
         {
             PlacableData catData = DataManager.Instance.Cats[i];
             GameObject obj = Instantiate(ButtonPrefab);
-            obj.transform.SetParent(Content);
-            (obj.transform as RectTransform).anchoredPosition = new Vector2(0, 675 - 125 * i);
-            Text text = obj.GetComponentInChildren<Text>();
-            text.text = catData.Name;
+            obj.transform.SetParent(Content, false);
+            (obj.transform as RectTransform).anchoredPosition = new Vector2(-220 + (i % 2) * 440, 500 - (i / 2) * 440);
+            Image image = obj.transform.Find("Image").GetComponent<Image>();
+            image.sprite = catData.Icon;
             Button button = obj.GetComponent<Button>();
             if (File.Exists(Application.persistentDataPath + "/" + catData.name + ".png"))
+            {
                 button.onClick.AddListener(new UnityEngine.Events.UnityAction(() => { ShowPhoto(catData); }));
+                image.color = Color.white;
+            }
             else
+            {
                 button.interactable = false;
+                image.color = Color.black;
+            }
         }
     }
 

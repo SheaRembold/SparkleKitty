@@ -8,6 +8,7 @@ public struct PlacedInst
 {
     public PlacableData Placable;
     public Vector3 Position;
+    public Vector3 Rotation;
 }
 
 

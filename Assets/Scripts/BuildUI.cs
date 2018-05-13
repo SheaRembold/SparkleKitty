@@ -5,6 +5,11 @@ using UnityEngine.UI;
 
 public class BuildUI : MonoBehaviour
 {
+    [SerializeField]
+    RecipeUI recipeUI;
+    [SerializeField]
+    PlacableDataType recipeType;
+
     public virtual void Show(PlacementLocation placementLocation)
     {
         PlacementManager.Instance.SetArea(AreaType.Build);
@@ -25,5 +30,11 @@ public class BuildUI : MonoBehaviour
     {
         PlacementManager.Instance.SetArea(AreaType.Play);
         UIManager.Instance.GoBack();
+    }
+
+    public void ShowRecipes()
+    {
+        recipeUI.SetRecipeType(recipeType);
+        UIManager.Instance.ShowUI(recipeUI.gameObject);
     }
 }

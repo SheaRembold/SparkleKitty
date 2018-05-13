@@ -203,11 +203,16 @@ public class PlacementManager : MonoBehaviour
 
     public Placable PlaceAt(PlacableData placable, Vector3 position)
     {
+        return PlaceAt(placable, position, Vector3.zero);
+    }
+
+    public Placable PlaceAt(PlacableData placable, Vector3 position, Vector3 rotation)
+    {
         Placable newPlacable = currentPlacing = Instantiate(placable.Prefab).GetComponent<Placable>();
         currentPlacing.Data = placable;
         currentPlacing.transform.SetParent(currentArea.Contents);
         currentPlacing.transform.localPosition = position;
-        currentPlacing.transform.localRotation = Quaternion.identity;
+        currentPlacing.transform.localRotation = Quaternion.Euler(rotation);
         currentPlacing.transform.localScale = Vector3.one;
         
         currentArea.AddToArea(currentPlacing);

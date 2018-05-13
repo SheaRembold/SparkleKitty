@@ -48,7 +48,7 @@ public class PlayArea : PlacementArea
             }
             for (int i = 0; i < startingInArea.Length; i++)
             {
-                PlacementManager.Instance.PlaceAt(startingInArea[i].Placable, startingInArea[i].Position);
+                PlacementManager.Instance.PlaceAt(startingInArea[i].Placable, startingInArea[i].Position, startingInArea[i].Rotation);
             }
         }
 
@@ -56,7 +56,7 @@ public class PlayArea : PlacementArea
         CheckForCats();
         if (!PlayerManager.Instance.HasShownHelp("IntroAR"))
         {
-            UIManager.Instance.ShowSpeechUI(GetInArea("SparkleKitty").transform, "IntroAR");
+            UIManager.Instance.ShowSpeechUI(GetInArea("SparkleKitty").transform, "IntroAR", true);
         }
     }
 

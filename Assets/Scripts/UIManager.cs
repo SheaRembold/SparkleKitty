@@ -66,9 +66,9 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ShowSpeechUI(Transform target, string speech)
+    public void ShowSpeechUI(Transform target, string speech, bool isOnscreen)
     {
-        speechUI.ShowSpeech(target, speech);
+        speechUI.ShowSpeech(target, speech, isOnscreen);
         Selectable[] selectables = currentUI.GetComponentsInChildren<Selectable>();
         for (int i = 0; i < selectables.Length; i++)
         {

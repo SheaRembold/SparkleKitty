@@ -1,0 +1,303 @@
+fileFormatVersion: 2
+guid: 0551ccf648042e04da941046af7e22da
+timeCreated: 1526151654
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: Armature
+    100002: BackBone_01
+    100004: BackBone_02
+    100006: BackBone_03
+    100008: Ear_L
+    100010: Ear_L_end
+    100012: Ear_L_end_end
+    100014: Ear_R
+    100016: Ear_R_end
+    100018: Ear_R_end_end
+    100020: EarBase_L
+    100022: EarBase_R
+    100024: EyeLeft
+    100026: EyeLeft_end
+    100028: EyeLeft_end_end
+    100030: EyeRight
+    100032: EyeRight_end
+    100034: EyeRight_end_end
+    100036: FootFrontLeft
+    100038: FootFrontLeft_end
+    100040: FootFrontLeft_end_end
+    100042: FootFrontLeft_IK
+    100044: FootFrontLeft_IK_end
+    100046: FootFrontLeft_IK_end_end
+    100048: FootFrontRight
+    100050: FootFrontRight_end
+    100052: FootFrontRight_end_end
+    100054: FootFrontRight_IK
+    100056: FootFrontRight_IK_end
+    100058: FootFrontRight_IK_end_end
+    100060: FootRearLeft
+    100062: FootRearLeft_end
+    100064: FootRearLeft_end_end
+    100066: FootRearLeft_IK
+    100068: FootRearLeft_IK_end
+    100070: FootRearLeft_IK_end_end
+    100072: FootRearRight
+    100074: FootRearRight_end
+    100076: FootRearRight_end_end
+    100078: FootRearRight_IK
+    100080: FootRearRight_IK_end
+    100082: FootRearRight_IK_end_end
+    100084: Head
+    100086: //RootNode
+    100088: LegFrontLeft_01
+    100090: LegFrontLeft_02
+    100092: LegFrontLeft_Pole
+    100094: LegFrontLeft_Pole_end
+    100096: LegFrontLeft_Pole_end_end
+    100098: LegFrontRight_01
+    100100: LegFrontRight_02
+    100102: LegFrontRight_Pole
+    100104: LegFrontRight_Pole_end
+    100106: LegFrontRight_Pole_end_end
+    100108: LegRearLeft_01
+    100110: LegRearLeft_02
+    100112: LegRearLeft_03
+    100114: LegRearLeft_Pole
+    100116: LegRearLeft_Pole_end
+    100118: LegRearLeft_Pole_end_end
+    100120: LegRearRight_01
+    100122: LegRearRight_02
+    100124: LegRearRight_03
+    100126: LegRearRight_Pole
+    100128: LegRearRight_Pole_end
+    100130: LegRearRight_Pole_end_end
+    100132: mainCatLP
+    100134: Master
+    100136: Mouth
+    100138: Mouth_end
+    100140: Mouth_end_end
+    100142: Neck
+    100144: Rig_Cat_Lite
+    100146: Tail_01
+    100148: Tail_02
+    100150: Tail_03
+    100152: Tail_04
+    100154: Tail_05
+    100156: Tail_05_end
+    100158: Tail_05_end_end
+    100160: TailBone
+    100162: TailBone_end
+    100164: TailBone_end_end
+    100166: Tummy
+    100168: Tummy_end
+    100170: Tummy_end_end
+    100172: Camera
+    100174: Lamp
+    400000: Armature
+    400002: BackBone_01
+    400004: BackBone_02
+    400006: BackBone_03
+    400008: Ear_L
+    400010: Ear_L_end
+    400012: Ear_L_end_end
+    400014: Ear_R
+    400016: Ear_R_end
+    400018: Ear_R_end_end
+    400020: EarBase_L
+    400022: EarBase_R
+    400024: EyeLeft
+    400026: EyeLeft_end
+    400028: EyeLeft_end_end
+    400030: EyeRight
+    400032: EyeRight_end
+    400034: EyeRight_end_end
+    400036: FootFrontLeft
+    400038: FootFrontLeft_end
+    400040: FootFrontLeft_end_end
+    400042: FootFrontLeft_IK
+    400044: FootFrontLeft_IK_end
+    400046: FootFrontLeft_IK_end_end
+    400048: FootFrontRight
+    400050: FootFrontRight_end
+    400052: FootFrontRight_end_end
+    400054: FootFrontRight_IK
+    400056: FootFrontRight_IK_end
+    400058: FootFrontRight_IK_end_end
+    400060: FootRearLeft
+    400062: FootRearLeft_end
+    400064: FootRearLeft_end_end
+    400066: FootRearLeft_IK
+    400068: FootRearLeft_IK_end
+    400070: FootRearLeft_IK_end_end
+    400072: FootRearRight
+    400074: FootRearRight_end
+    400076: FootRearRight_end_end
+    400078: FootRearRight_IK
+    400080: FootRearRight_IK_end
+    400082: FootRearRight_IK_end_end
+    400084: Head
+    400086: //RootNode
+    400088: LegFrontLeft_01
+    400090: LegFrontLeft_02
+    400092: LegFrontLeft_Pole
+    400094: LegFrontLeft_Pole_end
+    400096: LegFrontLeft_Pole_end_end
+    400098: LegFrontRight_01
+    400100: LegFrontRight_02
+    400102: LegFrontRight_Pole
+    400104: LegFrontRight_Pole_end
+    400106: LegFrontRight_Pole_end_end
+    400108: LegRearLeft_01
+    400110: LegRearLeft_02
+    400112: LegRearLeft_03
+    400114: LegRearLeft_Pole
+    400116: LegRearLeft_Pole_end
+    400118: LegRearLeft_Pole_end_end
+    400120: LegRearRight_01
+    400122: LegRearRight_02
+    400124: LegRearRight_03
+    400126: LegRearRight_Pole
+    400128: LegRearRight_Pole_end
+    400130: LegRearRight_Pole_end_end
+    400132: mainCatLP
+    400134: Master
+    400136: Mouth
+    400138: Mouth_end
+    400140: Mouth_end_end
+    400142: Neck
+    400144: Rig_Cat_Lite
+    400146: Tail_01
+    400148: Tail_02
+    400150: Tail_03
+    400152: Tail_04
+    400154: Tail_05
+    400156: Tail_05_end
+    400158: Tail_05_end_end
+    400160: TailBone
+    400162: TailBone_end
+    400164: TailBone_end_end
+    400166: Tummy
+    400168: Tummy_end
+    400170: Tummy_end_end
+    400172: Camera
+    400174: Lamp
+    2000000: Camera
+    2100000: catSkinMaterial
+    4300000: mainCatLP
+    7400000: Armature|Armature|Armature|Armature|Default Take|Base Layer.001|Armature
+    7400002: Armature|Armature|Armature|Armature|Default Take|Base Layer|Armature|Arm
+    7400004: Armature|Armature|Armature|Armature|Idle_A|Base Layer.001|Armature|Armat
+    7400006: Armature|Armature|Armature|Armature|Idle_A|Base Layer|Armature|Armature|
+    7400008: Armature|Armature|Armature|Armature|Idle_B|Base Layer.001|Armature|Armat
+    7400010: Armature|Armature|Armature|Armature|Idle_B|Base Layer|Armature|Armature|
+    7400012: Armature|Armature|Armature|Armature|Run|Base Layer.001|Armature|Armature
+    7400014: Armature|Armature|Armature|Armature|Run|Base Layer|Armature|Armature|Run
+    7400016: Armature|Armature|Armature|Armature|Walk|Base Layer.001|Armature|Armatur
+    7400018: Armature|Armature|Armature|Armature|Walk|Base Layer.002|Armature|Armatur
+    7400020: Armature|Armature|Armature|Armature|Walk|Base Layer|Armature|Armature|Wa
+    7400022: Armature|Armature|Armature|Default Take|Base Layer|Armature|Default Take
+    7400024: Armature|Armature|Armature|Eating|Armature|Eating
+    7400026: Armature|Armature|Armature|licking|Armature|licking
+    7400028: Armature|Armature|Armature|OnlySitting|Armature|OnlySitting
+    7400030: Armature|Armature|Armature|Playing|Armature|Playing
+    7400032: Armature|Armature|licking.001|licking.001
+    7400034: Armature|Default Take|Base Layer
+    7400036: licking.001
+    7400038: Armature|Armature|Default Take|Base Layer
+    7400040: Armature|Armature|Default Take|Base Layer.001
+    7400042: Armature|Armature|Idle_A|Base Layer
+    7400044: Armature|Armature|Idle_A|Base Layer.001
+    7400046: Armature|Armature|Idle_B|Base Layer
+    7400048: Armature|Armature|Idle_B|Base Layer.001
+    7400050: Armature|Armature|Run|Base Layer
+    7400052: Armature|Armature|Run|Base Layer.001
+    7400054: Armature|Armature|Walk|Base Layer
+    7400056: Armature|Armature|Walk|Base Layer.001
+    7400058: Armature|Armature|Walk|Base Layer.002
+    7400060: Armature|Eating
+    7400062: Armature|licking
+    7400064: Armature|OnlySitting
+    7400066: Armature|Playing
+    9500000: //RootNode
+    10800000: Lamp
+    13700000: mainCatLP
+  externalObjects: {}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
