@@ -201,8 +201,8 @@ public class CatController : MonoBehaviour
 
     public void MeowMaker()
     {
-        int i = Random.Range(0, data.CatSounds.Count);
-        ASource.PlayOneShot(data.CatSounds[i]);
+        //int i = Random.Range(0, data.CatSounds.Count);
+        //ASource.PlayOneShot(data.CatSounds[i]);
     }
 
     public void StartEatingAudio()

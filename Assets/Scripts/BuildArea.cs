@@ -16,9 +16,23 @@ public class BuildArea : PlacementArea
     GameObject upgradingObj;
     PlacementLocation placementLocation;
 
-    protected void Start()
+    bool areaSet;
+    
+    protected void OnEnable()
     {
-        SetArea();
+        if (!areaSet)
+        {
+            SetArea();
+            areaSet = true;
+        }
+
+        for (int i = 0; i < placedInArea.Count; i++)
+        {
+            PlayerManager.Instance.AddInventory(placedInArea[i].Data);
+            Destroy(placedInArea[i].gameObject);
+        }
+        placedInArea.Clear();
+        areaDirty = true;
     }
 
     public void SetPlacementLocation(PlacementLocation placementLocation)
@@ -132,7 +146,6 @@ public class BuildArea : PlacementArea
         Vector3 avgPos = Vector3.zero;
         for (int i = 0; i < placedInArea.Count; i++)
         {
-            PlayerManager.Instance.RemoveInventory(placedInArea[i].Data);
             avgPos += placedInArea[i].transform.position;
             Destroy(placedInArea[i].gameObject);
         }

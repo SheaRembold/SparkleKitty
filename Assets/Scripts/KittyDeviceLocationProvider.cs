@@ -49,8 +49,8 @@ namespace Mapbox.Unity.Location
 			yield return new WaitWhile(() => !UnityEditor.EditorApplication.isRemoteConnected);
 #endif
             yield return new WaitWhile(() => !Input.location.isEnabledByUser);
-
-			Input.location.Start(_desiredAccuracyInMeters, _updateDistanceInMeters);
+            
+            Input.location.Start(_desiredAccuracyInMeters, _updateDistanceInMeters);
 			Input.compass.enabled = true;
 
 			int maxWait = 20;
@@ -77,7 +77,8 @@ namespace Mapbox.Unity.Location
 			// from reporting a location of (0, 0), initially.
 			yield return _wait;
 #endif
-			while (true)
+            
+            while (true)
 			{
 				_currentLocation.IsHeadingUpdated = false;
 				_currentLocation.IsLocationUpdated = false;
