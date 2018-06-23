@@ -112,6 +112,26 @@ public class PlacementManager : MonoBehaviour
         buildArea = BuildAreaPrefab.GetComponent<BuildArea>();
         cookArea = CookAreaPrefab.GetComponent<CookArea>();
         UIManager.Instance.ShowUI(HelpUI.gameObject);
+        provider.laserPointer.SetActive(false);
+        provider.featherString.SetActive(false);
+    }
+
+    public void TurnOffAttach()
+    {
+        provider.laserPointer.SetActive(false);
+        provider.featherString.SetActive(false);
+    }
+
+    public void TurnOnLaser()
+    {
+        provider.laserPointer.SetActive(true);
+        provider.featherString.SetActive(false);
+    }
+
+    public void TurnOnFeather()
+    {
+        provider.laserPointer.SetActive(false);
+        provider.featherString.SetActive(true);
     }
 
     public PlayArea GetPlayArea()

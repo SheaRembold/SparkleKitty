@@ -4,6 +4,9 @@ using UnityEngine;
 
 public abstract class PlacementProvider
 {
+    public GameObject laserPointer;
+    public GameObject featherString;
+
     protected GameObject sceneObj;
 
     public virtual void TurnOff()

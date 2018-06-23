@@ -16,6 +16,9 @@ public class ARPlacementProvider : PlacementProvider
         cameraObj = sceneObj.GetComponentInChildren<Camera>().gameObject;
         lightObj = sceneObj.GetComponentInChildren<Light>().gameObject;
         controller = sceneObj.GetComponentInChildren<ARController>();
+
+        laserPointer = cameraObj.transform.Find("laserPointer").gameObject;
+        featherString = cameraObj.transform.Find("featherString").gameObject;
     }
 
     public override bool IsReady()
