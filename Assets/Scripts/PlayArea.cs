@@ -56,7 +56,7 @@ public class PlayArea : PlacementArea
         CheckForCats();
         if (!PlayerManager.Instance.HasShownHelp("IntroAR"))
         {
-            UIManager.Instance.ShowSpeechUI(GetInArea("SparkleKitty").transform, "IntroAR", true);
+            //UIManager.Instance.ShowSpeechUI(GetInArea("SparkleKitty").transform, "IntroAR", true);
         }
     }
 

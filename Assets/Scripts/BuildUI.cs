@@ -15,7 +15,7 @@ public class BuildUI : MonoBehaviour
         PlacementManager.Instance.SetArea(AreaType.Build);
         PlacementManager.Instance.GetBuildArea().SetPlacementLocation(placementLocation);
         PlacementManager.Instance.GetBuildArea().SetUpgrading(null);
-        UIManager.Instance.ShowUI(gameObject);
+        //UIManager.Instance.ShowUI(gameObject);
     }
 
     public virtual void ShowUpgrade(PlacementLocation placementLocation, UpgradableData upgradable)
@@ -23,18 +23,18 @@ public class BuildUI : MonoBehaviour
         PlacementManager.Instance.SetArea(AreaType.Build);
         PlacementManager.Instance.GetBuildArea().SetPlacementLocation(placementLocation);
         PlacementManager.Instance.GetBuildArea().SetUpgrading(upgradable);
-        UIManager.Instance.ShowUI(gameObject);
+        //UIManager.Instance.ShowUI(gameObject);
     }
 
     public virtual void Hide()
     {
         PlacementManager.Instance.SetArea(AreaType.Play);
-        UIManager.Instance.GoBack();
+        //UIManager.Instance.GoBack();
     }
 
     public void ShowRecipes()
     {
         recipeUI.SetRecipeType(recipeType);
-        UIManager.Instance.ShowUI(recipeUI.gameObject);
+        //UIManager.Instance.ShowUI(recipeUI.gameObject);
     }
 }

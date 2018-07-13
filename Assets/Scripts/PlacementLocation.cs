@@ -27,6 +27,6 @@ public class PlacementLocation : Clickable
 
     public override void Click()
     {
-        UIManager.Instance.GetBuildUI(buildUI).Show(this);
+        //UIManager.Instance.GetBuildUI(buildUI).Show(this);
     }
 }

@@ -59,7 +59,7 @@ public class UpgradeUI : MonoBehaviour
                 PlayerManager.Instance.RemoveInventory(upgradeData.UpgradeRequirements[i]);
             }
             PlacementManager.Instance.Replace(placable, upgradeData.Upgrade);
-            UIManager.Instance.GoBack();
+            //UIManager.Instance.GoBack();
         }
     }
 }

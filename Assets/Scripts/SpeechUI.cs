@@ -45,7 +45,7 @@ public class SpeechUI : MonoBehaviour
         }
         else
         {
-            UIManager.Instance.HideSpeechUI();
+            //UIManager.Instance.HideSpeechUI();
             gameObject.SetActive(false);
             PlayerManager.Instance.ShowHelp(speechName);
         }

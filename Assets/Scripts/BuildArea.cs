@@ -103,7 +103,7 @@ public class BuildArea : PlacementArea
         }
         if (!validFound)
         {
-            UIManager.Instance.ShowSpeechUI(upgradeLocation, "WrongRecipe", false);
+            //UIManager.Instance.ShowSpeechUI(upgradeLocation, "WrongRecipe", false);
         }
     }
 
@@ -137,7 +137,7 @@ public class BuildArea : PlacementArea
         }
         if (!validFound)
         {
-            UIManager.Instance.ShowSpeechUI(upgradeLocation, "WrongRecipe", false);
+            //UIManager.Instance.ShowSpeechUI(upgradeLocation, "WrongRecipe", false);
         }
     }
     
@@ -200,8 +200,8 @@ public class BuildArea : PlacementArea
             buildWorkUI.Hide();
         if (upgradeWorkUI.gameObject.activeSelf)
             upgradeWorkUI.Hide();
-        if (placementLocation != null)
-            UIManager.Instance.GetCurrentBuildUI().Hide();
+        //if (placementLocation != null)
+            //UIManager.Instance.GetCurrentBuildUI().Hide();
     }
 
     private void OnDisable()

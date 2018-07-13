@@ -45,6 +45,6 @@ public class AlbumUI : MonoBehaviour
     void ShowPhoto(PlacableData data)
     {
         photoUI.ShowPhoto(data);
-        UIManager.Instance.ShowUI(photoUI.gameObject);
+        //UIManager.Instance.ShowUI(photoUI.gameObject);
     }
 }

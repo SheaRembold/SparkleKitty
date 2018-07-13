@@ -34,7 +34,7 @@ public class BuildWorkUI : MonoBehaviour
         built = false;
 
         PlacementManager.Instance.enabled = false;
-        UIManager.Instance.ShowUI(gameObject);
+        //UIManager.Instance.ShowUI(gameObject);
         tool.SetActive(true);
         particles.gameObject.SetActive(true);
     }
@@ -44,7 +44,7 @@ public class BuildWorkUI : MonoBehaviour
         tool.SetActive(false);
         particles.gameObject.SetActive(false);
         PlacementManager.Instance.enabled = true;
-        UIManager.Instance.GoBack();
+        //UIManager.Instance.GoBack();
     }
 
     private void Update()

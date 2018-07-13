@@ -14,8 +14,8 @@ public class PlacementManager : MonoBehaviour
     GameObject LoadingUI;
     [SerializeField]
     PlacementUI HelpUI;
-    [SerializeField]
-    GameObject MainUI;
+    //[SerializeField]
+    //GameObject MainUI;
     [SerializeField]
     GameObject PlayAreaPrefab;
     [SerializeField]
@@ -41,9 +41,14 @@ public class PlacementManager : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        StartPlaying();
+    }
+
     public void StartPlaying()
     {
-        UIManager.Instance.ShowUI(MainUI);
+        //UIManager.Instance.ShowUI(MainUI);
         if (provider == null)
         {
 #if UNITY_EDITOR
@@ -63,13 +68,19 @@ public class PlacementManager : MonoBehaviour
         {
             SetArea(AreaType.Play);
             if (placingArea)
-                UIManager.Instance.ShowUI(HelpUI.gameObject);
+            {
+                //UIManager.Instance.ShowUI(HelpUI.gameObject);
+                LoadingUI.SetActive(false);
+                HelpUI.gameObject.SetActive(true);
+            }
         }
     }
 
     IEnumerator WaitToStart()
     {
-        UIManager.Instance.ShowUI(LoadingUI);
+        //UIManager.Instance.ShowUI(LoadingUI);
+        HelpUI.gameObject.SetActive(false);
+        LoadingUI.SetActive(true);
 
         GoogleARCore.AsyncTask<GoogleARCore.ApkAvailabilityStatus> availTask = GoogleARCore.Session.CheckApkAvailability();
         yield return availTask.WaitForCompletion();
@@ -111,7 +122,9 @@ public class PlacementManager : MonoBehaviour
         currentAreaType = AreaType.Play;
         buildArea = BuildAreaPrefab.GetComponent<BuildArea>();
         cookArea = CookAreaPrefab.GetComponent<CookArea>();
-        UIManager.Instance.ShowUI(HelpUI.gameObject);
+        //UIManager.Instance.ShowUI(HelpUI.gameObject);
+        LoadingUI.SetActive(false);
+        HelpUI.gameObject.SetActive(true);
         provider.laserPointer.SetActive(false);
         provider.featherString.SetActive(false);
     }
@@ -326,7 +339,9 @@ public class PlacementManager : MonoBehaviour
                 if (Input.GetMouseButtonDown(0))
                 {
                     placingArea = false;
-                    UIManager.Instance.GoBackToUI(MainUI);
+                    //UIManager.Instance.GoBackToUI(MainUI);
+                    LoadingUI.SetActive(false);
+                    HelpUI.gameObject.SetActive(false);
                     playArea.SetArea();
                     provider.FinishInit();
                 }

@@ -9,12 +9,12 @@ public class CookUI : BuildUI
     {
         PlacementManager.Instance.SetArea(AreaType.Cook);
         PlacementManager.Instance.GetCookArea().SetPlacementLocation(placementLocation);
-        UIManager.Instance.ShowUI(gameObject);
+        //UIManager.Instance.ShowUI(gameObject);
     }
 
     public override void Hide()
     {
         PlacementManager.Instance.SetArea(AreaType.Play);
-        UIManager.Instance.GoBack();
+        //UIManager.Instance.GoBack();
     }
 }

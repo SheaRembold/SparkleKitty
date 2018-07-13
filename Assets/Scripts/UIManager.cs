@@ -5,19 +5,19 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager Instance;
+    //public static UIManager Instance;
     
     [SerializeField]
     GameObject introUI;
-    [SerializeField]
-    SpeechUI speechUI;
+    //[SerializeField]
+    //SpeechUI speechUI;
 
     GameObject currentUI;
     Stack<GameObject> uiStack = new Stack<GameObject>();
 
     private void Awake()
     {
-        Instance = this;
+        //Instance = this;
 
         for (int i = 0; i < transform.childCount; i++)
             transform.GetChild(i).gameObject.SetActive(false);
@@ -66,7 +66,22 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ShowSpeechUI(Transform target, string speech, bool isOnscreen)
+    public void TurnOffAttach()
+    {
+        PlacementManager.Instance.TurnOffAttach();
+    }
+
+    public void TurnOnLaser()
+    {
+        PlacementManager.Instance.TurnOnLaser();
+    }
+
+    public void TurnOnFeather()
+    {
+        PlacementManager.Instance.TurnOnFeather();
+    }
+
+    /*public void ShowSpeechUI(Transform target, string speech, bool isOnscreen)
     {
         speechUI.ShowSpeech(target, speech, isOnscreen);
         Selectable[] selectables = currentUI.GetComponentsInChildren<Selectable>();
@@ -96,5 +111,5 @@ public class UIManager : MonoBehaviour
     public BuildUI GetCurrentBuildUI()
     {
         return currentUI.GetComponent<BuildUI>();
-    }
+    }*/
 }
