@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class PlacableButton : MonoBehaviour, IPointerDownHandler
+public class PlacableButton : MonoBehaviour//, IPointerDownHandler
 {
     public Text Label;
     public Image Icon;
@@ -26,10 +26,10 @@ public class PlacableButton : MonoBehaviour, IPointerDownHandler
             Label.text = Placable.Name;
         }
     }
-
+    /*
     public void OnPointerDown(PointerEventData eventData)
     {
         PlacementManager.Instance.StartPlacing(Placable);
         PlayerManager.Instance.RemoveInventory(Placable);
-    }
+    }*/
 }

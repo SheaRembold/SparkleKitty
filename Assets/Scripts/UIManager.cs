@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour
     //public static UIManager Instance;
     
     [SerializeField]
-    GameObject introUI;
+    GameObject mainUI;
     //[SerializeField]
     //SpeechUI speechUI;
 
@@ -21,11 +21,7 @@ public class UIManager : MonoBehaviour
 
         for (int i = 0; i < transform.childCount; i++)
             transform.GetChild(i).gameObject.SetActive(false);
-    }
-
-    private void Start()
-    {
-        GoBackToUI(introUI);
+        mainUI.SetActive(true);
     }
 
     public void ShowUI(GameObject uiObj)

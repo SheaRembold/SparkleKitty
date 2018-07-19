@@ -27,13 +27,17 @@ public class DebugUI : MonoBehaviour
             AddButton(DataManager.Instance.ToyRecipes[i]);
         for (int i = 0; i < DataManager.Instance.TreatRecipes.Length; i++)
             AddButton(DataManager.Instance.TreatRecipes[i]);
+        for (int i = 0; i < DataManager.Instance.Toys.Length; i++)
+            AddButton(DataManager.Instance.Toys[i]);
+        for (int i = 0; i < DataManager.Instance.Treats.Length; i++)
+            AddButton(DataManager.Instance.Treats[i]);
     }
 
     void AddButton(PlacableData componentData)
     {
         GameObject obj = Instantiate(ButtonPrefab);
         obj.transform.SetParent(Content, false);
-        (obj.transform as RectTransform).anchoredPosition = new Vector2(240 + (buttonCount % 4) * 200, 640 - (buttonCount / 4) * 200);
+        (obj.transform as RectTransform).anchoredPosition = new Vector2(120 + (buttonCount % 4) * 200, -120 - (buttonCount / 4) * 200);
         obj.GetComponent<InventoryDebugButton>().SetPlacable(componentData);
         buttonCount++;
     }
