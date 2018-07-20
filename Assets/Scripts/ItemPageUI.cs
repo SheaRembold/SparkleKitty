@@ -71,7 +71,8 @@ public class ItemPageUI : MonoBehaviour
             current = 0;
 
         NameLabel.text = buildables[current].Name;
-        PageLabel.text = (current + 1) + " / " + buildables.Length; 
+        PageLabel.text = (current + 1) + " / " + buildables.Length;
+        CountLabel.text = PlayerManager.Instance.GetInventoryCount(buildables[current]).ToString();
 
         bool hasRecipe = false;
         for (int i = 0; i < PlayerManager.Instance.InventoryCount; i++)
@@ -98,6 +99,7 @@ public class ItemPageUI : MonoBehaviour
                     requCounts.Add(buildables[current].BuildRequirements[i], 1);
             }
             int requIndex = 0;
+            bool requMissing = false;
             foreach (KeyValuePair<PlacableData, int> pair in requCounts)
             {
                 GameObject requObj = null;
@@ -117,7 +119,12 @@ public class ItemPageUI : MonoBehaviour
                 requObj.GetComponentInChildren<Image>().sprite = pair.Key.Icon;
                 requObj.GetComponentInChildren<Text>().text = invCount + " / " + pair.Value;
                 requIndex++;
+                if (invCount < pair.Value)
+                    requMissing = true;
             }
+
+            CraftButton.gameObject.SetActive(true);
+            CraftButton.interactable = !requMissing;
         }
         else
         {
@@ -125,6 +132,7 @@ public class ItemPageUI : MonoBehaviour
                 requs[i].SetActive(false);
             UnknownLabel.gameObject.SetActive(true);
             UnknownLabel.text = "????";
+            CraftButton.gameObject.SetActive(false);
         }
     }
 
@@ -137,6 +145,8 @@ public class ItemPageUI : MonoBehaviour
         PageLabel.text = (current + 1) + " / " + upgradables.Length;
 
         UpgradableData upgradable = upgradables[current];
+
+        CountLabel.text = PlayerManager.Instance.GetInventoryCount(upgradable).ToString();
 
         if (upgradable.Upgrade != null)
         { 
@@ -172,6 +182,7 @@ public class ItemPageUI : MonoBehaviour
             UnknownLabel.gameObject.SetActive(true);
             UnknownLabel.text = upgradable.Name;
 
+            bool requMissing = false;
             foreach (KeyValuePair<PlacableData, int> pair in requCounts)
             {
                 requObj = null;
@@ -191,7 +202,12 @@ public class ItemPageUI : MonoBehaviour
                 requObj.GetComponentInChildren<Image>().sprite = pair.Key.Icon;
                 requObj.GetComponentInChildren<Text>().text = invCount + " / " + pair.Value;
                 requIndex++;
+                if (invCount < pair.Value)
+                    requMissing = true;
             }
+
+            CraftButton.gameObject.SetActive(true);
+            CraftButton.interactable = !requMissing;
         }
         else
         {
@@ -199,6 +215,35 @@ public class ItemPageUI : MonoBehaviour
             for (int i = 0; i < requs.Count; i++)
                 requs[i].SetActive(false);
             UnknownLabel.gameObject.SetActive(false);
+            CraftButton.gameObject.SetActive(false);
         }
+    }
+
+    public void Craft()
+    {
+        if (currentType == PlacableDataType.Treat)
+            Craft(DataManager.Instance.Treats);
+        else if (currentType == PlacableDataType.Toy)
+            Craft(DataManager.Instance.Toys);
+        else if (currentType == PlacableDataType.Tower)
+            Upgrade(DataManager.Instance.Towers);
+    }
+
+    void Craft(BuildableData[] buildables)
+    {
+        for (int i = 0; i < buildables[current].BuildRequirements.Length; i++)
+        {
+            PlayerManager.Instance.RemoveInventory(buildables[current].BuildRequirements[i]);
+        }
+        PlayerManager.Instance.AddInventory(buildables[current]);
+
+        UpdateRecipe(buildables);
+    }
+
+    void Upgrade(UpgradableData[] upgradables)
+    {
+        PlacementManager.Instance.GetPlayArea().GetPlacementLocation().SetPlacable(upgradables[current].Upgrade);
+
+        UpdateUpgrade(upgradables);
     }
 }

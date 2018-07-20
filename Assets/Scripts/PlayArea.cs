@@ -60,6 +60,11 @@ public class PlayArea : PlacementArea
         }
     }
 
+    public PlacementLocation GetPlacementLocation()
+    {
+        return placementLocations[0];
+    }
+
     public override void AddToArea(Placable placable)
     {
         base.AddToArea(placable);
