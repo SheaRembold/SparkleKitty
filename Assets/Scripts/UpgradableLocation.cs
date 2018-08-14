@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class UpgradableLocation : PlacementLocation
 {
-    public override void Click()
+    public override void Click(RaycastHit hit)
     {
         //UIManager.Instance.GetBuildUI(buildUI).ShowUpgrade(this, CurrentPlacable.Data as UpgradableData);
     }

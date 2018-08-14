@@ -61,22 +61,7 @@ public class UIManager : MonoBehaviour
             currentUI.SetActive(true);
         }
     }
-
-    public void TurnOffAttach()
-    {
-        PlacementManager.Instance.TurnOffAttach();
-    }
-
-    public void TurnOnLaser()
-    {
-        PlacementManager.Instance.TurnOnLaser();
-    }
-
-    public void TurnOnFeather()
-    {
-        PlacementManager.Instance.TurnOnFeather();
-    }
-
+    
     /*public void ShowSpeechUI(Transform target, string speech, bool isOnscreen)
     {
         speechUI.ShowSpeech(target, speech, isOnscreen);

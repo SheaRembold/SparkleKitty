@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Mailbox : Clickable
 {
-    public override void Click()
+    public override void Click(RaycastHit hit)
     {
 
     }

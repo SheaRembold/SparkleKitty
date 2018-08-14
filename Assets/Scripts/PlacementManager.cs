@@ -35,6 +35,10 @@ public class PlacementManager : MonoBehaviour
     AreaType lastAreaType = AreaType.None;
     AreaType currentAreaType = AreaType.None;
     Clickable currentClickable;
+    public Placable CurrentAttached { get; private set; }
+    public delegate void OnFinishedPlacing(Placable placable);
+    public OnFinishedPlacing onFinishedPlacing;
+    public List<IChasable> chasables = new List<IChasable>();
 
     private void Awake()
     {
@@ -125,26 +129,27 @@ public class PlacementManager : MonoBehaviour
         //UIManager.Instance.ShowUI(HelpUI.gameObject);
         LoadingUI.SetActive(false);
         HelpUI.gameObject.SetActive(true);
-        provider.laserPointer.SetActive(false);
-        provider.featherString.SetActive(false);
+    }
+    
+    public void SetAttached(PlacableData placable)
+    {
+        RemoveAttached();
+
+        CurrentAttached = Instantiate(placable.Prefab).GetComponent<Placable>();
+        CurrentAttached.Data = placable;
+        CurrentAttached.transform.SetParent(provider.attachPoint);
+        CurrentAttached.transform.localPosition = Vector3.zero;
+        CurrentAttached.transform.localRotation = placable.Prefab.transform.rotation;
+        CurrentAttached.transform.localScale = Vector3.one;
     }
 
-    public void TurnOffAttach()
+    public void RemoveAttached()
     {
-        provider.laserPointer.SetActive(false);
-        provider.featherString.SetActive(false);
-    }
-
-    public void TurnOnLaser()
-    {
-        provider.laserPointer.SetActive(true);
-        provider.featherString.SetActive(false);
-    }
-
-    public void TurnOnFeather()
-    {
-        provider.laserPointer.SetActive(false);
-        provider.featherString.SetActive(true);
+        if (CurrentAttached != null)
+        {
+            Destroy(CurrentAttached.gameObject);
+            CurrentAttached = null;
+        }
     }
 
     public PlayArea GetPlayArea()
@@ -202,9 +207,12 @@ public class PlacementManager : MonoBehaviour
 
     public void StartPlacing(PlacableData placable)
     {
+        if (currentPlacing != null)
+            Destroy(currentPlacing.gameObject);
         currentPlacing = Instantiate(placable.Prefab).GetComponent<Placable>();
         currentPlacing.Data = placable;
         lastPos = null;
+        HelpUI.gameObject.SetActive(true);
         PlaceCurrent();
     }
 
@@ -288,21 +296,23 @@ public class PlacementManager : MonoBehaviour
     void PlaceCurrent()
     {
         RaycastHit hit;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Ground")))
+        //if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Ground")))
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Ground")))
         {
+            currentPlacing.gameObject.SetActive(true);
             currentPlacing.transform.SetParent(hit.transform.parent);
             currentPlacing.transform.position = hit.point;
             currentPlacing.transform.localRotation = Quaternion.identity;
             currentPlacing.transform.localScale = Vector3.one;
             placed = true;
+            HelpUI.ShowPlaceItem();
         }
         else
         {
-            Vector3 pos = Input.mousePosition;
-            pos.z = 3f;
-            pos = Camera.main.ScreenToWorldPoint(pos);
-            currentPlacing.transform.position = pos;
+            currentPlacing.transform.SetParent(null);
+            currentPlacing.gameObject.SetActive(false);
             placed = false;
+            HelpUI.ShowLookingItem();
         }
     }
 
@@ -352,48 +362,48 @@ public class PlacementManager : MonoBehaviour
                 HelpUI.ShowLooking();
             }
         }
-        else if (currentPlacing == null && currentClickable == null)
+        else if (currentPlacing == null)
         {
-#if UNITY_EDITOR || UNITY_STANDALONE
-            if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
-#else
-            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
-#endif
+            if (currentClickable == null)
             {
-                RaycastHit hit;
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Placable")))
+#if UNITY_EDITOR || UNITY_STANDALONE
+                if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+#else
+                if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+#endif
                 {
-                    currentClickable = hit.transform.GetComponentInParent<Clickable>();
-
-                    if (currentClickable == null && currentArea.AllowMovement)
+                    RaycastHit hit;
+                    if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Placable")))
                     {
-                        currentPlacing = hit.transform.GetComponentInParent<Placable>();
-                        lastPos = currentPlacing.transform.localPosition;
+                        currentClickable = hit.transform.GetComponentInParent<Clickable>();
+
+                        if (currentClickable == null && currentArea.AllowMovement)
+                        {
+                            currentPlacing = hit.transform.GetComponentInParent<Placable>();
+                            lastPos = currentPlacing.transform.localPosition;
+                        }
                     }
                 }
             }
-        }
-        else if (currentClickable != null)
-        {
-            if (Input.GetMouseButtonUp(0))
+            else
             {
-                RaycastHit hit;
-                if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Placable")))
+                if (Input.GetMouseButtonUp(0))
                 {
-                    Clickable upClickable = hit.transform.GetComponentInParent<Clickable>();
-                    if (upClickable == currentClickable)
-                        currentClickable.Click();
+                    RaycastHit hit;
+                    if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Placable")))
+                    {
+                        Clickable upClickable = hit.transform.GetComponentInParent<Clickable>();
+                        if (upClickable == currentClickable)
+                            currentClickable.Click(hit);
+                    }
+                    currentClickable = null;
                 }
-                currentClickable = null;
             }
         }
         else
         {
-            if (Input.GetMouseButton(0))
-            {
-                PlaceCurrent();
-            }
-            else
+            PlaceCurrent();
+            if (Input.GetMouseButtonUp(0))
             {
                 if (placed)
                 {
@@ -405,20 +415,26 @@ public class PlacementManager : MonoBehaviour
                     else
                     {
                         if (currentArea != null)
+                        {
                             currentArea.AddToArea(currentPlacing);
+                            PlayerManager.Instance.RemoveInventory(currentPlacing.Data);
+                            if (onFinishedPlacing != null)
+                                onFinishedPlacing(currentPlacing);
+                        }
                     }
+                    currentPlacing = null;
+                    HelpUI.gameObject.SetActive(false);
                 }
-                else
+                /*else
                 {
                     /*if (lastPos.HasValue)
                         currentPlacing.transform.localPosition = lastPos.Value;
-                    else*/
+                    else*
                     if (currentArea != null)
                         currentArea.RemoveFromArea(currentPlacing);
                     PlayerManager.Instance.AddInventory(currentPlacing.Data);
                     Destroy(currentPlacing.gameObject);
-                }
-                currentPlacing = null;
+                }*/
             }
         }
     }

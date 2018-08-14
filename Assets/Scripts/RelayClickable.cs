@@ -7,8 +7,8 @@ public class RelayClickable : Clickable
     [System.NonSerialized]
     public Clickable ParentClickable;
 
-    public override void Click()
+    public override void Click(RaycastHit hit)
     {
-        ParentClickable.Click();
+        ParentClickable.Click(hit);
     }
 }

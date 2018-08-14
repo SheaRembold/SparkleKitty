@@ -14,7 +14,8 @@ MonoBehaviour:
   Name: Feather on a String
   DataType: 2
   Icon: {fileID: 21300000, guid: 6d27d751ae82a054f954b29050a6ca73, type: 3}
-  Prefab: {fileID: 1023022131551718, guid: e4174db301e008a4b9090f71191e7760, type: 2}
+  Prefab: {fileID: 1023022131551718, guid: 1d693f9e94efc10478001a5903cde09d, type: 2}
+  Attached: 1
   BuildRequirements:
   - {fileID: 11400000, guid: de47dd02f39edc94daa0ac1b27d7939c, type: 2}
   - {fileID: 11400000, guid: de47dd02f39edc94daa0ac1b27d7939c, type: 2}

@@ -9,4 +9,5 @@ public class PlacableData : ScriptableObject
     public PlacableDataType DataType = PlacableDataType.Cat;
     public Sprite Icon;
     public GameObject Prefab;
+    public bool Attached;
 }

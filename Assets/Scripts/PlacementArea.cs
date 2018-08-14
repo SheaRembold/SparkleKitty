@@ -31,13 +31,20 @@ public class PlacementArea : MonoBehaviour
     public virtual void AddToArea(Placable placable)
     {
         if (!placedInArea.Contains(placable))
+        {
             placedInArea.Add(placable);
+            placable.AddedToArea();
+        }
         areaDirty = true;
     }
 
     public virtual void RemoveFromArea(Placable placable)
     {
-        placedInArea.Remove(placable);
+        if (placedInArea.Contains(placable))
+        {
+            placedInArea.Remove(placable);
+            placable.RemovedFromArea();
+        }
         areaDirty = true;
     }
 

@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class UpgradeClickable : Clickable
 {
-    public override void Click()
+    public override void Click(RaycastHit hit)
     {
     }
 }

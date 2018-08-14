@@ -9,8 +9,7 @@ public class TestPlacementProvider : PlacementProvider
     {
         sceneObj = GameObject.Instantiate(Resources.Load<GameObject>("TestScene"));
 
-        laserPointer = sceneObj.GetComponentInChildren<Camera>().transform.Find("laserPointer").gameObject;
-        featherString = sceneObj.GetComponentInChildren<Camera>().transform.Find("featherString").gameObject;
+        attachPoint = sceneObj.GetComponentInChildren<Camera>().transform.Find("AttachPoint");
     }
     
     public override bool GetPlane(out BoundedPlane plane)

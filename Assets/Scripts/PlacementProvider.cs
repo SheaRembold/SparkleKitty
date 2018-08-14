@@ -4,8 +4,7 @@ using UnityEngine;
 
 public abstract class PlacementProvider
 {
-    public GameObject laserPointer;
-    public GameObject featherString;
+    public Transform attachPoint;
 
     protected GameObject sceneObj;
 

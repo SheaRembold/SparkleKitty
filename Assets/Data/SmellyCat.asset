@@ -15,10 +15,11 @@ MonoBehaviour:
   DataType: 0
   Icon: {fileID: 21300000, guid: f5f46589eaf0e7b4799222b8b5c8ff7b, type: 3}
   Prefab: {fileID: 1720401851590550, guid: 3e06b46700415a140ab03399aecde551, type: 2}
+  Attached: 0
   RequiredTowerType: 1
-  RequiredTowerLevel: 4
+  RequiredTowerLevel: 3
   OtherRequirements:
-  - {fileID: 11400000, guid: 4e432c76d712eaf4bbf61786ecc32b1e, type: 2}
+  - {fileID: 11400000, guid: 8ff14f0193424214a8ddc41fe8c988bf, type: 2}
   - {fileID: 11400000, guid: 63980fdac7da4534e8fb2a413adf6a74, type: 2}
   CatSounds:
   - {fileID: 8300000, guid: 7ee783ec0394d244eac9a7edfc842bbf, type: 3}

@@ -42,6 +42,21 @@ public class CatController : MonoBehaviour
         public override void OnUpdate()
         {
             base.OnUpdate();
+
+            for (int i = 0; i < PlacementManager.Instance.chasables.Count; i++)
+            {
+                if (PlacementManager.Instance.chasables[i].Attraction >= 1f
+                    && (controller.chaseTarget == null || PlacementManager.Instance.chasables[i].Attraction > controller.chaseTarget.Attraction))
+                {
+                    controller.chaseTarget = PlacementManager.Instance.chasables[i];
+                }
+            }
+            if (controller.chaseTarget != null)
+            {
+                controller.SetState<ChaseState>();
+                return;
+            }
+
             if (stateTime > controller.SitTime)
             {
                 if (Random.value < controller.InteractProbability)
@@ -92,10 +107,25 @@ public class CatController : MonoBehaviour
         public override void OnUpdate()
         {
             base.OnUpdate();
+            
+            for (int i = 0; i < PlacementManager.Instance.chasables.Count; i++)
+            {
+                if (PlacementManager.Instance.chasables[i].Attraction >= 1f
+                    && (controller.chaseTarget == null || PlacementManager.Instance.chasables[i].Attraction > controller.chaseTarget.Attraction))
+                {
+                    controller.chaseTarget = PlacementManager.Instance.chasables[i];
+                }
+            }
+            if (controller.chaseTarget != null)
+            {
+                controller.SetState<ChaseState>();
+                return;
+            }
+
             if (controller.target != null)
                 controller.targetPos = controller.target.transform.localPosition;
             Vector3 targetWorldPos = PlacementManager.Instance.GetWorldPos(controller.targetPos);
-            controller.transform.LookAt(targetWorldPos, controller.transform.up);
+            controller.transform.LookAt(targetWorldPos, PlacementManager.Instance.GetPlayArea().transform.up);
             float distToTarget = Vector3.Distance(controller.transform.position, targetWorldPos);
             float worldStopDist = controller.StopDistance * controller.transform.lossyScale.x;
             if (Mathf.Abs(distToTarget - worldStopDist) < 0.01f)
@@ -178,45 +208,97 @@ public class CatController : MonoBehaviour
         }
     }
 
+    public class ChaseState : CatState
+    {
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            controller.animator.SetTrigger("Run");
+        }
+
+        public override void OnUpdate()
+        {
+            base.OnUpdate();
+            if (controller.chaseTarget == null || controller.chaseTarget.ChasePosition == Vector3.zero)
+            {
+                controller.SetState<SitState>();
+            }
+            else
+            {
+                Vector3 targetWorldPos = controller.chaseTarget.ChasePosition;
+                controller.transform.LookAt(targetWorldPos, PlacementManager.Instance.GetPlayArea().transform.up);
+                float distToTarget = Vector3.Distance(controller.transform.position, targetWorldPos);
+                float worldStopDist = controller.StopDistance * controller.transform.lossyScale.x;
+                if (Mathf.Abs(distToTarget - worldStopDist) < 0.01f)
+                {
+                    controller.SetState<ChasePlayState>();
+                }
+                else
+                {
+                    float movement = controller.RunSpeed * controller.transform.lossyScale.x * Time.deltaTime;
+                    if (movement < distToTarget - worldStopDist)
+                        controller.transform.position += controller.transform.forward * movement;
+                    else
+                        controller.transform.position += controller.transform.forward * (distToTarget - worldStopDist);
+                }
+            }
+        }
+    }
+
+    public class ChasePlayState : CatState
+    {
+        public override void OnEnter()
+        {
+            base.OnEnter();
+            controller.animator.SetTrigger("Play");
+        }
+
+        public override void OnUpdate()
+        {
+            base.OnUpdate();
+            if (controller.chaseTarget == null || controller.chaseTarget.ChasePosition == Vector3.zero || stateTime > controller.InteractTime)
+            {
+                controller.chaseTarget = null;
+                controller.SetState<SitState>();
+            }
+            else
+            {
+                Vector3 targetWorldPos = controller.chaseTarget.ChasePosition;
+                controller.transform.LookAt(targetWorldPos, PlacementManager.Instance.GetPlayArea().transform.up);
+                float distToTarget = Vector3.Distance(controller.transform.position, targetWorldPos);
+                float worldStopDist = controller.StopDistance * controller.transform.lossyScale.x;
+                if (distToTarget > 2f * worldStopDist)
+                {
+                    controller.SetState<ChaseState>();
+                }
+            }
+        }
+    }
+
     public float WalkSpeed = 1f;
+    public float RunSpeed = 2f;
     public float SitTime = 5f;
     public float StopDistance = 1f;
     public float InteractTime = 5f;
     public float InteractProbability = 1f;
     public float MeowProbability = 1f;
     public bool StayForever;
+    public Renderer[] MoodRenderers;
+    public Color[] MoodColors;
 
     protected CatData data;
     protected Animator animator;
     protected PlayArea playArea;
     protected Placable target;
     protected Vector3 targetPos;
+    protected IChasable chaseTarget;
     protected bool isLeaving;
     List<CatState> states = new List<CatState>();
     CatState currentState;
- 
-    // Audio Stuff
+    Material moodMat;
     AudioSource ASource;
-
-
-    public void MeowMaker()
-    {
-        //int i = Random.Range(0, data.CatSounds.Count);
-        //ASource.PlayOneShot(data.CatSounds[i]);
-    }
-
-    public void StartEatingAudio()
-    {
-        ASource.loop = true;
-        ASource.clip = data.EatingSound;
-        ASource.Play();
-    }
-
-    public void StopEatingAudio()
-    {
-        ASource.Play();
-    }
-
+    float moodValue = 0.5f;
+    
     protected void AddState<T>() where T : CatState, new()
     {
         T newState = new T();
@@ -237,8 +319,15 @@ public class CatController : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         ASource = GetComponent<AudioSource>();
-    }
 
+        moodMat = new Material(MoodRenderers[0].sharedMaterial);
+        for (int i=0;i<MoodRenderers.Length;i++)
+        {
+            MoodRenderers[i].material = moodMat;
+        }
+        moodMat.color = MoodColors[Mathf.Clamp((int)(moodValue * MoodColors.Length), 0, MoodColors.Length - 1)];
+    }
+    
     protected virtual void Start()
     {
         playArea = GetComponentInParent<PlayArea>();
@@ -248,6 +337,8 @@ public class CatController : MonoBehaviour
         AddState<WalkState>();
         AddState<EatState>();
         AddState<PlayState>();
+        AddState<ChaseState>();
+        AddState<ChasePlayState>();
 
         SetState<SitState>();
     }
@@ -256,5 +347,29 @@ public class CatController : MonoBehaviour
     {
         if (currentState != null)
             currentState.OnUpdate();
+    }
+
+    protected void MeowMaker()
+    {
+        //int i = Random.Range(0, data.CatSounds.Count);
+        //ASource.PlayOneShot(data.CatSounds[i]);
+    }
+
+    protected void StartEatingAudio()
+    {
+        ASource.loop = true;
+        ASource.clip = data.EatingSound;
+        ASource.Play();
+    }
+
+    protected void StopEatingAudio()
+    {
+        ASource.Play();
+    }
+
+    protected void AddMood(float amount)
+    {
+        moodValue = Mathf.Clamp01(moodValue + amount);
+        moodMat.color = MoodColors[Mathf.Clamp((int)(moodValue * MoodColors.Length), 0, MoodColors.Length - 1)];
     }
 }

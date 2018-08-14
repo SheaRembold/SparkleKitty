@@ -6,7 +6,7 @@ using UnityEngine.Events;
 
 public class Clickable : Placable
 {
-    public virtual void Click()
+    public virtual void Click(RaycastHit hit)
     {
 
     }

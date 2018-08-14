@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93e18d950f74e3949a677fe4ce3e1e1c, type: 3}
+  m_Name: RubberBall
+  m_EditorClassIdentifier: 
+  Name: Rubber Ball
+  DataType: 2
+  Icon: {fileID: 21300000, guid: 1e0ae9e5f170d7b4f94d1b04a266827c, type: 3}
+  Prefab: {fileID: 1632954494711690, guid: 5a9b82dbc95ce2948bc9acf7256957dd, type: 2}
+  Attached: 0
+  BuildRequirements:
+  - {fileID: 11400000, guid: db54f92e652b01f4dbe5df8633a42d6d, type: 2}
+  - {fileID: 11400000, guid: db54f92e652b01f4dbe5df8633a42d6d, type: 2}
+  - {fileID: 11400000, guid: 45205ae5da1979e419e860c21625fdd1, type: 2}
+  - {fileID: 11400000, guid: c37f3da60a4aba04e9f942dcad924c67, type: 2}

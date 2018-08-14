@@ -201,6 +201,19 @@ public class PlayArea : PlacementArea
         return tempPlacables;
     }
 
+    public List<Placable> GetInArea(PlacableData data)
+    {
+        tempPlacables.Clear();
+        for (int i = 0; i < placedInArea.Count; i++)
+        {
+            if (data == placedInArea[i].Data)
+            {
+                tempPlacables.Add(placedInArea[i]);
+            }
+        }
+        return tempPlacables;
+    }
+
     bool IsAtLoc(Placable placable)
     {
         for (int i = 0; i < placementLocations.Length; i++)

@@ -25,7 +25,7 @@ public class PlacementLocation : Clickable
         }
     }
 
-    public override void Click()
+    public override void Click(RaycastHit hit)
     {
         //UIManager.Instance.GetBuildUI(buildUI).Show(this);
     }

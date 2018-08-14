@@ -7,4 +7,12 @@ public class Placable : MonoBehaviour
 {
     [System.NonSerialized]
     public PlacableData Data;
+
+    public virtual void AddedToArea()
+    {
+    }
+
+    public virtual void RemovedFromArea()
+    {
+    }
 }

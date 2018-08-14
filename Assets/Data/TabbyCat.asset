@@ -13,13 +13,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Tabby Cat
   DataType: 0
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: 33e2b4da351b89e4899ad19056538749, type: 3}
   Prefab: {fileID: 1698703260715998, guid: 0eed56fa13b299246bd72f824815d42c, type: 2}
+  Attached: 0
   RequiredTowerType: 1
   RequiredTowerLevel: 2
   OtherRequirements:
   - {fileID: 11400000, guid: 8e9819dafa0d5374e950f02404ff2251, type: 2}
-  - {fileID: 11400000, guid: 7eca27cb3845b4542acd4890a770279c, type: 2}
+  - {fileID: 11400000, guid: 8ff14f0193424214a8ddc41fe8c988bf, type: 2}
   CatSounds:
   - {fileID: 8300000, guid: 7ee783ec0394d244eac9a7edfc842bbf, type: 3}
   EatingSound: {fileID: 8300000, guid: a5e6acf319e5e86429486dddc2c5b23f, type: 3}
