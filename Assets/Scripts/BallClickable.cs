@@ -12,6 +12,7 @@ public class BallClickable : Clickable, IChasable
     private void Awake()
     {
         rigidbody = GetComponentInChildren<Rigidbody>();
+        rigidbody.isKinematic = true;
     }
 
     public override void Click(RaycastHit hit)
@@ -25,6 +26,7 @@ public class BallClickable : Clickable, IChasable
     
     public override void AddedToArea()
     {
+        rigidbody.isKinematic = false;
         PlacementManager.Instance.chasables.Add(this);
     }
 

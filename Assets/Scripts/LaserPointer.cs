@@ -30,13 +30,13 @@ public class LaserPointer : MonoBehaviour, IChasable
         if (Physics.Raycast(transform.position, transform.up, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Ground")))
         {
             laser.transform.position = (transform.position + hit.point) / 2f;
-            laser.transform.localScale = new Vector3(laser.transform.localScale.x, hit.distance / 2f, laser.transform.localScale.z);
+            laser.transform.localScale = new Vector3(laser.transform.localScale.x, hit.distance / 2f / laser.transform.parent.lossyScale.y, laser.transform.localScale.z);
             hitPoint = hit.point;
         }
         else
         {
             laser.transform.position = transform.position + transform.up * defaultDistance / 2f;
-            laser.transform.localScale = new Vector3(laser.transform.localScale.x, defaultDistance / 2f, laser.transform.localScale.z);
+            laser.transform.localScale = new Vector3(laser.transform.localScale.x, defaultDistance / 2f / laser.transform.parent.lossyScale.y, laser.transform.localScale.z);
             hitPoint = null;
         }
     }
