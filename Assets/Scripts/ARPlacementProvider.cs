@@ -17,7 +17,8 @@ public class ARPlacementProvider : PlacementProvider
         lightObj = sceneObj.GetComponentInChildren<Light>().gameObject;
         controller = sceneObj.GetComponentInChildren<ARController>();
 
-        attachPoint = cameraObj.transform.Find("AttachPoint");
+        holdAttachPoint = cameraObj.transform.Find("AttachPoint");
+        viewAttachPoint = holdAttachPoint;
     }
 
     public override bool IsReady()

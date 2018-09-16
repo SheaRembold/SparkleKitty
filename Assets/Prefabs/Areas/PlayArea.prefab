@@ -2512,6 +2512,7 @@ GameObject:
   - component: {fileID: 114454362013345390}
   - component: {fileID: 114930809865913962}
   - component: {fileID: 114383444400793250}
+  - component: {fileID: 114596920327177228}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -2647,7 +2648,7 @@ GameObject:
   - component: {fileID: 33192320531728042}
   - component: {fileID: 65948503419692832}
   - component: {fileID: 23570481606239466}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Book (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3012,7 +3013,7 @@ GameObject:
   - component: {fileID: 65577612391974070}
   - component: {fileID: 23348831359867572}
   - component: {fileID: 114263795052579040}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Letter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5652,6 +5653,7 @@ GameObject:
   - component: {fileID: 114158703560700844}
   - component: {fileID: 114374271874094804}
   - component: {fileID: 114645500315320508}
+  - component: {fileID: 114487934949727580}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -7517,7 +7519,7 @@ GameObject:
   - component: {fileID: 4347440340438972}
   - component: {fileID: 95417186761476618}
   - component: {fileID: 65837896053954034}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: castleMailbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -32746,6 +32748,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114487934949727580
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1473144577694602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d518a00ceacb57f4d94b3cc806d60f40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
 --- !u!114 &114489822202555510
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -34318,6 +34332,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114596920327177228
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1224710868191032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d518a00ceacb57f4d94b3cc806d60f40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
 --- !u!114 &114599550583638246
 MonoBehaviour:
   m_ObjectHideFlags: 1

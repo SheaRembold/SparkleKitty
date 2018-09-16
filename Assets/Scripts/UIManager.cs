@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using HTC.UnityPlugin.Pointer3D;
 
 public class UIManager : MonoBehaviour
 {
@@ -15,9 +16,25 @@ public class UIManager : MonoBehaviour
     GameObject currentUI;
     Stack<GameObject> uiStack = new Stack<GameObject>();
 
+    GraphicRaycaster graphicRaycaster;
+    CanvasRaycastTarget canvasRaycastTarget;
+
     private void Awake()
     {
         //Instance = this;
+
+        graphicRaycaster = GetComponentInChildren<GraphicRaycaster>();
+        canvasRaycastTarget = GetComponentInChildren<CanvasRaycastTarget>();
+        if (PlacementManager.Instance.UseSteamVR)
+        {
+            graphicRaycaster.enabled = false;
+            canvasRaycastTarget.enabled = true;
+        }
+        else
+        {
+            canvasRaycastTarget.enabled = false;
+            graphicRaycaster.enabled = true;
+        }
 
         for (int i = 0; i < transform.childCount; i++)
             transform.GetChild(i).gameObject.SetActive(false);

@@ -10,6 +10,8 @@ public class PlacementManager : MonoBehaviour
 {
     public static PlacementManager Instance;
     
+    public bool UseSteamVR;
+
     [SerializeField]
     GameObject LoadingUI;
     [SerializeField]
@@ -54,9 +56,17 @@ public class PlacementManager : MonoBehaviour
         //UIManager.Instance.ShowUI(MainUI);
         if (provider == null)
         {
-#if UNITY_EDITOR
-            provider = new TestPlacementProvider();
-            StartPlacement();
+#if UNITY_EDITOR || UNITY_STANDALONE
+            if (UseSteamVR)
+            {
+                provider = new SteamVRPlacementProvider();
+                StartPlacement();
+            }
+            else
+            {
+                provider = new TestPlacementProvider();
+                StartPlacement();
+            }
 #elif VUFORIA
             provider = new VuforiaPlacementProvider();
             StartPlacement();
@@ -136,7 +146,7 @@ public class PlacementManager : MonoBehaviour
 
         CurrentAttached = Instantiate(placable.Prefab).GetComponent<Placable>();
         CurrentAttached.Data = placable;
-        CurrentAttached.transform.SetParent(provider.attachPoint);
+        CurrentAttached.transform.SetParent(provider.holdAttachPoint);
         CurrentAttached.transform.localPosition = Vector3.zero;
         CurrentAttached.transform.localRotation = placable.Prefab.transform.rotation;
         CurrentAttached.transform.localScale = Vector3.one;
@@ -220,7 +230,7 @@ public class PlacementManager : MonoBehaviour
     {
         heldBook = book;
 
-        heldBook.transform.SetParent(provider.attachPoint);
+        heldBook.transform.SetParent(provider.holdAttachPoint);
         heldBook.transform.localPosition = new Vector3(0f, 0f, 0.3f);
         heldBook.transform.localRotation = Quaternion.identity;
 
@@ -230,8 +240,8 @@ public class PlacementManager : MonoBehaviour
 
     public void GrabLetter(LetterController letter)
     {
-        letter.transform.position = provider.attachPoint.position + provider.attachPoint.forward * (0.3f * provider.attachPoint.localScale.z);
-        letter.transform.rotation = provider.attachPoint.rotation;
+        letter.transform.position = provider.viewAttachPoint.position + provider.viewAttachPoint.forward * (0.3f * provider.viewAttachPoint.localScale.z);
+        letter.transform.rotation = provider.viewAttachPoint.rotation;
     }
 
     PlacementArea tempArea;
@@ -320,7 +330,7 @@ public class PlacementManager : MonoBehaviour
     {
         RaycastHit hit;
         //if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Ground")))
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Ground")))
+        if (Physics.Raycast(provider.GetPlaceRay(), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Ground")))
         {
             currentPlacing.gameObject.SetActive(true);
             currentPlacing.transform.SetParent(hit.transform.parent);
@@ -333,7 +343,7 @@ public class PlacementManager : MonoBehaviour
         else
         {
             currentPlacing.gameObject.SetActive(true);
-            currentPlacing.transform.SetParent(provider.attachPoint);
+            currentPlacing.transform.SetParent(provider.holdAttachPoint);
             currentPlacing.transform.localPosition = Vector3.zero;
             currentPlacing.transform.localRotation = Quaternion.identity;
             currentPlacing.transform.localScale = Vector3.one * 0.5f;
@@ -372,11 +382,11 @@ public class PlacementManager : MonoBehaviour
 
                 HelpUI.ShowPlace();
 
-                if (Input.GetMouseButtonDown(0))
+                if (provider.GetClickDown())
                 {
                     placingArea = false;
-                    provider.attachPoint.localPosition = provider.attachPoint.localPosition * scale;
-                    provider.attachPoint.localScale = Vector3.one * scale;
+                    provider.holdAttachPoint.localPosition = provider.holdAttachPoint.localPosition * scale;
+                    provider.holdAttachPoint.localScale = Vector3.one * scale;
                     //UIManager.Instance.GoBackToUI(MainUI);
                     LoadingUI.SetActive(false);
                     HelpUI.gameObject.SetActive(false);
@@ -392,7 +402,7 @@ public class PlacementManager : MonoBehaviour
         }
         else if (heldBook != null)
         {
-            if (Input.GetMouseButtonUp(0))
+            if (provider.GetClickUp())
             {
                 heldBook.transform.SetParent(playArea.transform);
                 heldBook.PlaceBook();
@@ -405,13 +415,13 @@ public class PlacementManager : MonoBehaviour
             if (currentClickable == null)
             {
 #if UNITY_EDITOR || UNITY_STANDALONE
-                if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+                if (provider.GetClickDown())
 #else
                 if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
 #endif
                 {
                     RaycastHit hit;
-                    if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Placable")))
+                    if (Physics.Raycast(provider.GetClickRay(), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Placable")))
                     {
                         currentClickable = hit.transform.GetComponentInParent<Clickable>();
 
@@ -425,10 +435,10 @@ public class PlacementManager : MonoBehaviour
             }
             else
             {
-                if (Input.GetMouseButtonUp(0))
+                if (provider.GetClickUp())
                 {
                     RaycastHit hit;
-                    if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Placable")))
+                    if (Physics.Raycast(provider.GetClickRay(), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Placable")))
                     {
                         Clickable upClickable = hit.transform.GetComponentInParent<Clickable>();
                         if (upClickable == currentClickable)
@@ -441,7 +451,7 @@ public class PlacementManager : MonoBehaviour
         else
         {
             PlaceCurrent();
-            if (Input.GetMouseButtonUp(0))
+            if (provider.GetClickUp())
             {
                 if (placed)
                 {

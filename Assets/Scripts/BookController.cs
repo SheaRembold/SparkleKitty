@@ -2,24 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using HTC.UnityPlugin.Pointer3D;
 
 public class BookController : Clickable
 {
     GraphicRaycaster graphicRaycaster;
+    CanvasRaycastTarget canvasRaycastTarget;
 
     private void Awake()
     {
         graphicRaycaster = GetComponentInChildren<GraphicRaycaster>();
+        canvasRaycastTarget = GetComponentInChildren<CanvasRaycastTarget>();
     }
 
     public override void Click(RaycastHit hit)
     {
-        graphicRaycaster.enabled = false;
+        if (PlacementManager.Instance.UseSteamVR)
+            canvasRaycastTarget.enabled = false;
+        else
+            graphicRaycaster.enabled = false;
         PlacementManager.Instance.GrabBook(this);
     }
 
     public void PlaceBook()
     {
-        graphicRaycaster.enabled = true;
+        if (PlacementManager.Instance.UseSteamVR)
+            canvasRaycastTarget.enabled = true;
+        else
+            graphicRaycaster.enabled = true;
     }
 }

@@ -9,7 +9,8 @@ public class TestPlacementProvider : PlacementProvider
     {
         sceneObj = GameObject.Instantiate(Resources.Load<GameObject>("TestScene"));
 
-        attachPoint = sceneObj.GetComponentInChildren<Camera>().transform.Find("AttachPoint");
+        holdAttachPoint = sceneObj.GetComponentInChildren<Camera>().transform.Find("AttachPoint");
+        viewAttachPoint = holdAttachPoint;
     }
     
     public override bool GetPlane(out BoundedPlane plane)
