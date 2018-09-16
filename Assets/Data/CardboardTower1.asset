@@ -19,7 +19,7 @@ MonoBehaviour:
   BuildRequirements:
   - {fileID: 11400000, guid: e1f67c4d836710b4cb0d538e1cb790f9, type: 2}
   - {fileID: 11400000, guid: e1f67c4d836710b4cb0d538e1cb790f9, type: 2}
-  MaterialType: 1
+  MaterialType: 0
   Level: 1
   UpgradeRequirements:
   - {fileID: 11400000, guid: e1f67c4d836710b4cb0d538e1cb790f9, type: 2}

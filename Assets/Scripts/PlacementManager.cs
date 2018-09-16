@@ -36,9 +36,8 @@ public class PlacementManager : MonoBehaviour
     AreaType currentAreaType = AreaType.None;
     Clickable currentClickable;
     public Placable CurrentAttached { get; private set; }
-    public delegate void OnFinishedPlacing(Placable placable);
-    public OnFinishedPlacing onFinishedPlacing;
     public List<IChasable> chasables = new List<IChasable>();
+    BookController heldBook;
 
     private void Awake()
     {
@@ -124,8 +123,8 @@ public class PlacementManager : MonoBehaviour
         playArea = Instantiate(PlayAreaPrefab).GetComponent<PlayArea>();
         currentArea = playArea;
         currentAreaType = AreaType.Play;
-        buildArea = BuildAreaPrefab.GetComponent<BuildArea>();
-        cookArea = CookAreaPrefab.GetComponent<CookArea>();
+        //buildArea = BuildAreaPrefab.GetComponent<BuildArea>();
+        //cookArea = CookAreaPrefab.GetComponent<CookArea>();
         //UIManager.Instance.ShowUI(HelpUI.gameObject);
         LoadingUI.SetActive(false);
         HelpUI.gameObject.SetActive(true);
@@ -213,7 +212,26 @@ public class PlacementManager : MonoBehaviour
         currentPlacing.Data = placable;
         lastPos = null;
         HelpUI.gameObject.SetActive(true);
+        playArea.ShowPlacing(true);
         PlaceCurrent();
+    }
+
+    public void GrabBook(BookController book)
+    {
+        heldBook = book;
+
+        heldBook.transform.SetParent(provider.attachPoint);
+        heldBook.transform.localPosition = new Vector3(0f, 0f, 0.3f);
+        heldBook.transform.localRotation = Quaternion.identity;
+
+        HelpUI.gameObject.SetActive(true);
+        HelpUI.ShowPlaceItem();
+    }
+
+    public void GrabLetter(LetterController letter)
+    {
+        letter.transform.position = provider.attachPoint.position + provider.attachPoint.forward * (0.3f * provider.attachPoint.localScale.z);
+        letter.transform.rotation = provider.attachPoint.rotation;
     }
 
     PlacementArea tempArea;
@@ -242,21 +260,21 @@ public class PlacementManager : MonoBehaviour
         currentArea = tempArea;
     }
 
-    public Placable PlaceAt(PlacableData placable, Vector3 position)
+    public Placable PlaceAt(PlacementArea area, PlacableData placable, Vector3 position)
     {
-        return PlaceAt(placable, position, Vector3.zero);
+        return PlaceAt(area, placable, position, Vector3.zero);
     }
 
-    public Placable PlaceAt(PlacableData placable, Vector3 position, Vector3 rotation)
+    public Placable PlaceAt(PlacementArea area, PlacableData placable, Vector3 position, Vector3 rotation)
     {
         Placable newPlacable = currentPlacing = Instantiate(placable.Prefab).GetComponent<Placable>();
         currentPlacing.Data = placable;
-        currentPlacing.transform.SetParent(currentArea.Contents);
+        currentPlacing.transform.SetParent(area.Contents);
         currentPlacing.transform.localPosition = position;
         currentPlacing.transform.localRotation = Quaternion.Euler(rotation);
         currentPlacing.transform.localScale = Vector3.one;
-        
-        currentArea.AddToArea(currentPlacing);
+
+        area.AddToArea(currentPlacing);
         currentPlacing = null;
 
         return newPlacable;
@@ -264,7 +282,12 @@ public class PlacementManager : MonoBehaviour
 
     public void Remove(Placable oldPlacable)
     {
-        currentArea.RemoveFromArea(oldPlacable);
+        Remove(currentArea, oldPlacable);
+    }
+
+    public void Remove(PlacementArea area, Placable oldPlacable)
+    {
+        area.RemoveFromArea(oldPlacable);
         Destroy(oldPlacable.gameObject);
     }
 
@@ -309,8 +332,11 @@ public class PlacementManager : MonoBehaviour
         }
         else
         {
-            currentPlacing.transform.SetParent(null);
-            currentPlacing.gameObject.SetActive(false);
+            currentPlacing.gameObject.SetActive(true);
+            currentPlacing.transform.SetParent(provider.attachPoint);
+            currentPlacing.transform.localPosition = Vector3.zero;
+            currentPlacing.transform.localRotation = Quaternion.identity;
+            currentPlacing.transform.localScale = Vector3.one * 0.5f;
             placed = false;
             HelpUI.ShowLookingItem();
         }
@@ -349,6 +375,8 @@ public class PlacementManager : MonoBehaviour
                 if (Input.GetMouseButtonDown(0))
                 {
                     placingArea = false;
+                    provider.attachPoint.localPosition = provider.attachPoint.localPosition * scale;
+                    provider.attachPoint.localScale = Vector3.one * scale;
                     //UIManager.Instance.GoBackToUI(MainUI);
                     LoadingUI.SetActive(false);
                     HelpUI.gameObject.SetActive(false);
@@ -360,6 +388,16 @@ public class PlacementManager : MonoBehaviour
             {
                 playArea.gameObject.SetActive(false);
                 HelpUI.ShowLooking();
+            }
+        }
+        else if (heldBook != null)
+        {
+            if (Input.GetMouseButtonUp(0))
+            {
+                heldBook.transform.SetParent(playArea.transform);
+                heldBook.PlaceBook();
+                heldBook = null;
+                HelpUI.gameObject.SetActive(false);
             }
         }
         else if (currentPlacing == null)
@@ -418,12 +456,11 @@ public class PlacementManager : MonoBehaviour
                         {
                             currentArea.AddToArea(currentPlacing);
                             PlayerManager.Instance.RemoveInventory(currentPlacing.Data);
-                            if (onFinishedPlacing != null)
-                                onFinishedPlacing(currentPlacing);
                         }
                     }
                     currentPlacing = null;
                     HelpUI.gameObject.SetActive(false);
+                    playArea.ShowPlacing(false);
                 }
                 /*else
                 {

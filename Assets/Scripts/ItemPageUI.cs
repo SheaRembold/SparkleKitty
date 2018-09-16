@@ -8,43 +8,65 @@ public class ItemPageUI : MonoBehaviour
     [SerializeField]
     protected Text NameLabel;
     [SerializeField]
-    Text CountLabel;
+    protected Image ItemImage;
     [SerializeField]
-    GameObject RequPrefab;
+    protected Image HealthImage;
     [SerializeField]
-    Text UnknownLabel;
+    protected Text CountLabel;
     [SerializeField]
-    Transform Content;
+    protected GameObject RequPrefab;
+    [SerializeField]
+    protected Text UnknownLabel;
+    [SerializeField]
+    protected Transform Content;
     [SerializeField]
     protected Text PageLabel;
     [SerializeField]
-    Button UseButton;
+    protected Button UseButton;
     [SerializeField]
-    Text UseButtonText;
+    protected Text UseButtonText;
     [SerializeField]
-    Button CraftButton;
+    protected Button CraftButton;
     [SerializeField]
-    Text CraftButtonText;
+    protected Text CraftButtonText;
+    [SerializeField]
+    protected Sprite PlaceIcon;
+    [SerializeField]
+    protected Sprite PlaceIconPressed;
+    [SerializeField]
+    protected Sprite PlaceIconDisabled;
+    [SerializeField]
+    protected Sprite ReturnIcon;
+    [SerializeField]
+    protected Sprite ReturnIconPressed;
+    [SerializeField]
+    protected Sprite ReturnIconDisabled;
 
     [SerializeField]
-    PlacableDataType currentType = PlacableDataType.Tower;
+    protected PlacableDataType currentType = PlacableDataType.Toy;
     protected int current;
 
-    List<GameObject> requs = new List<GameObject>();
+    [SerializeField]
+    protected List<GameObject> requs = new List<GameObject>();
+
+    [System.NonSerialized]
+    public BookUI Book;
     
-    public void SetItem(PlacableData item)
+    public virtual void SetItem(PlacableData item)
     {
         current = System.Array.IndexOf(DataManager.Instance.GetAllData(currentType), item);
     }
-
-    private void Awake()
-    {
-        PlacementManager.Instance.onFinishedPlacing += OnFinishedPlacing;
-    }
-
+    
     private void OnEnable()
     {
+        PlayerManager.Instance.onInventoryChange += UpdateRecipe;
         UpdateRecipe();
+    }
+
+    private void OnDisable()
+    {
+        if (PlayerManager.Instance != null)
+            PlayerManager.Instance.onInventoryChange -= UpdateRecipe;
     }
 
     public void PrevRecipe()
@@ -59,15 +81,27 @@ public class ItemPageUI : MonoBehaviour
         UpdateRecipe();
     }
     
+    void SetUseButton(string mode)
+    {
+        UseButtonText.text = mode;
+        if (mode == "Place" || mode == "Use")
+        {
+            UseButton.spriteState = new SpriteState() { pressedSprite = PlaceIconPressed, disabledSprite = PlaceIconDisabled };
+            (UseButton.targetGraphic as Image).sprite = PlaceIcon;
+        }
+        else if (mode == "Return")
+        {
+            UseButton.spriteState = new SpriteState() { pressedSprite = ReturnIconPressed, disabledSprite = ReturnIconDisabled };
+            (UseButton.targetGraphic as Image).sprite = ReturnIcon;
+        }
+    }
+
     protected virtual void UpdateRecipe()
     {
         if (currentType == PlacableDataType.Treat)
             UpdateRecipe(DataManager.Instance.Treats);
         else if (currentType == PlacableDataType.Toy)
             UpdateRecipe(DataManager.Instance.Toys);
-        else if (currentType == PlacableDataType.Tower)
-            UpdateUpgrade(DataManager.Instance.Towers);
-        //PlacementManager.Instance.GetPlayArea().GetInArea(PlacableDataType.Tower)[0].Data as UpgradableData
     }
 
     void UpdateRecipe(BuildableData[] buildables)
@@ -78,19 +112,24 @@ public class ItemPageUI : MonoBehaviour
             current = 0;
 
         NameLabel.text = buildables[current].Name;
+        ItemImage.sprite = buildables[current].Icon;
         PageLabel.text = (current + 1) + " / " + buildables.Length;
         int count = PlayerManager.Instance.GetInventoryCount(buildables[current]);
         CountLabel.text = count.ToString();
+        if (count == 0)
+            HealthImage.fillAmount = 1f;
+        else
+            HealthImage.fillAmount = 1f - PlayerManager.Instance.GetItemHealth(buildables[current]);
         if (buildables[current].Attached)
         {
             if (PlacementManager.Instance.CurrentAttached != null && PlacementManager.Instance.CurrentAttached.Data == buildables[current])
             {
-                UseButtonText.text = "Return";
+                SetUseButton("Return");
                 UseButton.interactable = true;
             }
             else
             {
-                UseButtonText.text = "Use";
+                SetUseButton("Use");
                 UseButton.interactable = count > 0;
             }
         }
@@ -98,12 +137,12 @@ public class ItemPageUI : MonoBehaviour
         {
             if (PlacementManager.Instance.GetPlayArea().GetInArea(buildables[current]).Count > 0)
             {
-                UseButtonText.text = "Return";
+                SetUseButton("Return");
                 UseButton.interactable = true;
             }
             else
             {
-                UseButtonText.text = "Place";
+                SetUseButton("Place");
                 UseButton.interactable = count > 0;
             }
         }
@@ -151,6 +190,7 @@ public class ItemPageUI : MonoBehaviour
                 }
                 int invCount = PlayerManager.Instance.GetInventoryCount(pair.Key);
                 requObj.GetComponentInChildren<Image>().sprite = pair.Key.Icon;
+                requObj.GetComponentInChildren<Image>().color = Color.white;
                 requObj.GetComponentInChildren<Text>().text = invCount + " / " + pair.Value;
                 requIndex++;
                 if (invCount < pair.Value)
@@ -164,132 +204,25 @@ public class ItemPageUI : MonoBehaviour
         else
         {
             for (int i = 0; i < requs.Count; i++)
-                requs[i].SetActive(false);
-            UnknownLabel.gameObject.SetActive(true);
-            UnknownLabel.text = "????";
-            CraftButton.gameObject.SetActive(false);
+            {
+                requs[i].SetActive(true);
+                requs[i].GetComponentInChildren<Image>().sprite = null;
+                requs[i].GetComponentInChildren<Image>().color = Color.gray;
+                requs[i].GetComponentInChildren<Text>().text = "? / ?";
+            }
+            UnknownLabel.gameObject.SetActive(false);
+            //UnknownLabel.text = "????";
+            //CraftButton.gameObject.SetActive(false);
+            CraftButton.interactable = false;
         }
     }
-
-    void UpdateUpgrade(UpgradableData[] upgradables)
-    {
-        if (current < 0)
-            current = upgradables.Length - 1;
-        else if (current >= upgradables.Length)
-            current = 0;
-        PageLabel.text = (current + 1) + " / " + upgradables.Length;
-
-        UpgradableData upgradable = null;
-        for (int i = 0; i < upgradables.Length; i++)
-        {
-            if (upgradables[i].Upgrade == upgradables[current])
-            {
-                upgradable = upgradables[i];
-                break;
-            }
-        }
-
-        int count = PlayerManager.Instance.GetInventoryCount(upgradables[current]);
-        bool inPlayArea = PlacementManager.Instance.GetPlayArea().GetInArea(upgradables[current]).Count > 0;
-        CountLabel.text = count.ToString();
-        UseButtonText.text = "Place";
-        UseButton.interactable = count > 0 && !inPlayArea;
-
-        //if (upgradable.Upgrade != null)
-        { 
-            NameLabel.text = upgradables[current].Name;
-
-            for (int i = 0; i < requs.Count; i++)
-                requs[i].SetActive(false);
-
-            Dictionary<PlacableData, int> requCounts = new Dictionary<PlacableData, int>();
-            if (upgradable != null)
-            {
-                requCounts.Add(upgradable, 1);
-                for (int i = 0; i < upgradable.UpgradeRequirements.Length; i++)
-                {
-                    if (requCounts.ContainsKey(upgradable.UpgradeRequirements[i]))
-                        requCounts[upgradable.UpgradeRequirements[i]]++;
-                    else
-                        requCounts.Add(upgradable.UpgradeRequirements[i], 1);
-                }
-            }
-            else
-            {
-                for (int i = 0; i < upgradables[current].BuildRequirements.Length; i++)
-                {
-                    if (requCounts.ContainsKey(upgradables[current].BuildRequirements[i]))
-                        requCounts[upgradables[current].BuildRequirements[i]]++;
-                    else
-                        requCounts.Add(upgradables[current].BuildRequirements[i], 1);
-                }
-            }
-
-            int requIndex = 0;
-            GameObject requObj = null;
-            /*if (requIndex < requs.Count)
-            {
-                requObj = requs[requIndex];
-            }
-            else
-            {
-                requObj = Instantiate(RequPrefab);
-                requObj.transform.SetParent(Content, false);
-                (requObj.transform as RectTransform).anchoredPosition = new Vector2(125, -210 - 200 * requIndex);
-                requs.Add(requObj);
-            }
-            requObj.SetActive(false);
-            requIndex++;
-            UnknownLabel.gameObject.SetActive(true);
-            UnknownLabel.text = upgradable.Name;*/
-            UnknownLabel.gameObject.SetActive(false);
-
-            bool requMissing = false;
-            foreach (KeyValuePair<PlacableData, int> pair in requCounts)
-            {
-                requObj = null;
-                if (requIndex < requs.Count)
-                {
-                    requObj = requs[requIndex];
-                    requObj.SetActive(true);
-                }
-                else
-                {
-                    requObj = Instantiate(RequPrefab);
-                    requObj.transform.SetParent(Content, false);
-                    (requObj.transform as RectTransform).anchoredPosition = new Vector2(125, -210 - 200 * requIndex);
-                    requs.Add(requObj);
-                }
-                int invCount = PlayerManager.Instance.GetInventoryCount(pair.Key) + PlacementManager.Instance.GetPlayArea().GetInArea(pair.Key).Count;
-                requObj.GetComponentInChildren<Image>().sprite = pair.Key.Icon;
-                requObj.GetComponentInChildren<Text>().text = invCount + " / " + pair.Value;
-                requIndex++;
-                if (invCount < pair.Value)
-                    requMissing = true;
-            }
-
-            CraftButton.gameObject.SetActive(true);
-            //CraftButtonText.text = "Upgrade";
-            CraftButton.interactable = !requMissing;
-        }
-        /*else
-        {
-            NameLabel.text = upgradable.Name + " not upgradable";
-            for (int i = 0; i < requs.Count; i++)
-                requs[i].SetActive(false);
-            UnknownLabel.gameObject.SetActive(false);
-            CraftButton.gameObject.SetActive(false);
-        }*/
-    }
-
-    public void Craft()
+    
+    public virtual void Craft()
     {
         if (currentType == PlacableDataType.Treat)
             Craft(DataManager.Instance.Treats);
         else if (currentType == PlacableDataType.Toy)
             Craft(DataManager.Instance.Toys);
-        else if (currentType == PlacableDataType.Tower)
-            Upgrade(DataManager.Instance.Towers);
     }
 
     void Craft(BuildableData[] buildables)
@@ -300,50 +233,10 @@ public class ItemPageUI : MonoBehaviour
         }
         PlayerManager.Instance.AddInventory(buildables[current]);
 
-        UpdateRecipe(buildables);
+        //UpdateRecipe(buildables);
     }
-
-    void Upgrade(UpgradableData[] upgradables)
-    {
-        UpgradableData upgradable = null;
-        for (int i = 0; i < upgradables.Length; i++)
-        {
-            if (upgradables[i].Upgrade == upgradables[current])
-            {
-                upgradable = upgradables[i];
-                break;
-            }
-        }
-
-        if (upgradable != null)
-        {
-            for (int i = 0; i < upgradable.UpgradeRequirements.Length; i++)
-            {
-                PlayerManager.Instance.RemoveInventory(upgradable.UpgradeRequirements[i]);
-            }
-            if (PlacementManager.Instance.GetPlayArea().GetPlacementLocation().CurrentPlacable.Data == upgradable)
-            {
-                PlacementManager.Instance.GetPlayArea().GetPlacementLocation().SetPlacable(upgradables[current]);
-            }
-            else
-            {
-                PlayerManager.Instance.RemoveInventory(upgradable);
-                PlayerManager.Instance.AddInventory(upgradables[current]);
-            }
-        }
-        else
-        {
-            for (int i = 0; i < upgradables[current].BuildRequirements.Length; i++)
-            {
-                PlayerManager.Instance.RemoveInventory(upgradables[current].BuildRequirements[i]);
-            }
-            PlayerManager.Instance.AddInventory(upgradables[current]);
-        }
-
-        UpdateUpgrade(upgradables);
-    }
-
-    public void UseItem()
+    
+    public virtual void UseItem()
     {
         if (currentType == PlacableDataType.Treat)
         {
@@ -352,10 +245,6 @@ public class ItemPageUI : MonoBehaviour
         else if (currentType == PlacableDataType.Toy)
         {
             UseItem(DataManager.Instance.Toys);
-        }
-        else if (currentType == PlacableDataType.Tower)
-        {
-            PlaceItem(DataManager.Instance.Towers);
         }
     }
 
@@ -366,12 +255,12 @@ public class ItemPageUI : MonoBehaviour
             if (PlacementManager.Instance.CurrentAttached != null && PlacementManager.Instance.CurrentAttached.Data == buildables[current])
             {
                 PlacementManager.Instance.RemoveAttached();
-                UseButtonText.text = "Use";
+                SetUseButton("Use");
             }
             else
             {
                 PlacementManager.Instance.SetAttached(buildables[current]);
-                UseButtonText.text = "Return";
+                SetUseButton("Return");
             }
         }
         else
@@ -386,27 +275,12 @@ public class ItemPageUI : MonoBehaviour
                 }
                 int count = PlayerManager.Instance.GetInventoryCount(buildables[current]);
                 CountLabel.text = count.ToString();
-                UseButtonText.text = "Place";
+                SetUseButton("Place");
             }
             else
             {
                 PlacementManager.Instance.StartPlacing(buildables[current]);
             }
         }
-    }
-
-    void PlaceItem(UpgradableData[] upgradables)
-    {
-        PlayerManager.Instance.AddInventory(PlacementManager.Instance.GetPlayArea().GetPlacementLocation().CurrentPlacable.Data);
-        PlacementManager.Instance.GetPlayArea().GetPlacementLocation().SetPlacable(upgradables[current]);
-        PlayerManager.Instance.RemoveInventory(upgradables[current]);
-        int count = PlayerManager.Instance.GetInventoryCount(upgradables[current]);
-        CountLabel.text = count.ToString();
-        UseButton.interactable = false;
-    }
-    
-    void OnFinishedPlacing(Placable placable)
-    {
-        UpdateRecipe();
     }
 }

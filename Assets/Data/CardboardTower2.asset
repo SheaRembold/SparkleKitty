@@ -17,7 +17,7 @@ MonoBehaviour:
   Prefab: {fileID: 1108113564616294, guid: ee6e986da3b24004c9d2704349216b16, type: 2}
   Attached: 0
   BuildRequirements: []
-  MaterialType: 1
+  MaterialType: 0
   Level: 2
   UpgradeRequirements:
   - {fileID: 11400000, guid: e1f67c4d836710b4cb0d538e1cb790f9, type: 2}

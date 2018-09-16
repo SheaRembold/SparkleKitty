@@ -10,17 +10,19 @@ public class PlacementLocation : Clickable
     public Placable CurrentPlacable;
     [SerializeField]
     protected string buildUI;
+    [System.NonSerialized]
+    public PlacementArea Owner;
 
     public void SetPlacable(PlacableData placable)
     {
         if (CurrentPlacable != null)
         {
-            PlacementManager.Instance.Remove(CurrentPlacable);
+            PlacementManager.Instance.Remove(Owner, CurrentPlacable);
             CurrentPlacable = null;
         }
         if (placable != null)
         {
-            CurrentPlacable = PlacementManager.Instance.PlaceAt(placable, transform.localPosition);
+            CurrentPlacable = PlacementManager.Instance.PlaceAt(Owner, placable, transform.localPosition);
             CurrentPlacable.gameObject.AddComponent<RelayClickable>().ParentClickable = this;
         }
     }

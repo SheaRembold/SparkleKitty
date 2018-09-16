@@ -7,18 +7,18 @@ using UnityEngine.UI;
 public class ListPageUI : MonoBehaviour
 {
     [SerializeField]
-    GameObject ButtonPrefab;
+    protected GameObject ButtonPrefab;
     [SerializeField]
-    Transform Content;
+    protected Transform Content;
     [SerializeField]
-    ItemPageUI ItemPage;
+    protected ItemPageUI ItemPage;
     [SerializeField]
-    PlacableDataType PlacableDataType;
+    protected PlacableDataType PlacableDataType;
     
     [SerializeField]
     UIManager uiManager;
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         for (int i = 0; i < Content.childCount; i++)
         {
@@ -39,7 +39,7 @@ public class ListPageUI : MonoBehaviour
         }
     }
 
-    void ShowItem(PlacableData item)
+    protected void ShowItem(PlacableData item)
     {
         ItemPage.SetItem(item);
         uiManager.ShowUI(ItemPage.gameObject);

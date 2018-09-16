@@ -26,7 +26,10 @@ public class BookUI : MonoBehaviour
     private void Awake()
     {
         for (int i = 0; i < tabs.Length; i++)
+        {
+            tabs[i].ItemPage.Book = this;
             tabs[i].Tab.onValueChanged.AddListener(OnToggleTab);
+        }
         OnToggleTab(true);
     }
 
@@ -41,6 +44,19 @@ public class BookUI : MonoBehaviour
                     uiManager.ShowUI(tabs[i].ListPage.gameObject);
                     break;
                 }
+            }
+        }
+    }
+
+    public void ShowItem(PlacableData item)
+    {
+        for (int i = 0; i < tabs.Length; i++)
+        {
+            if (tabs[i].PlacableDataType == item.DataType)
+            {
+                tabs[i].ItemPage.SetItem(item);
+                uiManager.ShowUI(tabs[i].ItemPage.gameObject);
+                break;
             }
         }
     }

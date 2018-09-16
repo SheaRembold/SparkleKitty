@@ -174,6 +174,8 @@ public class CatController : MonoBehaviour
             TreatController treatController = controller.target == null ? null : controller.target.GetComponent<TreatController>();
             if (treatController == null || !treatController.AnyLeft() || stateTime > controller.InteractTime)
             {
+                if (stateTime > controller.InteractTime)
+                    controller.AddMood(1f / (CatManager.Instance.MoodColors.Length - 1));
                 PlacementManager.Instance.GetPlayArea().MarkAsDirty();
                 controller.SetState<SitState>();
             }
@@ -203,6 +205,7 @@ public class CatController : MonoBehaviour
             base.OnUpdate();
             if (stateTime > controller.InteractTime)
             {
+                controller.AddMood(1f / (CatManager.Instance.MoodColors.Length - 1));
                 controller.SetState<SitState>();
             }
         }
@@ -258,6 +261,8 @@ public class CatController : MonoBehaviour
             base.OnUpdate();
             if (controller.chaseTarget == null || controller.chaseTarget.ChasePosition == Vector3.zero || stateTime > controller.InteractTime)
             {
+                if (stateTime > controller.InteractTime)
+                    controller.AddMood(1f / (CatManager.Instance.MoodColors.Length - 1));
                 controller.chaseTarget = null;
                 controller.SetState<SitState>();
             }
@@ -284,7 +289,6 @@ public class CatController : MonoBehaviour
     public float MeowProbability = 1f;
     public bool StayForever;
     public Renderer[] MoodRenderers;
-    public Color[] MoodColors;
 
     protected CatData data;
     protected Animator animator;
@@ -325,7 +329,6 @@ public class CatController : MonoBehaviour
         {
             MoodRenderers[i].material = moodMat;
         }
-        moodMat.color = MoodColors[Mathf.Clamp((int)(moodValue * MoodColors.Length), 0, MoodColors.Length - 1)];
     }
     
     protected virtual void Start()
@@ -341,6 +344,10 @@ public class CatController : MonoBehaviour
         AddState<ChasePlayState>();
 
         SetState<SitState>();
+
+        CatManager.Instance.MarkFound(data);
+        moodValue = CatManager.Instance.GetMoodValue(data);
+        moodMat.color = CatManager.Instance.MoodColors[CatManager.Instance.GetMood(data)];
     }
 
     protected virtual void Update()
@@ -370,6 +377,7 @@ public class CatController : MonoBehaviour
     protected void AddMood(float amount)
     {
         moodValue = Mathf.Clamp01(moodValue + amount);
-        moodMat.color = MoodColors[Mathf.Clamp((int)(moodValue * MoodColors.Length), 0, MoodColors.Length - 1)];
+        CatManager.Instance.UpdateMood(data, moodValue);
+        moodMat.color = CatManager.Instance.MoodColors[CatManager.Instance.GetMood(data)];
     }
 }

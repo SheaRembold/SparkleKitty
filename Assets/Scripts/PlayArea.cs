@@ -9,13 +9,32 @@ public class PlayArea : PlacementArea
     PlacementLocation[] placementLocations;
     public Transform CatSpawnPoint;
     public float SpawnDelay = 5f;
+    [SerializeField]
+    GameObject placingGrid;
+    [SerializeField]
+    GameObject[] fences;
+    [SerializeField]
+    Mailbox mailbox;
 
     List<CatData> validCats = new List<CatData>();
     CatData waitingCat;
 
     bool finishedLoading;
 
-    public override void SetArea()
+    private void Awake()
+    {
+        for (int i = 0; i < placementLocations.Length; i++)
+            placementLocations[i].Owner = this;
+        placingGrid.SetActive(false);
+        Load();
+        for (int i = 0; i < placedInArea.Count; i++)
+            placedInArea[i].gameObject.SetActive(false);
+        UpgradableData currentTower = placementLocations[0].CurrentPlacable.Data as UpgradableData;
+        DataManager.Instance.SetTowerLevel(currentTower.MaterialType, currentTower.Level);
+        SetTower(currentTower);
+    }
+
+    public void Load()
     {
         if (File.Exists(Application.persistentDataPath + "/" + gameObject.name + "_" + saveVersion + ".txt"))
         {
@@ -36,7 +55,7 @@ public class PlayArea : PlacementArea
                 if (item != null)
                 {
                     Vector3 pos = new Vector3(float.Parse(placedNames[i + 1]), float.Parse(placedNames[i + 2]), float.Parse(placedNames[i + 3]));
-                    PlacementManager.Instance.PlaceAt(item, pos);
+                    PlacementManager.Instance.PlaceAt(this, item, pos);
                 }
             }
         }
@@ -48,11 +67,18 @@ public class PlayArea : PlacementArea
             }
             for (int i = 0; i < startingInArea.Length; i++)
             {
-                PlacementManager.Instance.PlaceAt(startingInArea[i].Placable, startingInArea[i].Position, startingInArea[i].Rotation);
+                PlacementManager.Instance.PlaceAt(this, startingInArea[i].Placable, startingInArea[i].Position, startingInArea[i].Rotation);
             }
         }
-
+        
         finishedLoading = true;
+    }
+
+    public override void SetArea()
+    {
+        for (int i = 0; i < placedInArea.Count; i++)
+            placedInArea[i].gameObject.SetActive(true);
+
         CheckForCats();
         if (!PlayerManager.Instance.HasShownHelp("IntroAR"))
         {
@@ -65,12 +91,25 @@ public class PlayArea : PlacementArea
         return placementLocations[0];
     }
 
+    public void SetTower(UpgradableData tower)
+    {
+        placementLocations[0].SetPlacable(tower);
+        for (int i = 0; i < fences.Length; i++)
+            fences[i].SetActive(i == (int)tower.MaterialType);
+        mailbox.SetMailbox(tower.MaterialType);
+    }
+
     public override void AddToArea(Placable placable)
     {
         base.AddToArea(placable);
 
         if (finishedLoading)
             CheckForCats();
+    }
+
+    public void ShowPlacing(bool show)
+    {
+        placingGrid.SetActive(show);
     }
 
     void CheckForCats()
@@ -111,7 +150,7 @@ public class PlayArea : PlacementArea
     {
         yield return new WaitForSeconds(SpawnDelay);
 
-        PlacementManager.Instance.PlaceAt(waitingCat, CatSpawnPoint.localPosition);
+        PlacementManager.Instance.PlaceAt(this, waitingCat, CatSpawnPoint.localPosition);
         waitingCat = null;
     }
 

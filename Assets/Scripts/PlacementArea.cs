@@ -64,7 +64,7 @@ public class PlacementArea : MonoBehaviour
                 if (item != null)
                 {
                     Vector3 pos = new Vector3(float.Parse(placedNames[i + 1]), float.Parse(placedNames[i + 2]), float.Parse(placedNames[i + 3]));
-                    PlacementManager.Instance.PlaceAt(item, pos);
+                    PlacementManager.Instance.PlaceAt(this, item, pos);
                 }
             }
         }
@@ -72,7 +72,7 @@ public class PlacementArea : MonoBehaviour
         {
             for (int i = 0; i < startingInArea.Length; i++)
             {
-                PlacementManager.Instance.PlaceAt(startingInArea[i].Placable, startingInArea[i].Position);
+                PlacementManager.Instance.PlaceAt(this, startingInArea[i].Placable, startingInArea[i].Position);
             }
         }
     }

@@ -40,6 +40,15 @@ public class PlayerManager : MonoBehaviour
         {
             inventory.AddRange(startingInventory);
         }
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            if (inventory[i] is UpgradableData)
+            {
+                UpgradableData upgradable = inventory[i] as UpgradableData;
+                if (upgradable.Level > DataManager.Instance.GetTowerLevel(upgradable.MaterialType))
+                    DataManager.Instance.SetTowerLevel(upgradable.MaterialType, upgradable.Level);
+            }
+        }
 
         if (File.Exists(Application.persistentDataPath + "/help.txt"))
         {
@@ -71,16 +80,12 @@ public class PlayerManager : MonoBehaviour
     public void AddInventory(PlacableData item)
     {
         inventory.Add(item);
-        if (onInventoryChange != null)
-            onInventoryChange();
         invDirty = true;
     }
 
     public void RemoveInventory(PlacableData item)
     {
         inventory.Remove(item);
-        if (onInventoryChange != null)
-            onInventoryChange();
         invDirty = true;
     }
     
@@ -107,10 +112,19 @@ public class PlayerManager : MonoBehaviour
         return count;
     }
 
+    public float GetItemHealth(PlacableData data)
+    {
+        return 1f;
+    }
+
     private void LateUpdate()
     {
         if (invDirty)
+        {
+            if (onInventoryChange != null)
+                onInventoryChange();
             Save();
+        }
     }
 
     void Save()

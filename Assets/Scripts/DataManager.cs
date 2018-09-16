@@ -20,6 +20,7 @@ public class DataManager : MonoBehaviour
     public RecipeData[] TreatRecipes;
 
     Dictionary<string, PlacableData> allData = new Dictionary<string, PlacableData>();
+    Dictionary<MaterialType, int> towerLevels = new Dictionary<MaterialType, int>();
 
     private void Awake()
     {
@@ -35,6 +36,10 @@ public class DataManager : MonoBehaviour
         AddData(TowerRecipes);
         AddData(ToyRecipes);
         AddData(TreatRecipes);
+
+        MaterialType[] materialTypes = System.Enum.GetValues(typeof(MaterialType)) as MaterialType[];
+        for (int i = 0; i < materialTypes.Length; i++)
+            towerLevels.Add(materialTypes[i], 0);
     }
 
     void AddData(PlacableData[] dataArray)
@@ -77,5 +82,25 @@ public class DataManager : MonoBehaviour
             return TreatRecipes;
         else
             return null;
+    }
+
+    public UpgradableData GetTower(MaterialType type, int level)
+    {
+        for (int i = 0; i < Towers.Length; i++)
+        {
+            if (Towers[i].MaterialType == type && Towers[i].Level == level)
+                return Towers[i];
+        }
+        return null;
+    }
+
+    public void SetTowerLevel(MaterialType type, int level)
+    {
+        towerLevels[type] = level;
+    }
+
+    public int GetTowerLevel(MaterialType type)
+    {
+        return towerLevels[type];
     }
 }
