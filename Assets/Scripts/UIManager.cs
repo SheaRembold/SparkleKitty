@@ -25,7 +25,7 @@ public class UIManager : MonoBehaviour
 
         graphicRaycaster = GetComponentInChildren<GraphicRaycaster>();
         canvasRaycastTarget = GetComponentInChildren<CanvasRaycastTarget>();
-        if (PlacementManager.Instance.UseSteamVR)
+        if (PlacementManager.Instance.IsUsingSteamVR)
         {
             graphicRaycaster.enabled = false;
             canvasRaycastTarget.enabled = true;

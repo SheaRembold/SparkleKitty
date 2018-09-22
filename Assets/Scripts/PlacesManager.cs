@@ -92,7 +92,7 @@ public class PlacesManager : MonoBehaviour
             raycaster.eventMask = LayerMask.GetMask();
             _mapMovement.enabled = false;
             resourceLocationData.Find((x) => { return x.ResourceType == marker.resourceType; }).InteractUI.Show();
-            if (!PlayerManager.Instance.HasShownHelp("MapInteract"))
+            if (!HelpManager.Instance.HasShownHelp("MapInteract"))
                 Help.SetActive(true);
         }
     }
@@ -100,7 +100,7 @@ public class PlacesManager : MonoBehaviour
     public void CompleteStep()
     {
         Help.SetActive(false);
-        PlayerManager.Instance.ShowHelp("MapInteract");
+        HelpManager.Instance.ShowHelp("MapInteract");
     }
 
     public void CompleteInteraction()

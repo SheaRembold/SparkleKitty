@@ -4,8 +4,21 @@ using UnityEngine;
 
 public class LetterController : MonoBehaviour
 {
-    private void OnEnable()
+    [SerializeField]
+    BookController book;
+    [SerializeField]
+    GameObject acceptParticle;
+
+    public void ShowLetter()
     {
         PlacementManager.Instance.GrabLetter(this);
+    }
+
+    public void AcceptLetter()
+    {
+        GameObject obj = Instantiate(acceptParticle, transform.position, transform.rotation);
+        obj.transform.localScale = transform.lossyScale;
+        obj.GetComponent<MoveParticles>().StartMoving(book.transform);
+        gameObject.SetActive(false);
     }
 }

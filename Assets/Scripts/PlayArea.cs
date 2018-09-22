@@ -14,7 +14,7 @@ public class PlayArea : PlacementArea
     [SerializeField]
     GameObject[] fences;
     [SerializeField]
-    Mailbox mailbox;
+    MailboxManager mailbox;
 
     List<CatData> validCats = new List<CatData>();
     CatData waitingCat;
@@ -80,7 +80,7 @@ public class PlayArea : PlacementArea
             placedInArea[i].gameObject.SetActive(true);
 
         CheckForCats();
-        if (!PlayerManager.Instance.HasShownHelp("IntroAR"))
+        if (!HelpManager.Instance.HasShownHelp("IntroAR"))
         {
             //UIManager.Instance.ShowSpeechUI(GetInArea("SparkleKitty").transform, "IntroAR", true);
         }

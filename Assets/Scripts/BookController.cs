@@ -17,7 +17,7 @@ public class BookController : Clickable
 
     public override void Click(RaycastHit hit)
     {
-        if (PlacementManager.Instance.UseSteamVR)
+        if (PlacementManager.Instance.IsUsingSteamVR)
             canvasRaycastTarget.enabled = false;
         else
             graphicRaycaster.enabled = false;
@@ -26,7 +26,7 @@ public class BookController : Clickable
 
     public void PlaceBook()
     {
-        if (PlacementManager.Instance.UseSteamVR)
+        if (PlacementManager.Instance.IsUsingSteamVR)
             canvasRaycastTarget.enabled = true;
         else
             graphicRaycaster.enabled = true;

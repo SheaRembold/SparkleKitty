@@ -9,9 +9,9 @@ public enum AreaType { None, Play, Build, Cook }
 public class PlacementManager : MonoBehaviour
 {
     public static PlacementManager Instance;
-    
-    public bool UseSteamVR;
 
+    [SerializeField]
+    bool UseSteamVR;
     [SerializeField]
     GameObject LoadingUI;
     [SerializeField]
@@ -24,6 +24,8 @@ public class PlacementManager : MonoBehaviour
     GameObject BuildAreaPrefab;
     [SerializeField]
     GameObject CookAreaPrefab;
+
+    public bool IsUsingSteamVR { get; private set; }
 
     PlayArea playArea;
     BuildArea buildArea;
@@ -57,8 +59,9 @@ public class PlacementManager : MonoBehaviour
         if (provider == null)
         {
 #if UNITY_EDITOR || UNITY_STANDALONE
-            if (UseSteamVR)
+            if (UseSteamVR && UnityEngine.XR.XRDevice.isPresent)
             {
+                IsUsingSteamVR = true;
                 provider = new SteamVRPlacementProvider();
                 StartPlacement();
             }
@@ -238,10 +241,30 @@ public class PlacementManager : MonoBehaviour
         HelpUI.ShowPlaceItem();
     }
 
+    Coroutine moveLetterCoroutine;
+    [SerializeField]
+    float moveLetterTime = 1f;
     public void GrabLetter(LetterController letter)
     {
-        letter.transform.position = provider.viewAttachPoint.position + provider.viewAttachPoint.forward * (0.3f * provider.viewAttachPoint.localScale.z);
-        letter.transform.rotation = provider.viewAttachPoint.rotation;
+        if (moveLetterCoroutine != null)
+            StopCoroutine(moveLetterCoroutine);
+        moveLetterCoroutine = StartCoroutine(MoveLetter(letter));
+    }
+
+    IEnumerator MoveLetter(LetterController letter)
+    {
+        Vector3 startPos = letter.transform.position;
+        Quaternion startRot = letter.transform.rotation;
+        float time = 0f;
+        while (time < moveLetterTime)
+        {
+            time += Time.deltaTime;
+            letter.transform.position = Vector3.Lerp(startPos, provider.viewAttachPoint.position + provider.viewAttachPoint.forward * (0.3f * provider.viewAttachPoint.localScale.z), time / moveLetterTime);
+            letter.transform.rotation = Quaternion.Lerp(startRot, provider.viewAttachPoint.rotation, time);
+            yield return null;
+        }
+
+        moveLetterCoroutine = null;
     }
 
     PlacementArea tempArea;
@@ -323,7 +346,9 @@ public class PlacementManager : MonoBehaviour
 
     public Vector3 GetWorldPos(Vector3 areaPos)
     {
-        return currentArea.transform.TransformPoint(areaPos);
+        Vector3 worldPos = currentArea.transform.TransformPoint(areaPos);
+        Plane plane = new Plane(currentArea.transform.up, currentArea.transform.position);
+        return plane.ClosestPointOnPlane(worldPos);
     }
 
     void PlaceCurrent()
@@ -421,14 +446,17 @@ public class PlacementManager : MonoBehaviour
 #endif
                 {
                     RaycastHit hit;
-                    if (Physics.Raycast(provider.GetClickRay(), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Placable")))
+                    if (Physics.Raycast(provider.GetClickRay(), out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Placable")) | (1 << LayerMask.NameToLayer("UI"))))
                     {
-                        currentClickable = hit.transform.GetComponentInParent<Clickable>();
-
-                        if (currentClickable == null && currentArea.AllowMovement)
+                        if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Placable"))
                         {
-                            currentPlacing = hit.transform.GetComponentInParent<Placable>();
-                            lastPos = currentPlacing.transform.localPosition;
+                            currentClickable = hit.transform.GetComponentInParent<Clickable>();
+
+                            if (currentClickable == null && currentArea.AllowMovement)
+                            {
+                                currentPlacing = hit.transform.GetComponentInParent<Placable>();
+                                lastPos = currentPlacing.transform.localPosition;
+                            }
                         }
                     }
                 }

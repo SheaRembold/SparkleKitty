@@ -39,7 +39,7 @@ public class CatManager : MonoBehaviour
         {
             if (pair.Value.Found && pair.Value.Mood >= MoodColors.Length / 2 && now.Subtract(pair.Value.LastGift).TotalSeconds >= GiftFrequency)
             {
-                Mailbox.Instance.AddRandomLetter(pair.Key);
+                MailboxManager.Instance.AddRandomLetter(pair.Key);
                 pair.Value.LastGift = now;
                 statusDirty = true;
             }
