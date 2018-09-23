@@ -35,6 +35,23 @@ public class CatPageUI : ItemPageUI
             SetRequButton(i + 1, DataManager.Instance.Cats[current].OtherRequirements[i]);
         for (int i = DataManager.Instance.Cats[current].OtherRequirements.Length + 1; i < requs.Count; i++)
             requs[i].SetActive(false);
+
+        if (HelpManager.Instance.CurrentStep == TutorialStep.PlaceTreat)
+        {
+            if (buttonFlash == null)
+                buttonFlash = Instantiate(Book.uiManager.flashPrefab);
+            buttonFlash.GetComponent<FlashUI>().SetTarget(requs[1].GetComponent<Button>().targetGraphic);
+            for (int i = 0; i < requs.Count; i++)
+                requs[i].GetComponent<Button>().interactable = false;
+            requs[1].GetComponent<Button>().interactable = true;
+        }
+        else
+        {
+            if (buttonFlash != null)
+                Destroy(buttonFlash);
+            for (int i = 0; i < requs.Count; i++)
+                requs[i].GetComponent<Button>().interactable = true;
+        }
     }
 
     void SetRequButton(int i, PlacableData itemData)

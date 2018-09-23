@@ -136,14 +136,14 @@ public class PlacesManager : MonoBehaviour
             builder.AppendLine(collected[i].ToString());
             builder.AppendLine(collectedTime[i].ToFileTime().ToString());
         }
-        File.WriteAllText(Application.persistentDataPath + "/places.txt", builder.ToString());
+        File.WriteAllText(Application.persistentDataPath + "/places_" + DataManager.saveVersion + ".txt", builder.ToString());
     }
 
     void Load()
     {
-        if (File.Exists(Application.persistentDataPath + "/places.txt"))
+        if (File.Exists(Application.persistentDataPath + "/places_" + DataManager.saveVersion + ".txt"))
         {
-            string[] collectedData = File.ReadAllLines(Application.persistentDataPath + "/places.txt");
+            string[] collectedData = File.ReadAllLines(Application.persistentDataPath + "/places_" + DataManager.saveVersion + ".txt");
             for (int i = 0; i < collectedData.Length; i += 2)
             {
                 collected.Add(ulong.Parse(collectedData[i]));

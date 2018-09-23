@@ -51,7 +51,9 @@ public class ItemPageUI : MonoBehaviour
 
     [System.NonSerialized]
     public BookUI Book;
-    
+
+    protected GameObject buttonFlash;
+
     public virtual void SetItem(PlacableData item)
     {
         current = System.Array.IndexOf(DataManager.Instance.GetAllData(currentType), item);
@@ -115,8 +117,8 @@ public class ItemPageUI : MonoBehaviour
         ItemImage.sprite = buildables[current].Icon;
         PageLabel.text = (current + 1) + " / " + buildables.Length;
         int count = PlayerManager.Instance.GetInventoryCount(buildables[current]);
-        CountLabel.text = count.ToString();
-        if (count == 0)
+        CountLabel.text = buildables[current].Unlimited ? "\u221E" : count.ToString();
+        if (count == 0 && !buildables[current].Unlimited)
             HealthImage.fillAmount = 1f;
         else
             HealthImage.fillAmount = 1f - PlayerManager.Instance.GetItemHealth(buildables[current]);
@@ -130,7 +132,7 @@ public class ItemPageUI : MonoBehaviour
             else
             {
                 SetUseButton("Use");
-                UseButton.interactable = count > 0;
+                UseButton.interactable = count > 0 || buildables[current].Unlimited;
             }
         }
         else
@@ -143,77 +145,102 @@ public class ItemPageUI : MonoBehaviour
             else
             {
                 SetUseButton("Place");
-                UseButton.interactable = count > 0;
+                UseButton.interactable = count > 0 || buildables[current].Unlimited;
             }
         }
 
-        bool hasRecipe = false;
-        for (int i = 0; i < PlayerManager.Instance.InventoryCount; i++)
+        if (buildables[current].Unlimited)
         {
-            RecipeData recipe = PlayerManager.Instance.GetInventory(i) as RecipeData;
-            if (recipe != null && recipe.Product == buildables[current])
-            {
-                hasRecipe = true;
-                break;
-            }
-        }
-
-        if (hasRecipe)
-        {
-            UnknownLabel.gameObject.SetActive(false);
             for (int i = 0; i < requs.Count; i++)
+            {
                 requs[i].SetActive(false);
-            Dictionary<PlacableData, int> requCounts = new Dictionary<PlacableData, int>();
-            for (int i = 0; i < buildables[current].BuildRequirements.Length; i++)
-            {
-                if (requCounts.ContainsKey(buildables[current].BuildRequirements[i]))
-                    requCounts[buildables[current].BuildRequirements[i]]++;
-                else
-                    requCounts.Add(buildables[current].BuildRequirements[i], 1);
             }
-            int requIndex = 0;
-            bool requMissing = false;
-            foreach (KeyValuePair<PlacableData, int> pair in requCounts)
-            {
-                GameObject requObj = null;
-                if (requIndex < requs.Count)
-                {
-                    requObj = requs[requIndex];
-                    requObj.SetActive(true);
-                }
-                else
-                {
-                    requObj = Instantiate(RequPrefab);
-                    requObj.transform.SetParent(Content, false);
-                    (requObj.transform as RectTransform).anchoredPosition = new Vector2(125, -210 - 200 * requIndex);
-                    requs.Add(requObj);
-                }
-                int invCount = PlayerManager.Instance.GetInventoryCount(pair.Key);
-                requObj.GetComponentInChildren<Image>().sprite = pair.Key.Icon;
-                requObj.GetComponentInChildren<Image>().color = Color.white;
-                requObj.GetComponentInChildren<Text>().text = invCount + " / " + pair.Value;
-                requIndex++;
-                if (invCount < pair.Value)
-                    requMissing = true;
-            }
-
-            CraftButton.gameObject.SetActive(true);
-            //CraftButtonText.text = "Craft";
-            CraftButton.interactable = !requMissing;
+            CraftButton.gameObject.SetActive(false);
         }
         else
         {
-            for (int i = 0; i < requs.Count; i++)
+            bool hasRecipe = false;
+            for (int i = 0; i < PlayerManager.Instance.InventoryCount; i++)
             {
-                requs[i].SetActive(true);
-                requs[i].GetComponentInChildren<Image>().sprite = null;
-                requs[i].GetComponentInChildren<Image>().color = Color.gray;
-                requs[i].GetComponentInChildren<Text>().text = "? / ?";
+                RecipeData recipe = PlayerManager.Instance.GetInventory(i) as RecipeData;
+                if (recipe != null && recipe.Product == buildables[current])
+                {
+                    hasRecipe = true;
+                    break;
+                }
             }
-            UnknownLabel.gameObject.SetActive(false);
-            //UnknownLabel.text = "????";
-            //CraftButton.gameObject.SetActive(false);
+
+            if (hasRecipe)
+            {
+                UnknownLabel.gameObject.SetActive(false);
+                for (int i = 0; i < requs.Count; i++)
+                    requs[i].SetActive(false);
+                Dictionary<PlacableData, int> requCounts = new Dictionary<PlacableData, int>();
+                for (int i = 0; i < buildables[current].BuildRequirements.Length; i++)
+                {
+                    if (requCounts.ContainsKey(buildables[current].BuildRequirements[i]))
+                        requCounts[buildables[current].BuildRequirements[i]]++;
+                    else
+                        requCounts.Add(buildables[current].BuildRequirements[i], 1);
+                }
+                int requIndex = 0;
+                bool requMissing = false;
+                foreach (KeyValuePair<PlacableData, int> pair in requCounts)
+                {
+                    GameObject requObj = null;
+                    if (requIndex < requs.Count)
+                    {
+                        requObj = requs[requIndex];
+                        requObj.SetActive(true);
+                    }
+                    else
+                    {
+                        requObj = Instantiate(RequPrefab);
+                        requObj.transform.SetParent(Content, false);
+                        (requObj.transform as RectTransform).anchoredPosition = new Vector2(125, -210 - 200 * requIndex);
+                        requs.Add(requObj);
+                    }
+                    int invCount = PlayerManager.Instance.GetInventoryCount(pair.Key);
+                    requObj.GetComponentInChildren<Image>().sprite = pair.Key.Icon;
+                    requObj.GetComponentInChildren<Image>().color = Color.white;
+                    requObj.GetComponentInChildren<Text>().text = invCount + " / " + pair.Value;
+                    requIndex++;
+                    if (invCount < pair.Value)
+                        requMissing = true;
+                }
+
+                CraftButton.gameObject.SetActive(true);
+                //CraftButtonText.text = "Craft";
+                CraftButton.interactable = !requMissing;
+            }
+            else
+            {
+                for (int i = 0; i < requs.Count; i++)
+                {
+                    requs[i].SetActive(true);
+                    requs[i].GetComponentInChildren<Image>().sprite = null;
+                    requs[i].GetComponentInChildren<Image>().color = Color.gray;
+                    requs[i].GetComponentInChildren<Text>().text = "? / ?";
+                }
+                UnknownLabel.gameObject.SetActive(false);
+                //UnknownLabel.text = "????";
+                CraftButton.gameObject.SetActive(false);
+                CraftButton.interactable = false;
+            }
+        }
+
+        if (HelpManager.Instance.CurrentStep == TutorialStep.PlaceTreat)
+        {
+            if (buttonFlash == null)
+                buttonFlash = Instantiate(Book.uiManager.flashPrefab);
+            buttonFlash.GetComponent<FlashUI>().SetTarget(UseButton.targetGraphic);
+            UseButton.interactable = true;
             CraftButton.interactable = false;
+        }
+        else
+        {
+            if (buttonFlash != null)
+                Destroy(buttonFlash);
         }
     }
     
@@ -274,12 +301,14 @@ public class ItemPageUI : MonoBehaviour
                     PlacementManager.Instance.Remove(inArea[i]);
                 }
                 int count = PlayerManager.Instance.GetInventoryCount(buildables[current]);
-                CountLabel.text = count.ToString();
+                CountLabel.text = buildables[current].Unlimited ? "\u221E" : count.ToString();
                 SetUseButton("Place");
             }
             else
             {
                 PlacementManager.Instance.StartPlacing(buildables[current]);
+                if (buttonFlash != null)
+                    Destroy(buttonFlash);
             }
         }
     }

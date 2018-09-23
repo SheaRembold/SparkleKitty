@@ -14,11 +14,13 @@ public class LetterUI : MonoBehaviour
     [SerializeField]
     Button acceptButton;
     [SerializeField]
-    FlashUI acceptFlash;
+    GameObject flashPrefab;
 
     Letter letter;
     MailboxManager mailbox;
     List<GameObject> gifts = new List<GameObject>();
+
+    GameObject acceptFlash;
 
     public void SetLetter(Letter letter, MailboxManager mailbox)
     {
@@ -48,7 +50,10 @@ public class LetterUI : MonoBehaviour
         }
         acceptButton.interactable = true;
         if (HelpManager.Instance.CurrentStep == TutorialStep.Mail)
-            acceptFlash.enabled = true;
+        {
+            acceptFlash = Instantiate(flashPrefab);
+            acceptFlash.GetComponent<FlashUI>().SetTarget(acceptButton.targetGraphic);
+        }
     }
 
     public void Accept()
@@ -60,6 +65,7 @@ public class LetterUI : MonoBehaviour
         }
         mailbox.RemoveLetter(letter);
         acceptButton.interactable = false;
-        acceptFlash.enabled = false;
+        if (acceptFlash != null)
+            Destroy(acceptFlash);
     }
 }

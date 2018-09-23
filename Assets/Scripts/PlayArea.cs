@@ -36,9 +36,9 @@ public class PlayArea : PlacementArea
 
     public void Load()
     {
-        if (File.Exists(Application.persistentDataPath + "/" + gameObject.name + "_" + saveVersion + ".txt"))
+        if (File.Exists(Application.persistentDataPath + "/" + gameObject.name + "_" + DataManager.saveVersion + ".txt"))
         {
-            string[] placedNames = File.ReadAllLines(Application.persistentDataPath + "/" + gameObject.name + "_" + saveVersion + ".txt");
+            string[] placedNames = File.ReadAllLines(Application.persistentDataPath + "/" + gameObject.name + "_" + DataManager.saveVersion + ".txt");
             for (int i = 0; i < placementLocations.Length; i++)
             {
                 PlacableData item = DataManager.Instance.GetData(placedNames[2 * i]);
@@ -284,7 +284,7 @@ public class PlayArea : PlacementArea
                 builder.AppendLine(placedInArea[i].transform.localPosition.z.ToString());
             }
         }
-        File.WriteAllText(Application.persistentDataPath + "/" + gameObject.name + "_" + saveVersion + ".txt", builder.ToString());
+        File.WriteAllText(Application.persistentDataPath + "/" + gameObject.name + "_" + DataManager.saveVersion + ".txt", builder.ToString());
 
         areaDirty = false;
     }

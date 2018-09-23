@@ -204,57 +204,7 @@ public class CatController : Clickable
         public override void OnUpdate()
         {
             base.OnUpdate();
-
-            /*for (int i = 0; i < PlacementManager.Instance.chasables.Count; i++)
-            {
-                if (PlacementManager.Instance.chasables[i].Attraction >= 1f
-                    && (controller.chaseTarget == null || PlacementManager.Instance.chasables[i].Attraction > controller.chaseTarget.Attraction))
-                {
-                    controller.chaseTarget = PlacementManager.Instance.chasables[i];
-                }
-            }
-            if (controller.chaseTarget != null)
-            {
-                controller.SetState<ChaseState>();
-                return;
-            }*/
-            /*
-            if (stateTime > controller.SitTime)
-            {
-                if (Random.value < controller.InteractProbability)
-                {
-                    List<Placable> favorites = controller.playArea.GetInArea(controller.catData.OtherRequirements);
-                    for (int i = 0; i < favorites.Count; i++)
-                    {
-                        if (favorites[i].GetComponent<ItemController>() != null && !favorites[i].GetComponent<ItemController>().AnyLeft())
-                        {
-                            favorites.RemoveAt(i);
-                            i--;
-                        }
-                    }
-                    if (favorites.Count > 0)
-                    {
-                        controller.target = favorites[Random.Range(0, favorites.Count)];
-                        controller.targetPos = controller.target.transform.localPosition;
-                    }
-                    else
-                    {
-                        controller.target = null;
-                        controller.isLeaving = !controller.StayForever;
-                        if (controller.isLeaving)
-                            controller.targetPos = controller.playArea.CatSpawnPoint.localPosition;
-                        else
-                            controller.targetPos = PlacementManager.Instance.GetRandomInArea();
-                    }
-                }
-                else
-                {
-                    controller.target = null;
-                    controller.isLeaving = false;
-                    controller.targetPos = PlacementManager.Instance.GetRandomInArea();
-                }
-                controller.SetState<WalkState>();
-            }*/
+            
         }
     }
 
@@ -286,8 +236,6 @@ public class CatController : Clickable
                 if (HelpManager.Instance.CurrentStep == TutorialStep.Start)
                 {
                     HelpManager.Instance.CompleteTutorialStep(TutorialStep.Start);
-                    controller.targetPos = MailboxManager.Instance.transform.localPosition;
-                    controller.SetState<TutorialWalkState>();
                 }
                 else
                 {
@@ -506,6 +454,11 @@ public class CatController : Clickable
             targetPos = MailboxManager.Instance.transform.localPosition;
             SetState<TutorialWalkState>();
         }
+        else if (HelpManager.Instance.CurrentStep == TutorialStep.GrabBook)
+        {
+            targetPos = BookController.Instance.transform.localPosition;
+            SetState<TutorialWalkState>();
+        }
         else
         {
             SetState<SitState>();
@@ -517,9 +470,24 @@ public class CatController : Clickable
 
     void OnCompleteTutorialStep(TutorialStep currentStep)
     {
-        if (currentStep == TutorialStep.GrabBook)
+        if (currentStep == TutorialStep.Mail)
+        {
+            targetPos = MailboxManager.Instance.transform.localPosition;
+            SetState<TutorialWalkState>();
+        }
+        else if (currentStep == TutorialStep.GrabBook)
+        {
+            targetPos = BookController.Instance.transform.localPosition;
+            SetState<TutorialWalkState>();
+        }
+        else if (currentStep == TutorialStep.PlaceTreat)
         {
             SetState<SitState>();
+        }
+        else if (currentStep == TutorialStep.CraftToy)
+        {
+            target = playArea.GetInArea(PlacableDataType.Treat)[0];
+            SetState<WalkState>();
         }
     }
 

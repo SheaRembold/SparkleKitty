@@ -7,7 +7,9 @@ public enum PlacableDataType { Cat, Tower, Toy, Treat, TowerComponent, ToyCompon
 public class DataManager : MonoBehaviour
 {
     public static DataManager Instance;
-    
+
+    public const int saveVersion = 3;
+
     public CatData[] Cats;
     public UpgradableData[] Towers;
     public BuildableData[] Toys;

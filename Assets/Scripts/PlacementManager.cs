@@ -227,6 +227,7 @@ public class PlacementManager : MonoBehaviour
         HelpUI.gameObject.SetActive(true);
         playArea.ShowPlacing(true);
         PlaceCurrent();
+        placingDown = false;
     }
 
     public void GrabBook(BookController book)
@@ -377,6 +378,7 @@ public class PlacementManager : MonoBehaviour
         }
     }
 
+    bool placingDown;
     void Update()
     {
         if (provider == null)
@@ -456,6 +458,7 @@ public class PlacementManager : MonoBehaviour
                             {
                                 currentPlacing = hit.transform.GetComponentInParent<Placable>();
                                 lastPos = currentPlacing.transform.localPosition;
+                                placingDown = true;
                             }
                         }
                     }
@@ -478,8 +481,12 @@ public class PlacementManager : MonoBehaviour
         }
         else
         {
-            PlaceCurrent();
-            if (provider.GetClickUp())
+                PlaceCurrent();
+            if (provider.GetClickDown())
+            {
+                placingDown = true;
+            }
+            else if (placingDown && provider.GetClickUp())
             {
                 if (placed)
                 {
@@ -499,6 +506,9 @@ public class PlacementManager : MonoBehaviour
                     currentPlacing = null;
                     HelpUI.gameObject.SetActive(false);
                     playArea.ShowPlacing(false);
+                    if (HelpManager.Instance.CurrentStep == TutorialStep.PlaceTreat)
+                        HelpManager.Instance.CompleteTutorialStep(TutorialStep.PlaceTreat);
+                    placingDown = false;
                 }
                 /*else
                 {

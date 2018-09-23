@@ -14,7 +14,6 @@ public struct PlacedInst
 
 public class PlacementArea : MonoBehaviour
 {
-    protected static int saveVersion = 2;
     [SerializeField]
     protected PlacedInst[] startingInArea;
     public Transform Contents;
@@ -55,9 +54,9 @@ public class PlacementArea : MonoBehaviour
     
     public virtual void SetArea()
     {
-        if (File.Exists(Application.persistentDataPath + "/" + gameObject.name + "_" + saveVersion + ".txt"))
+        if (File.Exists(Application.persistentDataPath + "/" + gameObject.name + "_" + DataManager.saveVersion + ".txt"))
         {
-            string[] placedNames = File.ReadAllLines(Application.persistentDataPath + "/" + gameObject.name + "_" + saveVersion + ".txt");
+            string[] placedNames = File.ReadAllLines(Application.persistentDataPath + "/" + gameObject.name + "_" + DataManager.saveVersion + ".txt");
             for (int i = 0; i < placedNames.Length; i+= 4)
             {
                 PlacableData item = DataManager.Instance.GetData(placedNames[i]);
@@ -93,7 +92,7 @@ public class PlacementArea : MonoBehaviour
             builder.AppendLine(placedInArea[i].transform.localPosition.y.ToString());
             builder.AppendLine(placedInArea[i].transform.localPosition.z.ToString());
         }
-        File.WriteAllText(Application.persistentDataPath + "/" + gameObject.name + "_" + saveVersion + ".txt", builder.ToString());
+        File.WriteAllText(Application.persistentDataPath + "/" + gameObject.name + "_" + DataManager.saveVersion + ".txt", builder.ToString());
 
         areaDirty = false;
     }

@@ -7,7 +7,9 @@ using HTC.UnityPlugin.Pointer3D;
 public class UIManager : MonoBehaviour
 {
     //public static UIManager Instance;
-    
+
+    public GameObject flashPrefab;
+
     [SerializeField]
     GameObject mainUI;
     //[SerializeField]

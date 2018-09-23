@@ -138,14 +138,14 @@ public class MailboxManager : Clickable
                 builder.AppendLine(pair.Key.name + "," + pair.Value);
             builder.AppendLine("----");
         }
-        File.WriteAllText(Application.persistentDataPath + "/mailbox.txt", builder.ToString());
+        File.WriteAllText(Application.persistentDataPath + "/mailbox_" + DataManager.saveVersion + ".txt", builder.ToString());
     }
 
     private void Load()
     {
-        if (File.Exists(Application.persistentDataPath + "/mailbox.txt"))
+        if (File.Exists(Application.persistentDataPath + "/mailbox_" + DataManager.saveVersion + ".txt"))
         {
-            string[] lettersFile = File.ReadAllLines(Application.persistentDataPath + "/mailbox.txt");
+            string[] lettersFile = File.ReadAllLines(Application.persistentDataPath + "/mailbox_" + DataManager.saveVersion + ".txt");
             int letterIndex = 0;
             Letter letter = null;
             for (int i = 0; i < lettersFile.Length; i++)

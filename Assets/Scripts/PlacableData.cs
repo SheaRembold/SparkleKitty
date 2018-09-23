@@ -10,4 +10,5 @@ public class PlacableData : ScriptableObject
     public Sprite Icon;
     public GameObject Prefab;
     public bool Attached;
+    public bool Unlimited;
 }

@@ -13,9 +13,8 @@ public class BookUI : MonoBehaviour
         public ItemPageUI ItemPage;
         public PlacableDataType PlacableDataType;
     }
-
-    [SerializeField]
-    UIManager uiManager;
+    
+    public UIManager uiManager;
     [SerializeField]
     TabData[] tabs;
 
@@ -31,13 +30,22 @@ public class BookUI : MonoBehaviour
             tabs[i].Tab.onValueChanged.AddListener(OnToggleTab);
         }
         OnToggleTab(true);
+
+        HelpManager.Instance.onCompleteTutorialStep += OnCompleteTutorialStep;
+    }
+
+    void OnCompleteTutorialStep(TutorialStep currentStep)
+    {
+        if (HelpManager.Instance.CurrentStep == TutorialStep.PlaceTreat)
+        {
+        }
     }
 
     public void OnToggleTab(bool value)
     {
         if (value)
         {
-            for (int i=0;i<tabs.Length;i++)
+            for (int i = 0; i < tabs.Length; i++)
             {
                 if (tabs[i].Tab.isOn)
                 {
@@ -54,6 +62,7 @@ public class BookUI : MonoBehaviour
         {
             if (tabs[i].PlacableDataType == item.DataType)
             {
+                tabs[i].Tab.isOn = true;
                 tabs[i].ItemPage.SetItem(item);
                 uiManager.ShowUI(tabs[i].ItemPage.gameObject);
                 break;

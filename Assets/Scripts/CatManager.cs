@@ -103,15 +103,15 @@ public class CatManager : MonoBehaviour
             builder.AppendLine(pair.Value.MoodValue.ToString());
             builder.AppendLine(pair.Value.LastGift.Ticks.ToString());
         }
-        File.WriteAllText(Application.persistentDataPath + "/cats.txt", builder.ToString());
+        File.WriteAllText(Application.persistentDataPath + "/cats_" + DataManager.saveVersion + ".txt", builder.ToString());
         statusDirty = false;
     }
 
     void Load()
     {
-        if (File.Exists(Application.persistentDataPath + "/cats.txt"))
+        if (File.Exists(Application.persistentDataPath + "/cats_" + DataManager.saveVersion + ".txt"))
         {
-            string[] catsData = File.ReadAllLines(Application.persistentDataPath + "/cats.txt");
+            string[] catsData = File.ReadAllLines(Application.persistentDataPath + "/cats_" + DataManager.saveVersion + ".txt");
             for (int i = 0; i < catsData.Length; i += 4)
             {
                 CatData cat = DataManager.Instance.GetData(catsData[i]) as CatData;

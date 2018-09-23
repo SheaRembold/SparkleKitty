@@ -25,9 +25,9 @@ public class HelpManager : MonoBehaviour
     {
         Instance = this;
         
-        if (File.Exists(Application.persistentDataPath + "/help.txt"))
+        if (File.Exists(Application.persistentDataPath + "/help_" + DataManager.saveVersion + ".txt"))
         {
-            string[] helpNames = File.ReadAllLines(Application.persistentDataPath + "/help.txt");
+            string[] helpNames = File.ReadAllLines(Application.persistentDataPath + "/help_" + DataManager.saveVersion + ".txt");
             try
             {
                 CurrentStep = (TutorialStep)System.Enum.Parse(typeof(TutorialStep), helpNames[0]);
@@ -61,7 +61,7 @@ public class HelpManager : MonoBehaviour
         {
             builder.AppendLine(shownHelp[i]);
         }
-        File.WriteAllText(Application.persistentDataPath + "/help.txt", builder.ToString());
+        File.WriteAllText(Application.persistentDataPath + "/help_" + DataManager.saveVersion + ".txt", builder.ToString());
     }
 
     public bool HasShownHelp(string name)
@@ -86,10 +86,6 @@ public class HelpManager : MonoBehaviour
                 }
                 MailboxManager.Instance.AddLetter(new Letter(DataManager.Instance.Cats[0], gifts));
                 MailboxManager.Instance.TurnOnHelp();
-            }
-            else if (CurrentStep == TutorialStep.GrabBook)
-            {
-                
             }
             if (onCompleteTutorialStep != null)
                 onCompleteTutorialStep(CurrentStep);

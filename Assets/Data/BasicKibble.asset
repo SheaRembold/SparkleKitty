@@ -15,6 +15,8 @@ MonoBehaviour:
   DataType: 3
   Icon: {fileID: 21300000, guid: 354af896b6a15d044806642e546a3a69, type: 3}
   Prefab: {fileID: 1299546934261784, guid: c6f2b787bb198414e93c99c9610394aa, type: 2}
+  Attached: 0
+  Unlimited: 1
   BuildRequirements:
   - {fileID: 11400000, guid: 16447e4cce6384b469fe5697c93bc7d5, type: 2}
   - {fileID: 11400000, guid: 16447e4cce6384b469fe5697c93bc7d5, type: 2}

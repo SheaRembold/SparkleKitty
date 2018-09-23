@@ -25,9 +25,9 @@ public class PlayerManager : MonoBehaviour
     {
         Instance = this;
 
-        if (File.Exists(Application.persistentDataPath + "/inventory.txt"))
+        if (File.Exists(Application.persistentDataPath + "/inventory_" + DataManager.saveVersion + ".txt"))
         {
-            string[] invNames = File.ReadAllLines(Application.persistentDataPath + "/inventory.txt");
+            string[] invNames = File.ReadAllLines(Application.persistentDataPath + "/inventory_" + DataManager.saveVersion + ".txt");
             for (int i = 0; i < invNames.Length; i++)
             {
                 PlacableData item = DataManager.Instance.GetData(invNames[i]);
@@ -107,7 +107,7 @@ public class PlayerManager : MonoBehaviour
         {
             builder.AppendLine(inventory[i].name);
         }
-        File.WriteAllText(Application.persistentDataPath + "/inventory.txt", builder.ToString());
+        File.WriteAllText(Application.persistentDataPath + "/inventory_" + DataManager.saveVersion + ".txt", builder.ToString());
 
         invDirty = false;
     }
