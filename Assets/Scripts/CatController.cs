@@ -231,8 +231,10 @@ public class CatController : Clickable
             else if (hasBeenPet)
             {
                 controller.AddMood(1f / (CatManager.Instance.MoodColors.Length - 1));
-                if (controller.HelpParticles != null)
-                    controller.HelpParticles.SetActive(false);
+                //if (controller.HelpParticles != null)
+                    //controller.HelpParticles.SetActive(false);
+                if (controller.HelpOutline != null)
+                    controller.HelpOutline.enabled = false;
                 if (HelpManager.Instance.CurrentStep == TutorialStep.Start)
                 {
                     HelpManager.Instance.CompleteTutorialStep(TutorialStep.Start);
@@ -383,6 +385,7 @@ public class CatController : Clickable
     public bool StayForever;
     public Renderer[] MoodRenderers;
     public GameObject HelpParticles;
+    public Outline HelpOutline;
 
     protected CatData catData;
     protected Animator animator;
@@ -446,8 +449,10 @@ public class CatController : Clickable
 
         if (HelpManager.Instance.CurrentStep == TutorialStep.Start)
         {
-            if (HelpParticles != null)
-                HelpParticles.SetActive(true);
+            //if (HelpParticles != null)
+                //HelpParticles.SetActive(true);
+            if (HelpOutline != null)
+                HelpOutline.enabled = true;
         }
         if (HelpManager.Instance.CurrentStep == TutorialStep.Mail)
         {

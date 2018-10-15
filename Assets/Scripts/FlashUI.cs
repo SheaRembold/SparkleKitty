@@ -8,25 +8,35 @@ public class FlashUI : MonoBehaviour
     [SerializeField]
     Image Scaling;
     [SerializeField]
+    Image ScalingInner;
+    [SerializeField]
     float FlashSpeed = 1f;
     [SerializeField]
-    Vector2 sizeOffset = new Vector2(20, 20);
+    Vector2 sizeMinOffset = new Vector2(20, 20);
+    [SerializeField]
+    Vector2 sizeMaxOffset = new Vector2(20, 20);
 
     Graphic target;
 
-    public void SetTarget(Graphic target)
+    public void SetTarget(Image target)
     {
         this.target = target;
         transform.SetParent(target.transform.parent, false);
-        transform.SetSiblingIndex(target.transform.GetSiblingIndex());
+        transform.SetSiblingIndex(0);
         transform.localPosition = target.transform.localPosition;
-        Scaling.rectTransform.sizeDelta = target.rectTransform.sizeDelta;
+        Scaling.rectTransform.sizeDelta = target.rectTransform.sizeDelta + sizeMinOffset;
+        Scaling.sprite = target.sprite;
+        ScalingInner.sprite = target.sprite;
+        Scaling.type = target.type;
+        ScalingInner.type = target.type;
+        Scaling.preserveAspect = target.preserveAspect;
+        ScalingInner.preserveAspect = target.preserveAspect;
     }
     
     private void Update()
     {
         if (target != null)
-            Scaling.rectTransform.sizeDelta = Vector2.Lerp(target.rectTransform.sizeDelta, target.rectTransform.sizeDelta + sizeOffset, (Mathf.Sin(Time.time * FlashSpeed) + 3f) * 0.25f);
+            Scaling.rectTransform.sizeDelta = Vector2.Lerp(target.rectTransform.sizeDelta + sizeMinOffset, target.rectTransform.sizeDelta + sizeMaxOffset, (Mathf.Sin(Time.time * FlashSpeed) + 1f) * 0.5f);
         else
             Scaling.rectTransform.sizeDelta = Vector2.zero;
     }

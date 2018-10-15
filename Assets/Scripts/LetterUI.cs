@@ -52,7 +52,7 @@ public class LetterUI : MonoBehaviour
         if (HelpManager.Instance.CurrentStep == TutorialStep.Mail)
         {
             acceptFlash = Instantiate(flashPrefab);
-            acceptFlash.GetComponent<FlashUI>().SetTarget(acceptButton.targetGraphic);
+            acceptFlash.GetComponent<FlashUI>().SetTarget(acceptButton.targetGraphic as Image);
         }
     }
 

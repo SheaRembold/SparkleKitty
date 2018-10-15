@@ -40,7 +40,7 @@ public class CatPageUI : ItemPageUI
         {
             if (buttonFlash == null)
                 buttonFlash = Instantiate(Book.uiManager.flashPrefab);
-            buttonFlash.GetComponent<FlashUI>().SetTarget(requs[1].GetComponent<Button>().targetGraphic);
+            buttonFlash.GetComponent<FlashUI>().SetTarget(requs[1].GetComponent<Button>().targetGraphic as Image);
             for (int i = 0; i < requs.Count; i++)
                 requs[i].GetComponent<Button>().interactable = false;
             requs[1].GetComponent<Button>().interactable = true;

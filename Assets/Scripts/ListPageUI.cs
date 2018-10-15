@@ -42,7 +42,7 @@ public class ListPageUI : MonoBehaviour
             {
                 GameObject obj = Instantiate(ButtonPrefab);
                 obj.transform.SetParent(Content, false);
-                (obj.transform as RectTransform).anchoredPosition = new Vector2(120 + (i % 4) * 200, -120 - (i / 4) * 200);
+                (obj.transform as RectTransform).anchoredPosition = new Vector2(175 + (i % 3) * 250, -125 - (i / 3) * 250);
                 button = obj.GetComponent<Button>();
                 buttons.Add(button);
             }
@@ -55,7 +55,7 @@ public class ListPageUI : MonoBehaviour
         {
             if (buttonFlash == null)
                 buttonFlash = Instantiate(uiManager.flashPrefab);
-            buttonFlash.GetComponent<FlashUI>().SetTarget(buttons[0].targetGraphic);
+            buttonFlash.GetComponent<FlashUI>().SetTarget(buttons[0].targetGraphic as Image);
             buttons[0].interactable = true;
             for (int i = 1; i < buttons.Count; i++)
                 buttons[i].interactable = false;

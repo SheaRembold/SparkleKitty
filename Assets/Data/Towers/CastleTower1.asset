@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5e0f7b2da4c80c419c5bb1418fd7f42, type: 3}
+  m_Name: CastleTower1
+  m_EditorClassIdentifier: 
+  Name: Castle Tower 1
+  DataType: 1
+  Icon: {fileID: 21300000, guid: 8665ca0397198ef4999231afc53aa076, type: 3}
+  Prefab: {fileID: 1007721593138942, guid: 5750ca134ae30b34c85a1d72e0604571, type: 2}
+  Attached: 0
+  Unlimited: 0
+  BuildRequirements:
+  - {fileID: 11400000, guid: 261f554cf1335f34aa0fd14cd1daebd4, type: 2}
+  - {fileID: 11400000, guid: 261f554cf1335f34aa0fd14cd1daebd4, type: 2}
+  MaterialType: 1
+  Level: 1
+  UpgradeRequirements:
+  - {fileID: 11400000, guid: 261f554cf1335f34aa0fd14cd1daebd4, type: 2}
+  - {fileID: 11400000, guid: 261f554cf1335f34aa0fd14cd1daebd4, type: 2}
+  Upgrade: {fileID: 11400000, guid: 53be7240fad2648469322bbb20574711, type: 2}

@@ -31,6 +31,8 @@ public class MailboxManager : Clickable
     LetterUI letterUI;
     [SerializeField]
     GameObject helpParticles;
+    [SerializeField]
+    Outline helpOutline;
 
     Animator animator;
     List<Letter> letters = new List<Letter>();
@@ -67,7 +69,8 @@ public class MailboxManager : Clickable
 
     public void TurnOnHelp()
     {
-        helpParticles.SetActive(true);
+        //helpParticles.SetActive(true);
+        helpOutline.enabled = true;
     }
 
     private void Update()
@@ -115,7 +118,8 @@ public class MailboxManager : Clickable
         animator.SetBool("IsOpen", false);
         letterRoot.AcceptLetter();
         IsOpen = false;
-        helpParticles.SetActive(false);
+        //helpParticles.SetActive(false);
+        helpOutline.enabled = false;
         HelpManager.Instance.CompleteTutorialStep(TutorialStep.Mail);
         Save();
     }

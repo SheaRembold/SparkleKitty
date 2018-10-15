@@ -848,6 +848,7 @@ GameObject:
   - component: {fileID: 95424952911764224}
   - component: {fileID: 114971861758412782}
   - component: {fileID: 82803988327443136}
+  - component: {fileID: 114545359228693060}
   m_Layer: 10
   m_Name: SparkleKittyLP
   m_TagString: Untagged
@@ -2909,6 +2910,28 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114545359228693060
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1720401851590550}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  doubleOutline: 1
+  flash: 1
+  flashSpeed: 4
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineOuterColor: {r: 0.5647059, g: 0.043137256, b: 0.7607843, a: 1}
+  outlineWidth: 6
+  outlineOuterWidth: 4
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!114 &114971861758412782
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2935,6 +2958,7 @@ MonoBehaviour:
   - {fileID: 23201876622725204}
   - {fileID: 23539033560542090}
   HelpParticles: {fileID: 1953114732901108}
+  HelpOutline: {fileID: 114545359228693060}
 --- !u!119 &119547040035423834
 Projector:
   m_ObjectHideFlags: 1

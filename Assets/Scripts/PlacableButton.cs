@@ -8,6 +8,7 @@ public class PlacableButton : MonoBehaviour//, IPointerDownHandler
 {
     public Text Label;
     public Image Icon;
+    public GameObject[] Backs;
     PlacableData Placable;
 
     public void SetPlacable(PlacableData placable)
@@ -24,6 +25,28 @@ public class PlacableButton : MonoBehaviour//, IPointerDownHandler
             Icon.gameObject.SetActive(false);
             Label.gameObject.SetActive(true);
             Label.text = Placable.Name;
+        }
+        for (int i = 0; i < Backs.Length; i++)
+            Backs[i].SetActive(false);
+        if (placable.DataType == PlacableDataType.Tower)
+        {
+            Backs[0].SetActive(true);
+            GetComponent<Button>().targetGraphic = Backs[0].GetComponent<Image>();
+        }
+        else if (placable.DataType == PlacableDataType.Cat)
+        {
+            Backs[1].SetActive(true);
+            GetComponent<Button>().targetGraphic = Backs[1].GetComponent<Image>();
+        }
+        else if (placable.DataType == PlacableDataType.Toy)
+        {
+            Backs[2].SetActive(true);
+            GetComponent<Button>().targetGraphic = Backs[2].GetComponent<Image>();
+        }
+        else if (placable.DataType == PlacableDataType.Treat)
+        {
+            Backs[3].SetActive(true);
+            GetComponent<Button>().targetGraphic = Backs[3].GetComponent<Image>();
         }
     }
     /*

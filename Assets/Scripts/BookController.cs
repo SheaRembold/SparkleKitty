@@ -12,6 +12,8 @@ public class BookController : Clickable
     GameObject uiRoot;
     [SerializeField]
     GameObject helpParticle;
+    [SerializeField]
+    Outline helpOutline;
 
     GraphicRaycaster graphicRaycaster;
     CanvasRaycastTarget canvasRaycastTarget;
@@ -28,7 +30,8 @@ public class BookController : Clickable
 
         if (HelpManager.Instance.CurrentStep == TutorialStep.GrabBook)
         {
-            helpParticle.SetActive(true);
+            //helpParticle.SetActive(true);
+            helpOutline.enabled = true;
         }
 
         HelpManager.Instance.onCompleteTutorialStep += OnCompleteTutorialStep;
@@ -38,7 +41,8 @@ public class BookController : Clickable
     {
         if (HelpManager.Instance.CurrentStep == TutorialStep.GrabBook)
         {
-            helpParticle.SetActive(true);
+            //helpParticle.SetActive(true);
+            helpOutline.enabled = true;
         }
     }
 
@@ -62,7 +66,8 @@ public class BookController : Clickable
 
     public override void Click(RaycastHit hit)
     {
-        helpParticle.SetActive(false);
+        //helpParticle.SetActive(false);
+        helpOutline.enabled = false;
 
         CloseBook();
         PlacementManager.Instance.GrabBook(this);

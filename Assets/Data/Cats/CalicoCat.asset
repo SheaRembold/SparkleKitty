@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de8f34063753e8d42ad4ae36f1ddf9cf, type: 3}
+  m_Name: CalicoCat
+  m_EditorClassIdentifier: 
+  Name: Calico Cat
+  DataType: 0
+  Icon: {fileID: 21300000, guid: adcc4582a0c137741973df352d277e51, type: 3}
+  Prefab: {fileID: 1436853899390780, guid: 3cc030d35ca5fa946b82c9a247e7aa43, type: 2}
+  Attached: 0
+  Unlimited: 0
+  RequiredTowerType: 0
+  RequiredTowerLevel: 2
+  OtherRequirements:
+  - {fileID: 11400000, guid: 63980fdac7da4534e8fb2a413adf6a74, type: 2}
+  - {fileID: 11400000, guid: 4e432c76d712eaf4bbf61786ecc32b1e, type: 2}
+  CatSounds:
+  - {fileID: 8300000, guid: 7ee783ec0394d244eac9a7edfc842bbf, type: 3}
+  EatingSound: {fileID: 8300000, guid: a5e6acf319e5e86429486dddc2c5b23f, type: 3}

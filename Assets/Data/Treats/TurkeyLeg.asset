@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93e18d950f74e3949a677fe4ce3e1e1c, type: 3}
+  m_Name: TurkeyLeg
+  m_EditorClassIdentifier: 
+  Name: Turkey Leg
+  DataType: 3
+  Icon: {fileID: 21300000, guid: 03081dc284976fc41a9d4952ded8ffaa, type: 3}
+  Prefab: {fileID: 1323498488211722, guid: 7ee9a8549968e0c41bc9bc15a2dce2e3, type: 2}
+  Attached: 0
+  Unlimited: 0
+  BuildRequirements:
+  - {fileID: 11400000, guid: 16825c51c2e7190409e3c03cbe51be7f, type: 2}
+  - {fileID: 11400000, guid: 69de5e3c76c10fc46b09cf9a1817c992, type: 2}

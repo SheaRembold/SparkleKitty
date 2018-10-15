@@ -20,7 +20,7 @@ public class UpgradeListPageUI : ListPageUI
             PlacableData itemData = DataManager.Instance.GetTower(materialTypes[i], level == 0 ? 1 : level);
             GameObject obj = Instantiate(ButtonPrefab);
             obj.transform.SetParent(Content, false);
-            (obj.transform as RectTransform).anchoredPosition = new Vector2(120 + (i % 4) * 200, -120 - (i / 4) * 200);
+            (obj.transform as RectTransform).anchoredPosition = new Vector2(175 + (i % 3) * 250, -125 - (i / 3) * 250);
             PlacableButton image = obj.GetComponent<PlacableButton>();
             image.SetPlacable(itemData);
             Button button = obj.GetComponent<Button>();

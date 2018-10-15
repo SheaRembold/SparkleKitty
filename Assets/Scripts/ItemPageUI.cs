@@ -233,7 +233,7 @@ public class ItemPageUI : MonoBehaviour
         {
             if (buttonFlash == null)
                 buttonFlash = Instantiate(Book.uiManager.flashPrefab);
-            buttonFlash.GetComponent<FlashUI>().SetTarget(UseButton.targetGraphic);
+            buttonFlash.GetComponent<FlashUI>().SetTarget(UseButton.targetGraphic as Image);
             UseButton.interactable = true;
             CraftButton.interactable = false;
         }

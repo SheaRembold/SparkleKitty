@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93e18d950f74e3949a677fe4ce3e1e1c, type: 3}
+  m_Name: FeatherOnString
+  m_EditorClassIdentifier: 
+  Name: Feather on a String
+  DataType: 2
+  Icon: {fileID: 21300000, guid: 6d27d751ae82a054f954b29050a6ca73, type: 3}
+  Prefab: {fileID: 1023022131551718, guid: 1d693f9e94efc10478001a5903cde09d, type: 2}
+  Attached: 1
+  Unlimited: 0
+  BuildRequirements:
+  - {fileID: 11400000, guid: de47dd02f39edc94daa0ac1b27d7939c, type: 2}
+  - {fileID: 11400000, guid: de47dd02f39edc94daa0ac1b27d7939c, type: 2}
+  - {fileID: 11400000, guid: 45205ae5da1979e419e860c21625fdd1, type: 2}
+  - {fileID: 11400000, guid: 45205ae5da1979e419e860c21625fdd1, type: 2}

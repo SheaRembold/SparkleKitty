@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93e18d950f74e3949a677fe4ce3e1e1c, type: 3}
+  m_Name: LaserPointer
+  m_EditorClassIdentifier: 
+  Name: Laser Pointer
+  DataType: 2
+  Icon: {fileID: 21300000, guid: 1abdc91ea961a7a49b1a2a7ca4546c4e, type: 3}
+  Prefab: {fileID: 1110371862291102, guid: 5ec7057e0c56c3f4e882f8d3cbbd1447, type: 2}
+  Attached: 1
+  Unlimited: 0
+  BuildRequirements:
+  - {fileID: 11400000, guid: 486dcb76121dceb48902c61d6b650508, type: 2}
+  - {fileID: 11400000, guid: 85943bcf0d9b0f2449530c5a929e7741, type: 2}
