@@ -36,5 +36,5 @@ public class BallClickable : Clickable, IChasable
     }
 
     public Vector3 ChasePosition { get { return rigidbody.position; } }
-    public float Attraction { get { return rigidbody.velocity.magnitude / (speed / 2f); } }
+    public float Attraction(CatController cat) { return rigidbody.velocity.magnitude / (speed / 2f); }
 }

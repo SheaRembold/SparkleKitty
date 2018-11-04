@@ -148,7 +148,8 @@ public class PlayArea : PlacementArea
 
     IEnumerator WaitToSpawnCat()
     {
-        yield return new WaitForSeconds(SpawnDelay);
+        if (HelpManager.Instance.CurrentStep != TutorialStep.PlaceToy)
+            yield return new WaitForSeconds(SpawnDelay);
 
         PlacementManager.Instance.PlaceAt(this, waitingCat, CatSpawnPoint.localPosition);
         waitingCat = null;

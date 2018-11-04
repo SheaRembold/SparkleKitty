@@ -301,15 +301,14 @@ public class PlacementManager : MonoBehaviour
 
     public Placable PlaceAt(PlacementArea area, PlacableData placable, Vector3 position, Vector3 rotation)
     {
-        Placable newPlacable = currentPlacing = Instantiate(placable.Prefab).GetComponent<Placable>();
-        currentPlacing.Data = placable;
-        currentPlacing.transform.SetParent(area.Contents);
-        currentPlacing.transform.localPosition = position;
-        currentPlacing.transform.localRotation = Quaternion.Euler(rotation);
-        currentPlacing.transform.localScale = Vector3.one;
+        Placable newPlacable = Instantiate(placable.Prefab).GetComponent<Placable>();
+        newPlacable.Data = placable;
+        newPlacable.transform.SetParent(area.Contents);
+        newPlacable.transform.localPosition = position;
+        newPlacable.transform.localRotation = Quaternion.Euler(rotation);
+        newPlacable.transform.localScale = Vector3.one;
 
-        area.AddToArea(currentPlacing);
-        currentPlacing = null;
+        area.AddToArea(newPlacable);
 
         return newPlacable;
     }
@@ -508,6 +507,8 @@ public class PlacementManager : MonoBehaviour
                     playArea.ShowPlacing(false);
                     if (HelpManager.Instance.CurrentStep == TutorialStep.PlaceTreat)
                         HelpManager.Instance.CompleteTutorialStep(TutorialStep.PlaceTreat);
+                    else if (HelpManager.Instance.CurrentStep == TutorialStep.PlaceToy)
+                        HelpManager.Instance.CompleteTutorialStep(TutorialStep.PlaceToy);
                     placingDown = false;
                 }
                 /*else

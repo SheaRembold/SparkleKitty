@@ -162,7 +162,7 @@ ModelImporter:
     7400022: Armature|Armature|Walk|Base Layer.001
     7400024: Armature|Armature|Walk|Base Layer.002
     7400026: Armature|licking
-    7400028: Armature|Playing
+    7400028: CatPlaying
     7400030: Armature|Eating
     7400032: OnlyLick
     7400034: SittingDown
@@ -627,7 +627,7 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Armature|Playing
+      name: CatPlaying
       takeName: Armature|Playing
       firstFrame: 0
       lastFrame: 65

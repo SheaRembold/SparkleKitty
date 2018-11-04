@@ -5,5 +5,5 @@ using UnityEngine;
 public interface IChasable
 {
     Vector3 ChasePosition { get; }
-    float Attraction { get; }
+    float Attraction(CatController cat);
 }

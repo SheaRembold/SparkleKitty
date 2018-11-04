@@ -18,6 +18,9 @@ public class ListPageUI : MonoBehaviour
     [SerializeField]
     UIManager uiManager;
 
+    [System.NonSerialized]
+    public BookUI Book;
+
     GameObject buttonFlash;
     List<Button> buttons = new List<Button>();
 
@@ -51,7 +54,15 @@ public class ListPageUI : MonoBehaviour
             button.onClick.AddListener(new UnityEngine.Events.UnityAction(() => { ShowItem(itemData); }));
         }
 
-        if (HelpManager.Instance.CurrentStep == TutorialStep.PlaceTreat)
+        if ((HelpManager.Instance.CurrentStep == TutorialStep.CraftToy || HelpManager.Instance.CurrentStep == TutorialStep.PlaceToy) && PlacableDataType != PlacableDataType.Toy)
+        {
+            if (buttonFlash == null)
+                Destroy(buttonFlash);
+            for (int i = 0; i < buttons.Count; i++)
+                buttons[i].interactable = false;
+            Book.FlashTab(PlacableDataType.Toy);
+        }
+        else if (HelpManager.Instance.CurrentStep == TutorialStep.PlaceTreat || HelpManager.Instance.CurrentStep == TutorialStep.CraftToy || HelpManager.Instance.CurrentStep == TutorialStep.PlaceToy)
         {
             if (buttonFlash == null)
                 buttonFlash = Instantiate(uiManager.flashPrefab);
@@ -59,6 +70,7 @@ public class ListPageUI : MonoBehaviour
             buttons[0].interactable = true;
             for (int i = 1; i < buttons.Count; i++)
                 buttons[i].interactable = false;
+            Book.SetInteractable(false);
         }
         else
         {
@@ -66,6 +78,7 @@ public class ListPageUI : MonoBehaviour
                 Destroy(buttonFlash);
             for (int i = 0; i < buttons.Count; i++)
                 buttons[i].interactable = true;
+            Book.SetInteractable(true);
         }
     }
 

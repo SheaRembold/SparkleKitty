@@ -17,8 +17,14 @@ public class BookUI : MonoBehaviour
     public UIManager uiManager;
     [SerializeField]
     TabData[] tabs;
+    [SerializeField]
+    Button backButton;
+    [SerializeField]
+    Button debugButton;
 
     int current;
+
+    GameObject buttonFlash;
 
     List<GameObject> requs = new List<GameObject>();
 
@@ -27,6 +33,7 @@ public class BookUI : MonoBehaviour
         for (int i = 0; i < tabs.Length; i++)
         {
             tabs[i].ItemPage.Book = this;
+            tabs[i].ListPage.Book = this;
             tabs[i].Tab.onValueChanged.AddListener(OnToggleTab);
         }
         OnToggleTab(true);
@@ -68,5 +75,39 @@ public class BookUI : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void SetInteractable(bool value)
+    {
+        for (int i = 0; i < tabs.Length; i++)
+        {
+            tabs[i].Tab.interactable = value;
+        }
+        backButton.interactable = value;
+        debugButton.interactable = value;
+        if (buttonFlash != null)
+            Destroy(buttonFlash);
+    }
+
+    public void FlashTab(PlacableDataType tabType)
+    {
+        if (buttonFlash != null)
+            Destroy(buttonFlash);
+        for (int i = 0; i < tabs.Length; i++)
+        {
+            if (tabs[i].PlacableDataType == tabType)
+            {
+                tabs[i].Tab.interactable = true;
+                if (buttonFlash == null)
+                    buttonFlash = Instantiate(uiManager.flashPrefab);
+                buttonFlash.GetComponent<FlashUI>().SetTarget(tabs[i].Tab.targetGraphic as Image);
+            }
+            else
+            {
+                tabs[i].Tab.interactable = false;
+            }
+        }
+        backButton.interactable = false;
+        debugButton.interactable = false;
     }
 }

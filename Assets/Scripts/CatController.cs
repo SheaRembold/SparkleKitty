@@ -27,6 +27,10 @@ public class CatController : Clickable
         public virtual void OnExit()
         {
         }
+
+        public virtual void HitToy()
+        {
+        }
     }
 
     public class SitState : CatState
@@ -45,8 +49,8 @@ public class CatController : Clickable
 
             for (int i = 0; i < PlacementManager.Instance.chasables.Count; i++)
             {
-                if (PlacementManager.Instance.chasables[i].Attraction >= 1f
-                    && (controller.chaseTarget == null || PlacementManager.Instance.chasables[i].Attraction > controller.chaseTarget.Attraction))
+                if (PlacementManager.Instance.chasables[i].Attraction(controller) >= 1f
+                    && (controller.chaseTarget == null || PlacementManager.Instance.chasables[i].Attraction(controller) > controller.chaseTarget.Attraction(controller)))
                 {
                     controller.chaseTarget = PlacementManager.Instance.chasables[i];
                 }
@@ -110,8 +114,8 @@ public class CatController : Clickable
             
             for (int i = 0; i < PlacementManager.Instance.chasables.Count; i++)
             {
-                if (PlacementManager.Instance.chasables[i].Attraction >= 1f
-                    && (controller.chaseTarget == null || PlacementManager.Instance.chasables[i].Attraction > controller.chaseTarget.Attraction))
+                if (PlacementManager.Instance.chasables[i].Attraction(controller) >= 1f
+                    && (controller.chaseTarget == null || PlacementManager.Instance.chasables[i].Attraction(controller) > controller.chaseTarget.Attraction(controller)))
                 {
                     controller.chaseTarget = PlacementManager.Instance.chasables[i];
                 }
@@ -199,6 +203,13 @@ public class CatController : Clickable
             controller.animator.SetTrigger("Sit");
             if (Random.value < controller.MeowProbability)
                 controller.MeowMaker();
+            if (HelpManager.Instance.CurrentStep == TutorialStep.Start)
+            {
+                //if (controller.HelpParticles != null)
+                //controller.HelpParticles.SetActive(true);
+                if (controller.HelpOutline != null)
+                    controller.HelpOutline.enabled = true;
+            }
         }
 
         public override void OnUpdate()
@@ -302,6 +313,15 @@ public class CatController : Clickable
             {
                 controller.AddMood(1f / (CatManager.Instance.MoodColors.Length - 1));
                 controller.SetState<SitState>();
+            }
+        }
+
+        public override void HitToy()
+        {
+            base.HitToy();
+            if (controller.target != null && controller.target.GetComponent<AnimatedToy>() != null)
+            {
+                controller.target.GetComponent<AnimatedToy>().HitToy();
             }
         }
     }
@@ -449,12 +469,10 @@ public class CatController : Clickable
 
         if (HelpManager.Instance.CurrentStep == TutorialStep.Start)
         {
-            //if (HelpParticles != null)
-                //HelpParticles.SetActive(true);
-            if (HelpOutline != null)
-                HelpOutline.enabled = true;
+            targetPos = Vector3.zero;
+            SetState<TutorialWalkState>();
         }
-        if (HelpManager.Instance.CurrentStep == TutorialStep.Mail)
+        else if (HelpManager.Instance.CurrentStep == TutorialStep.Mail)
         {
             targetPos = MailboxManager.Instance.transform.localPosition;
             SetState<TutorialWalkState>();
@@ -529,9 +547,14 @@ public class CatController : Clickable
     
     public override void Click(RaycastHit hit)
     {
-        if (currentState is SitState || currentState is WalkState)
+        if (currentState is SitState || currentState is WalkState || currentState is TutorialSitState || currentState is TutorialWalkState)
         {
             SetState<PetState>();
         }
+    }
+
+    public void HitToy()
+    {
+        currentState.HitToy();
     }
 }

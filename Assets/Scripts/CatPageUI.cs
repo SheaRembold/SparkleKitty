@@ -44,6 +44,9 @@ public class CatPageUI : ItemPageUI
             for (int i = 0; i < requs.Count; i++)
                 requs[i].GetComponent<Button>().interactable = false;
             requs[1].GetComponent<Button>().interactable = true;
+            prevButton.interactable = false;
+            nextButton.interactable = false;
+            Book.SetInteractable(false);
         }
         else
         {
@@ -51,6 +54,9 @@ public class CatPageUI : ItemPageUI
                 Destroy(buttonFlash);
             for (int i = 0; i < requs.Count; i++)
                 requs[i].GetComponent<Button>().interactable = true;
+            prevButton.interactable = true;
+            nextButton.interactable = true;
+            Book.SetInteractable(true);
         }
     }
 

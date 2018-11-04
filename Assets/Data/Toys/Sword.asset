@@ -14,7 +14,7 @@ MonoBehaviour:
   Name: Sword
   DataType: 2
   Icon: {fileID: 21300000, guid: 820111faecee6804d91f2be5188855b7, type: 3}
-  Prefab: {fileID: 1632954494711690, guid: 5a9b82dbc95ce2948bc9acf7256957dd, type: 2}
+  Prefab: {fileID: 1248519913348348, guid: accd18cc53046494aa56b71a023ef481, type: 2}
   Attached: 0
   Unlimited: 0
   BuildRequirements:

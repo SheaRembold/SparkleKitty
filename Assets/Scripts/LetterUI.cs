@@ -41,7 +41,7 @@ public class LetterUI : MonoBehaviour
             {
                 gift = Instantiate(giftPrefab);
                 gift.transform.SetParent(content, false);
-                (gift.transform as RectTransform).anchoredPosition = new Vector2(125, -360 - 160 * giftIndex);
+                (gift.transform as RectTransform).anchoredPosition = new Vector2(195 + 230 * (giftIndex / 2), -450 - 230 * (giftIndex % 2));
                 gifts.Add(gift);
             }
             gift.GetComponentInChildren<Image>().sprite = pair.Key.Icon;

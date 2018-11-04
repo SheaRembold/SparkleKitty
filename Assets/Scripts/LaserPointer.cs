@@ -53,5 +53,5 @@ public class LaserPointer : MonoBehaviour, IChasable
     }
 
     public Vector3 ChasePosition { get { return hitPoint.HasValue ? hitPoint.Value : Vector3.zero; } }
-    public float Attraction { get { return hitPoint.HasValue ? 1f : 0f; } }
+    public float Attraction(CatController cat) { return hitPoint.HasValue ? 1f : 0f; }
 }

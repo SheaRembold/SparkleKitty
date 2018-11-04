@@ -47,8 +47,13 @@ public class ItemPageUI : MonoBehaviour
     protected int current;
 
     [SerializeField]
-    protected List<GameObject> requs = new List<GameObject>();
+    protected Button prevButton;
+    [SerializeField]
+    protected Button nextButton;
 
+    [SerializeField]
+    protected List<GameObject> requs = new List<GameObject>();
+    
     [System.NonSerialized]
     public BookUI Book;
 
@@ -229,18 +234,45 @@ public class ItemPageUI : MonoBehaviour
             }
         }
 
-        if (HelpManager.Instance.CurrentStep == TutorialStep.PlaceTreat)
+        if ((HelpManager.Instance.CurrentStep == TutorialStep.CraftToy || HelpManager.Instance.CurrentStep == TutorialStep.PlaceToy) && buildables[current].name != "FeltMouse")
+        {
+            if (buttonFlash == null)
+                Destroy(buttonFlash);
+            UseButton.interactable = false;
+            CraftButton.interactable = false;
+            prevButton.interactable = false;
+            nextButton.interactable = false;
+            Book.FlashTab(PlacableDataType.Toy);
+        }
+        else if (HelpManager.Instance.CurrentStep == TutorialStep.PlaceTreat || HelpManager.Instance.CurrentStep == TutorialStep.PlaceToy)
         {
             if (buttonFlash == null)
                 buttonFlash = Instantiate(Book.uiManager.flashPrefab);
             buttonFlash.GetComponent<FlashUI>().SetTarget(UseButton.targetGraphic as Image);
             UseButton.interactable = true;
             CraftButton.interactable = false;
+            prevButton.interactable = false;
+            nextButton.interactable = false;
+            Book.SetInteractable(false);
+        }
+        else if (HelpManager.Instance.CurrentStep == TutorialStep.CraftToy)
+        {
+            if (buttonFlash == null)
+                buttonFlash = Instantiate(Book.uiManager.flashPrefab);
+            buttonFlash.GetComponent<FlashUI>().SetTarget(CraftButton.targetGraphic as Image);
+            UseButton.interactable = false;
+            CraftButton.interactable = true;
+            prevButton.interactable = false;
+            nextButton.interactable = false;
+            Book.SetInteractable(false);
         }
         else
         {
             if (buttonFlash != null)
                 Destroy(buttonFlash);
+            prevButton.interactable = true;
+            nextButton.interactable = true;
+            Book.SetInteractable(true);
         }
     }
     
@@ -260,7 +292,11 @@ public class ItemPageUI : MonoBehaviour
         }
         PlayerManager.Instance.AddInventory(buildables[current]);
 
-        //UpdateRecipe(buildables);
+        if (HelpManager.Instance.CurrentStep == TutorialStep.CraftToy)
+        {
+            HelpManager.Instance.CompleteTutorialStep(TutorialStep.CraftToy);
+            UpdateRecipe(buildables);
+        }
     }
     
     public virtual void UseItem()
