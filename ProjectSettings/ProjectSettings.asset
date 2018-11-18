@@ -7,7 +7,7 @@ PlayerSettings:
   productGUID: 92d7131f21370aa46aefdb3791e5b10b
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
-  defaultScreenOrientation: 0
+  defaultScreenOrientation: 3
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
@@ -280,7 +280,7 @@ PlayerSettings:
     - Oculus
     - OpenVR
   - m_BuildTarget: Android
-    m_Enabled: 0
+    m_Enabled: 1
     m_Devices: []
   m_BuildTargetEnableVuforiaSettings:
   - m_BuildTarget: Android

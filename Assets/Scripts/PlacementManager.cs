@@ -261,7 +261,7 @@ public class PlacementManager : MonoBehaviour
         {
             time += Time.deltaTime;
             letter.transform.position = Vector3.Lerp(startPos, provider.viewAttachPoint.position + provider.viewAttachPoint.forward * (0.3f * provider.viewAttachPoint.localScale.z), time / moveLetterTime);
-            letter.transform.rotation = Quaternion.Lerp(startRot, provider.viewAttachPoint.rotation, time);
+            letter.transform.rotation = Quaternion.Lerp(startRot, provider.viewAttachPoint.rotation, time / moveLetterTime);
             yield return null;
         }
 

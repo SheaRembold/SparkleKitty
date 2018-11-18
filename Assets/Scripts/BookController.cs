@@ -17,6 +17,7 @@ public class BookController : Clickable
 
     GraphicRaycaster graphicRaycaster;
     CanvasRaycastTarget canvasRaycastTarget;
+    Animator animator;
 
     private void Awake()
     {
@@ -24,6 +25,7 @@ public class BookController : Clickable
 
         graphicRaycaster = uiRoot.GetComponent<GraphicRaycaster>();
         canvasRaycastTarget = uiRoot.GetComponent<CanvasRaycastTarget>();
+        animator = GetComponent<Animator>();
 
         if (HelpManager.Instance.CurrentStep <= TutorialStep.GrabBook)
             CloseBook();
@@ -49,6 +51,7 @@ public class BookController : Clickable
     public void CloseBook()
     {
         uiRoot.SetActive(false);
+        animator.SetBool("IsOpen", false);
         if (PlacementManager.Instance.IsUsingSteamVR)
             canvasRaycastTarget.enabled = false;
         else
@@ -58,6 +61,7 @@ public class BookController : Clickable
     public void OpenBook()
     {
         uiRoot.SetActive(true);
+        animator.SetBool("IsOpen", true);
         if (PlacementManager.Instance.IsUsingSteamVR)
             canvasRaycastTarget.enabled = true;
         else
