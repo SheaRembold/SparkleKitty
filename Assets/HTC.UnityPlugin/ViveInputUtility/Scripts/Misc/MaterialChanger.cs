@@ -1,10 +1,12 @@
-﻿using HTC.UnityPlugin.ColliderEvent;
+﻿//========= Copyright 2016-2018, HTC Corporation. All rights reserved. ===========
+
+using HTC.UnityPlugin.ColliderEvent;
 using HTC.UnityPlugin.Utility;
-using HTC.UnityPlugin.Vive;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+// This component shows the status that interacting with ColliderEventCaster
 public class MaterialChanger : MonoBehaviour
     , IColliderEventHoverEnterHandler
     , IColliderEventHoverExitHandler
@@ -21,11 +23,19 @@ public class MaterialChanger : MonoBehaviour
     public Material Pressed;
     public Material dragged;
 
-    public ControllerButton heighlightButton = ControllerButton.Trigger;
+    public ColliderButtonEventData.InputButton heighlightButton = ColliderButtonEventData.InputButton.Trigger;
 
     private HashSet<ColliderHoverEventData> hovers = new HashSet<ColliderHoverEventData>();
     private HashSet<ColliderButtonEventData> presses = new HashSet<ColliderButtonEventData>();
     private IndexedSet<ColliderButtonEventData> drags = new IndexedSet<ColliderButtonEventData>();
+
+    public static void SetAllChildrenHeighlightButton(GameObject parent, ColliderButtonEventData.InputButton button)
+    {
+        var matChangers = ListPool<MaterialChanger>.Get();
+        parent.GetComponentsInChildren(matChangers);
+        for (int i = matChangers.Count - 1; i >= 0; --i) { matChangers[i].heighlightButton = button; }
+        ListPool<MaterialChanger>.Release(matChangers);
+    }
 
     private void Start()
     {
@@ -48,7 +58,7 @@ public class MaterialChanger : MonoBehaviour
 
     public void OnColliderEventPressEnter(ColliderButtonEventData eventData)
     {
-        if (!eventData.IsViveButton(heighlightButton)) { return; }
+        if (eventData.button != heighlightButton) { return; }
 
         presses.Add(eventData);
 

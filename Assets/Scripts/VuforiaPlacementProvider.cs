@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityARInterface;
+using UnityEngine.Experimental.XR;
 #if VUFORIA
 using Vuforia;
 

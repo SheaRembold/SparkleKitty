@@ -1,4 +1,4 @@
-﻿//========= Copyright 2016-2017, HTC Corporation. All rights reserved. ===========
+﻿//========= Copyright 2016-2018, HTC Corporation. All rights reserved. ===========
 
 using HTC.UnityPlugin.Utility;
 using System;
@@ -22,7 +22,6 @@ namespace HTC.UnityPlugin.Pointer3D
     {
         public const float MIN_SEGMENT_DISTANCE = 0.01f;
 
-        private Pointer3DEventData hoverEventData;
         private ReadOnlyCollection<Pointer3DEventData> buttonEventDataListReadOnly;
         private ReadOnlyCollection<RaycastResult> sortedRaycastResultsReadOnly;
         private ReadOnlyCollection<Vector3> breakPointsReadOnly;
@@ -35,11 +34,8 @@ namespace HTC.UnityPlugin.Pointer3D
         public float clickInterval = 0.3f;
 
         public bool showDebugRay = true;
-
-        public Pointer3DEventData HoverEventData
-        {
-            get { return hoverEventData ?? (hoverEventData = new Pointer3DEventData(this, EventSystem.current)); }
-        }
+        
+        public Pointer3DEventData HoverEventData { get { return buttonEventDataList.Count > 0 ? buttonEventDataList[0] : null; } }
 
         public ReadOnlyCollection<Pointer3DEventData> ButtonEventDataList
         {
@@ -100,25 +96,19 @@ namespace HTC.UnityPlugin.Pointer3D
                 SetLagacyRaycastMode(m_raycastMode);
                 m_raycastMode = RaycastMode.DefaultRaycast;
             }
-
-            Pointer3DInputModule.AddRaycaster(this);
         }
 
         // override OnEnable & OnDisable on purpose so that this BaseRaycaster won't be registered into RaycasterManager
         protected override void OnEnable()
         {
             //base.OnEnable();
+            Pointer3DInputModule.AddRaycaster(this);
         }
 
         protected override void OnDisable()
         {
             //base.OnDisable();
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            Pointer3DInputModule.RemoveRaycasters(this);
+            Pointer3DInputModule.RemoveRaycaster(this);
         }
 
         public virtual void CleanUpRaycast()
@@ -394,5 +384,26 @@ namespace HTC.UnityPlugin.Pointer3D
             }
         }
         #endregion
+
+        public override string ToString()
+        {
+            var str = string.Empty;
+            str += "Raycaster path: " + Pointer3DInputModule.PrintGOPath(gameObject) + "(" + GetType().Name + ")\n";
+            str += "Raycaster transform: " + "pos" + transform.position.ToString("0.00") + " " + "rot" + transform.eulerAngles.ToString("0.0") + "\n";
+
+            for (int i = 0, imax = buttonEventDataList.Count; i < imax; ++i)
+            {
+                var eventData = buttonEventDataList[i];
+                if (eventData == null) { continue; }
+
+                if (eventData.eligibleForClick || (i == 0 && eventData.pointerEnter != null)) // is hover event?
+                {
+                    str += "<b>EventData: [" + i + "]</b>\n";
+                    str += eventData.ToString();
+                }
+            }
+
+            return str;
+        }
     }
 }

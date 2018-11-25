@@ -1,7 +1,8 @@
-﻿//========= Copyright 2016-2017, HTC Corporation. All rights reserved. ===========
+﻿//========= Copyright 2016-2018, HTC Corporation. All rights reserved. ===========
 
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace HTC.UnityPlugin.Pointer3D
 {
@@ -57,7 +58,7 @@ namespace HTC.UnityPlugin.Pointer3D
                     var go = new GameObject(name + " FallbackCamera");
                     go.SetActive(false);
                     // place fallback camera at root to preserve world position
-                    //go.transform.SetParent(transform);
+                    go.transform.SetParent(EventSystem.current.transform, false);
                     go.transform.localPosition = Vector3.zero;
                     go.transform.localRotation = Quaternion.identity;
                     go.transform.localScale = Vector3.one;

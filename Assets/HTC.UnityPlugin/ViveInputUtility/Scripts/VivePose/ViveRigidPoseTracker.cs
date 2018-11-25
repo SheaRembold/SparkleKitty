@@ -1,12 +1,12 @@
-﻿//========= Copyright 2016-2017, HTC Corporation. All rights reserved. ===========
+﻿//========= Copyright 2016-2018, HTC Corporation. All rights reserved. ===========
 
-using HTC.UnityPlugin.PoseTracker;
 using UnityEngine;
+using HTC.UnityPlugin.Utility;
 
 namespace HTC.UnityPlugin.Vive
 {
+    [AddComponentMenu("HTC/VIU/Device Tracker/Vive Rigid Pose Tracker (Rigidbody)", 8)]
     [RequireComponent(typeof(Rigidbody))]
-    [AddComponentMenu("HTC/Vive/Vive Rigid Pose Tracker")]
     public class ViveRigidPoseTracker : VivePoseTracker
     {
         public const float MIN_FOLLOWING_DURATION = 0.02f;
@@ -14,7 +14,7 @@ namespace HTC.UnityPlugin.Vive
         public const float MAX_FOLLOWING_DURATION = 0.5f;
 
         private Rigidbody rigid;
-        private HTC.UnityPlugin.PoseTracker.Pose targetPose;
+        private RigidPose targetPose;
         private bool m_snap;
 
         [SerializeField]
@@ -41,34 +41,21 @@ namespace HTC.UnityPlugin.Vive
         {
             if (isPoseValid)
             {
-                // applying velocity
-                var diffPos = targetPose.pos - rigid.position;
-                if (Mathf.Approximately(diffPos.sqrMagnitude, 0f))
-                {
-                    rigid.velocity = Vector3.zero;
-                }
-                else
-                {
-                    rigid.velocity = diffPos / Mathf.Clamp(followingDuration, MIN_FOLLOWING_DURATION, MAX_FOLLOWING_DURATION);
-                }
-
-                // applying angular velocity
-                float angle;
-                Vector3 axis;
-                (targetPose.rot * Quaternion.Inverse(rigid.rotation)).ToAngleAxis(out angle, out axis);
-                while (angle > 360f) { angle -= 360f; }
-
-                if (Mathf.Approximately(angle, 0f) || float.IsNaN(axis.x))
-                {
-                    rigid.angularVelocity = Vector3.zero;
-                }
-                else
-                {
-                    angle *= Mathf.Deg2Rad / Mathf.Clamp(followingDuration, MIN_FOLLOWING_DURATION, MAX_FOLLOWING_DURATION); // convert to radius speed
-                    if (rigid.maxAngularVelocity < angle) { rigid.maxAngularVelocity = angle; }
-                    rigid.angularVelocity = axis * angle;
-                }
+                RigidPose.SetRigidbodyVelocity(rigid, rigid.position, targetPose.pos, followingDuration);
+                RigidPose.SetRigidbodyAngularVelocity(rigid, rigid.rotation, targetPose.rot, followingDuration);
             }
+            else
+            {
+                rigid.velocity = Vector3.zero;
+                rigid.angularVelocity = Vector3.zero;
+            }
+        }
+
+        protected override void OnDisable()
+        {
+            rigid.velocity = Vector3.zero;
+            rigid.angularVelocity = Vector3.zero;
+            base.OnDisable();
         }
 
         public override void OnNewPoses()
@@ -76,14 +63,14 @@ namespace HTC.UnityPlugin.Vive
             var deviceIndex = viveRole.GetDeviceIndex();
 
             // set targetPose to device pose
-            targetPose = VivePose.GetPose(deviceIndex) * new HTC.UnityPlugin.PoseTracker.Pose(posOffset, Quaternion.Euler(rotOffset));
+            targetPose = VivePose.GetPose(deviceIndex) * new RigidPose(posOffset, Quaternion.Euler(rotOffset));
             ModifyPose(ref targetPose, origin);
 
             // transform to world space
             var o = origin != null ? origin : transform.parent;
             if (o != null)
             {
-                targetPose = new HTC.UnityPlugin.PoseTracker.Pose(o) * targetPose;
+                targetPose = new RigidPose(o) * targetPose;
                 targetPose.pos.Scale(o.localScale);
             }
 

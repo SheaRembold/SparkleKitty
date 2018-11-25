@@ -1,0 +1,22 @@
+# MTL
+
+newmtl Layer_2_mtl
+	map_Kd smore roasted bite_Layer_2.png
+
+
+newmtl top_mtl
+	map_Kd smore roasted bite_top.png
+
+
+newmtl marsh_mtl
+	map_Kd smore roasted bite_marsh.png
+
+
+newmtl choc_mtl
+	map_Kd smore roasted bite_choc.png
+
+
+newmtl bottom_mtl
+	map_Kd smore roasted bite_bottom.png
+
+

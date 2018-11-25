@@ -3,7 +3,7 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -14,7 +14,7 @@ MonoBehaviour:
   Name: Sushi
   DataType: 3
   Icon: {fileID: 21300000, guid: 2e910f5e7043dc241b1630510920ef40, type: 3}
-  Prefab: {fileID: 1323498488211722, guid: 7ee9a8549968e0c41bc9bc15a2dce2e3, type: 2}
+  Prefab: {fileID: 1980405880296604, guid: 6226ceeae3e87a34e966e5f4aa1a9891, type: 2}
   Attached: 0
   Unlimited: 0
   BuildRequirements:

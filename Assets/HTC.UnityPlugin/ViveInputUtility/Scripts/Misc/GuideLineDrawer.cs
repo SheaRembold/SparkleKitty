@@ -1,4 +1,6 @@
-﻿using HTC.UnityPlugin.Pointer3D;
+﻿//========= Copyright 2016-2018, HTC Corporation. All rights reserved. ===========
+
+using HTC.UnityPlugin.Pointer3D;
 using UnityEngine;
 
 public class GuideLineDrawer : MonoBehaviour

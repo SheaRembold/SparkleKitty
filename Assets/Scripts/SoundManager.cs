@@ -21,6 +21,9 @@ public class SoundManager : MonoBehaviour
     AudioSource MusicSource;
     AudioSource FxSource;
     public bool FXEnabled = true;
+    public float BackgroundLength = 300f;
+    int currentBack = -1;
+    float lastBackChange;
 
     private void Awake()
     {
@@ -29,6 +32,7 @@ public class SoundManager : MonoBehaviour
         MusicSource = gameObject.AddComponent<AudioSource>();
         MusicSource.outputAudioMixerGroup = MusicGroup;
         MusicSource.playOnAwake = false;
+        MusicSource.loop = true;
 
         FxSource = gameObject.AddComponent<AudioSource>();
         FxSource.outputAudioMixerGroup = FxGroup;
@@ -37,27 +41,33 @@ public class SoundManager : MonoBehaviour
 
     void Start()
     {
-        MusicSource.loop = true;
-        PlayBackground(true);
+        PlayBackground();
     }
-
-    public void PlayBackground(bool flipper)
-    {
-        if (flipper)
-        {
-            MusicSource.clip = BackgroundAudio[1];
-            MusicSource.Play();
-        }
-        else
-        {
-            MusicSource.Stop();
-        }
-    }
-
 
     void Update()
     {
+        if (Time.time - lastBackChange > BackgroundLength)
+            PlayBackground();
+    }
 
+    public void PlayBackground()
+    {
+        if (BackgroundAudio.Count > 1)
+        {
+            int newBack = Random.Range(0, BackgroundAudio.Count);
+            while(newBack == currentBack)
+                newBack = Random.Range(0, BackgroundAudio.Count);
+            currentBack = newBack;
+        }
+        else
+        {
+            currentBack = 0;
+        }
+
+        MusicSource.clip = BackgroundAudio[currentBack];
+        MusicSource.Play();
+
+        lastBackChange = Time.time;
     }
 
     public void SimpleButtonClick()
@@ -66,7 +76,6 @@ public class SoundManager : MonoBehaviour
         {
             PlayGroup("ButtonClick");
         }
-
     }
 
     public void SimpleMapClick()

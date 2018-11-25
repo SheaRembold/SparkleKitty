@@ -1,17 +1,17 @@
-﻿//========= Copyright 2016-2017, HTC Corporation. All rights reserved. ===========
+﻿//========= Copyright 2016-2018, HTC Corporation. All rights reserved. ===========
 
+using HTC.UnityPlugin.Utility;
 using UnityEngine;
 
 namespace HTC.UnityPlugin.PoseTracker
 {
-    [AddComponentMenu("HTC/Pose Tracker/Pose Stablizer")]
     public class PoseStablizer : BasePoseModifier
     {
-        public float positionThreshold = 0.003f; // meter
-        public float rotationThreshold = 1.0f; // degree
+        public float positionThreshold = 0.0005f; // meter
+        public float rotationThreshold = 0.5f; // degree
 
         private bool firstPose = true;
-        private Pose prevPose;
+        private RigidPose prevPose;
 
         protected override void OnEnable()
         {
@@ -19,7 +19,7 @@ namespace HTC.UnityPlugin.PoseTracker
             ResetFirstPose();
         }
 
-        public override void ModifyPose(ref Pose pose, Transform origin)
+        public override void ModifyPose(ref RigidPose pose, Transform origin)
         {
             if (firstPose)
             {

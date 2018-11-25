@@ -1,4 +1,6 @@
-﻿using HTC.UnityPlugin.Utility;
+﻿//========= Copyright 2016-2018, HTC Corporation. All rights reserved. ===========
+
+using HTC.UnityPlugin.Utility;
 using HTC.UnityPlugin.Vive;
 using System.Collections.Generic;
 using UnityEngine;

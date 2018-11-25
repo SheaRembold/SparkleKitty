@@ -1,4 +1,4 @@
-﻿//========= Copyright 2016-2017, HTC Corporation. All rights reserved. ===========
+﻿//========= Copyright 2016-2018, HTC Corporation. All rights reserved. ===========
 
 using HTC.UnityPlugin.Utility;
 using System;
@@ -14,7 +14,7 @@ namespace HTC.UnityPlugin.Pointer3D
         private static bool isApplicationQuitting = false;
 
         private static readonly IndexedSet<Pointer3DRaycaster> raycasters = new IndexedSet<Pointer3DRaycaster>();
-        private static readonly List<Pointer3DRaycaster> processingRaycasters = new List<Pointer3DRaycaster>();
+        private static IndexedSet<Pointer3DRaycaster> processingRaycasters = new IndexedSet<Pointer3DRaycaster>();
         private static int validEventDataId = PointerInputModule.kFakeTouchesId - 1;
 
 #if UNITY_5_5_OR_NEWER
@@ -138,15 +138,13 @@ namespace HTC.UnityPlugin.Pointer3D
         {
             base.OnDisable();
 
-            if (Active)
+            if (Active && processingRaycasters.Count == 0)
             {
                 for (var i = raycasters.Count - 1; i >= 0; --i)
                 {
                     instance.CleanUpRaycaster(raycasters[i]);
                 }
             }
-
-            eventSystem.SetSelectedGameObject(null, GetBaseEventData());
         }
 
         public static readonly Comparison<RaycastResult> defaultRaycastComparer = RaycastComparer;
@@ -207,24 +205,24 @@ namespace HTC.UnityPlugin.Pointer3D
             raycasters.AddUnique(raycaster);
         }
 
-        public static void RemoveRaycasters(Pointer3DRaycaster raycaster)
+        public static void RemoveRaycaster(Pointer3DRaycaster raycaster)
         {
-            raycasters.Remove(raycaster);
+            if (!raycasters.Remove(raycaster)) { return; }
+
+            if (!processingRaycasters.Contains(raycaster) && Active)
+            {
+                Instance.CleanUpRaycaster(raycaster);
+            }
         }
+
+        [Obsolete("Use RemoveRaycaster instead")]
+        public static void RemoveRaycasters(Pointer3DRaycaster raycaster) { RemoveRaycaster(raycaster); }
 
         protected void CleanUpRaycaster(Pointer3DRaycaster raycaster)
         {
-            raycaster.CleanUpRaycast();
+            if (raycaster == null) { return; }
 
             var hoverEventData = raycaster.HoverEventData;
-
-            // hover event
-            hoverEventData.pointerCurrentRaycast = default(RaycastResult);
-
-            if (hoverEventData.pointerEnter != null)
-            {
-                HandlePointerExitAndEnter(hoverEventData, null);
-            }
 
             // buttons event
             for (int i = 0, imax = raycaster.ButtonEventDataList.Count; i < imax; ++i)
@@ -233,14 +231,33 @@ namespace HTC.UnityPlugin.Pointer3D
                 if (buttonEventData == null) { continue; }
 
                 buttonEventData.Reset();
-                buttonEventData.pointerCurrentRaycast = default(RaycastResult);
 
-                ProcessPressUp(buttonEventData);
+                if (buttonEventData.pressPrecessed)
+                {
+                    ProcessPressUp(buttonEventData);
+                    HandlePressExitAndEnter(buttonEventData, null);
+                }
 
                 if (buttonEventData.pointerEnter != null)
                 {
-                    HandlePointerExitAndEnter(buttonEventData, null);
+                    if (buttonEventData == hoverEventData)
+                    {
+                        // perform exit event only for hover event data
+                        HandlePointerExitAndEnter(buttonEventData, null);
+                    }
+                    else
+                    {
+                        buttonEventData.pointerEnter = null;
+                    }
                 }
+            }
+
+            raycaster.CleanUpRaycast();
+
+            for (int i = 0, imax = raycaster.ButtonEventDataList.Count; i < imax; ++i)
+            {
+                raycaster.ButtonEventDataList[i].pointerPressRaycast = default(RaycastResult);
+                raycaster.ButtonEventDataList[i].pointerCurrentRaycast = default(RaycastResult);
             }
         }
 
@@ -251,12 +268,20 @@ namespace HTC.UnityPlugin.Pointer3D
 
             // use another list to iterate raycasters
             // incase that raycasters may changed during this process cycle
-            processingRaycasters.AddRange(raycasters);
+            for (int i = 0, imax = raycasters.Count; i < imax; ++i)
+            {
+                var r = raycasters[i];
+
+                if (r != null)
+                {
+                    processingRaycasters.Add(r);
+                }
+            }
+
             for (var i = processingRaycasters.Count - 1; i >= 0; --i)
             {
                 var raycaster = processingRaycasters[i];
-
-                if (raycaster == null || !raycaster.isActiveAndEnabled) { continue; }
+                if (raycaster == null) { continue; }
 
                 raycaster.Raycast();
                 var result = raycaster.FirstRaycastResult();
@@ -266,8 +291,10 @@ namespace HTC.UnityPlugin.Pointer3D
                 var raycasterPos = raycaster.transform.position;
                 var raycasterRot = raycaster.transform.rotation;
 
-                // hover event
                 var hoverEventData = raycaster.HoverEventData;
+                if (hoverEventData == null) { continue; }
+
+                // gen shared data and put in hover event
                 hoverEventData.Reset();
                 hoverEventData.delta = Vector2.zero;
                 hoverEventData.scrollDelta = scrollDelta;
@@ -279,16 +306,11 @@ namespace HTC.UnityPlugin.Pointer3D
                 hoverEventData.rotationDelta = Quaternion.Inverse(hoverEventData.rotation) * raycasterRot;
                 hoverEventData.rotation = raycasterRot;
 
-                if (hoverEventData.pointerEnter != result.gameObject)
-                {
-                    HandlePointerExitAndEnter(hoverEventData, result.gameObject);
-                }
-
-                // buttons event
+                // copy data to other button event
                 for (int j = 0, jmax = raycaster.ButtonEventDataList.Count; j < jmax; ++j)
                 {
                     var buttonEventData = raycaster.ButtonEventDataList[j];
-                    if (buttonEventData == null) { continue; }
+                    if (buttonEventData == null || buttonEventData == hoverEventData) { continue; }
 
                     buttonEventData.Reset();
                     buttonEventData.delta = Vector2.zero;
@@ -300,15 +322,21 @@ namespace HTC.UnityPlugin.Pointer3D
                     buttonEventData.position3D = hoverEventData.position3D;
                     buttonEventData.rotationDelta = hoverEventData.rotationDelta;
                     buttonEventData.rotation = hoverEventData.rotation;
+                }
+
+                ProcessPress(hoverEventData);
+                ProcessMove(hoverEventData);
+                ProcessDrag(hoverEventData);
+
+                // other buttons event
+                for (int j = 1, jmax = raycaster.ButtonEventDataList.Count; j < jmax; ++j)
+                {
+                    var buttonEventData = raycaster.ButtonEventDataList[j];
+                    if (buttonEventData == null || buttonEventData == hoverEventData) { continue; }
+
+                    buttonEventData.pointerEnter = hoverEventData.pointerEnter;
 
                     ProcessPress(buttonEventData);
-
-                    var hoverGO = buttonEventData.eligibleForClick ? result.gameObject : null;
-                    if (buttonEventData.pointerEnter != hoverGO)
-                    {
-                        HandlePointerExitAndEnter(buttonEventData, hoverGO);
-                    }
-
                     ProcessDrag(buttonEventData);
                 }
 
@@ -318,31 +346,54 @@ namespace HTC.UnityPlugin.Pointer3D
                     var scrollHandler = ExecuteEvents.GetEventHandler<IScrollHandler>(result.gameObject);
                     ExecuteEvents.ExecuteHierarchy(scrollHandler, hoverEventData, ExecuteEvents.scrollHandler);
                 }
+            }
 
-                if (!raycaster.isActiveAndEnabled)
+            if (isActiveAndEnabled)
+            {
+                for (var i = processingRaycasters.Count - 1; i >= 0; --i)
                 {
-                    CleanUpRaycaster(raycaster);
+                    var r = processingRaycasters[i];
+                    if (!raycasters.Contains(r))
+                    {
+                        CleanUpRaycaster(r);
+                    }
+                }
+            }
+            else
+            {
+                for (var i = processingRaycasters.Count - 1; i >= 0; --i)
+                {
+                    CleanUpRaycaster(processingRaycasters[i]);
                 }
             }
 
             processingRaycasters.Clear();
         }
 
+        protected virtual void ProcessMove(PointerEventData eventData)
+        {
+            var hoverGO = eventData.pointerCurrentRaycast.gameObject;
+            if (eventData.pointerEnter != hoverGO)
+            {
+                HandlePointerExitAndEnter(eventData, hoverGO);
+            }
+        }
+
         protected virtual void ProcessPress(Pointer3DEventData eventData)
         {
-            if (!eventData.eligibleForClick)
+            if (eventData.GetPress())
             {
-                if (eventData.GetPress())
+                if (!eventData.pressPrecessed)
                 {
                     ProcessPressDown(eventData);
                 }
+
+                HandlePressExitAndEnter(eventData, eventData.pointerCurrentRaycast.gameObject);
             }
-            else
+            else if (eventData.pressPrecessed)
             {
-                if (!eventData.GetPress())
-                {
-                    ProcessPressUp(eventData);
-                }
+                ProcessPressUp(eventData);
+                HandlePressExitAndEnter(eventData, null);
             }
         }
 
@@ -350,6 +401,7 @@ namespace HTC.UnityPlugin.Pointer3D
         {
             var currentOverGo = eventData.pointerCurrentRaycast.gameObject;
 
+            eventData.pressPrecessed = true;
             eventData.eligibleForClick = true;
             eventData.delta = Vector2.zero;
             eventData.dragging = false;
@@ -373,7 +425,7 @@ namespace HTC.UnityPlugin.Pointer3D
                 newPressed = ExecuteEvents.GetEventHandler<IPointerClickHandler>(currentOverGo);
             }
 
-            float time = Time.unscaledTime;
+            var time = Time.unscaledTime;
 
             if (newPressed == eventData.lastPress)
             {
@@ -411,25 +463,22 @@ namespace HTC.UnityPlugin.Pointer3D
         {
             var currentOverGo = eventData.pointerCurrentRaycast.gameObject;
 
-            if (eventData.pointerPress != null)
+            ExecuteEvents.Execute(eventData.pointerPress, eventData, ExecuteEvents.pointerUpHandler);
+
+            // see if we mouse up on the same element that we clicked on...
+            var pointerUpHandler = ExecuteEvents.GetEventHandler<IPointerClickHandler>(currentOverGo);
+
+            // PointerClick and Drop events
+            if (eventData.pointerPress == pointerUpHandler && eventData.eligibleForClick)
             {
-                ExecuteEvents.Execute(eventData.pointerPress, eventData, ExecuteEvents.pointerUpHandler);
-
-                // see if we mouse up on the same element that we clicked on...
-                var pointerUpHandler = ExecuteEvents.GetEventHandler<IPointerClickHandler>(currentOverGo);
-
-                if (eventData.pointerPress == pointerUpHandler && eventData.eligibleForClick)
-                {
-                    ExecuteEvents.Execute(eventData.pointerPress, eventData, ExecuteEvents.pointerClickHandler);
-                }
+                ExecuteEvents.Execute(eventData.pointerPress, eventData, ExecuteEvents.pointerClickHandler);
             }
-
-            // Drop events
-            if (currentOverGo != null && eventData.pointerDrag != null && eventData.dragging)
+            else if (eventData.pointerDrag != null && eventData.dragging)
             {
                 ExecuteEvents.ExecuteHierarchy(currentOverGo, eventData, ExecuteEvents.dropHandler);
             }
 
+            eventData.pressPrecessed = false;
             eventData.eligibleForClick = false;
             eventData.pointerPress = null;
             eventData.rawPointerPress = null;
@@ -441,6 +490,16 @@ namespace HTC.UnityPlugin.Pointer3D
 
             eventData.dragging = false;
             eventData.pointerDrag = null;
+
+            // redo pointer enter / exit to refresh state
+            // so that if we moused over something that ignored it before
+            // due to having pressed on something else
+            // it now gets it.
+            if (currentOverGo != eventData.pointerEnter)
+            {
+                HandlePointerExitAndEnter(eventData, null);
+                HandlePointerExitAndEnter(eventData, currentOverGo);
+            }
         }
 
         protected bool ShouldStartDrag(Pointer3DEventData eventData)
@@ -467,7 +526,7 @@ namespace HTC.UnityPlugin.Pointer3D
             {
                 // Before doing drag we should cancel any pointer down state
                 // And clear selection!
-                if (eventData.pointerPress != null && eventData.pointerPress != eventData.pointerDrag)
+                if (eventData.pointerPress != eventData.pointerDrag)
                 {
                     ExecuteEvents.Execute(eventData.pointerPress, eventData, ExecuteEvents.pointerUpHandler);
 
@@ -479,13 +538,42 @@ namespace HTC.UnityPlugin.Pointer3D
             }
         }
 
+        protected static void HandlePressExitAndEnter(Pointer3DEventData eventData, GameObject newEnterTarget)
+        {
+            if (eventData.pressEnter == newEnterTarget) { return; }
+
+            var oldTarget = eventData.pressEnter == null ? null : eventData.pressEnter.transform;
+            var newTarget = newEnterTarget == null ? null : newEnterTarget.transform;
+            var commonRoot = default(Transform);
+
+            for (var t = oldTarget; t != null; t = t.parent)
+            {
+                if (newTarget != null && newTarget.IsChildOf(t))
+                {
+                    commonRoot = t;
+                    break;
+                }
+                else
+                {
+                    ExecuteEvents.Execute(t.gameObject, eventData, ExecutePointer3DEvents.PressExitHandler);
+                }
+            }
+
+            eventData.pressEnter = newEnterTarget;
+
+            for (var t = newTarget; t != commonRoot; t = t.parent)
+            {
+                ExecuteEvents.Execute(t.gameObject, eventData, ExecutePointer3DEvents.PressEnterHandler);
+            }
+        }
+
         protected void DeselectIfSelectionChanged(GameObject currentOverGo, BaseEventData pointerEvent)
         {
             // Selection tracking
             var selectHandlerGO = ExecuteEvents.GetEventHandler<ISelectHandler>(currentOverGo);
             // if we have clicked something new, deselect the old thing
             // leave 'selection handling' up to the press event though.
-            if (selectHandlerGO != eventSystem.currentSelectedGameObject)
+            if (eventSystem != null && selectHandlerGO != eventSystem.currentSelectedGameObject)
             {
                 eventSystem.SetSelectedGameObject(null, pointerEvent);
             }
@@ -520,6 +608,44 @@ namespace HTC.UnityPlugin.Pointer3D
             var data = GetAxisEventData(x, y, moveDeadZone);
             ExecuteEvents.Execute(selected, data, ExecuteEvents.moveHandler);
             return data.used;
+        }
+
+        public static string PrintGOPath(GameObject go)
+        {
+            var str = string.Empty;
+
+            if (go != null)
+            {
+                for (var t = go.transform; t != null; t = t.parent)
+                {
+                    if (!string.IsNullOrEmpty(str)) { str = "." + str; }
+                    str = t.name + str;
+                }
+            }
+
+            return str;
+        }
+
+        public override string ToString()
+        {
+            var str = string.Empty;
+            if (raycasters.Count == 0)
+            {
+                str += "No raycaster registered";
+            }
+            else
+            {
+                for (int i = 0, imax = raycasters.Count; i < imax; ++i)
+                {
+                    var raycaster = raycasters[i];
+                    if (raycaster == null) { continue; }
+
+                    str += "<b>Raycaster: [" + i + "]</b>\n";
+                    str += raycaster.ToString() + "\n";
+                }
+            }
+
+            return str;
         }
     }
 }

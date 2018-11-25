@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityARInterface;
+using UnityEngine.Experimental.XR;
 
 public class SteamVRPlacementProvider : PlacementProvider
 {
@@ -24,7 +24,7 @@ public class SteamVRPlacementProvider : PlacementProvider
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("ARGameObject")))
         {
-            plane = new BoundedPlane() { center = hit.point, rotation = hit.transform.rotation, extents = new Vector2(10, 10) };
+            plane = new BoundedPlane() { Center = hit.point, Pose = new Pose(hit.point, hit.transform.rotation), Size = new Vector2(10, 10) };
             return true;
         }
 

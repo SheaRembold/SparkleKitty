@@ -1,4 +1,4 @@
-﻿//========= Copyright 2016-2017, HTC Corporation. All rights reserved. ===========
+﻿//========= Copyright 2016-2018, HTC Corporation. All rights reserved. ===========
 
 using HTC.UnityPlugin.Pointer3D;
 using System;
@@ -72,25 +72,16 @@ namespace HTC.UnityPlugin.Vive
     // Custom PointerEventData implement for Vive controller.
     public class VivePointerEventData : Pointer3DEventData
     {
-        [Obsolete]
-        public readonly HandRole hand;
+        public ViveRaycaster viveRaycaster { get; private set; }
+        public ControllerButton viveButton { get; private set; }
 
-        public readonly ViveRoleProperty viveRole;
-        public readonly ControllerButton viveButton;
+        public ViveRoleProperty viveRole { get { return viveRaycaster.viveRole; } }
 
-        public VivePointerEventData(Pointer3DRaycaster ownerRaycaster, EventSystem eventSystem, ViveRoleProperty role, ControllerButton viveButton, InputButton mouseButton) : base(ownerRaycaster, eventSystem)
+        public VivePointerEventData(ViveRaycaster ownerRaycaster, EventSystem eventSystem, ControllerButton viveButton, InputButton mouseButton) : base(ownerRaycaster, eventSystem)
         {
-            viveRole = role;
+            this.viveRaycaster = ownerRaycaster;
             this.viveButton = viveButton;
-            button = mouseButton;
-        }
-
-        [Obsolete]
-        public VivePointerEventData(Pointer3DRaycaster ownerRaycaster, EventSystem eventSystem, HandRole hand, ControllerButton viveButton, InputButton mouseButton) : base(ownerRaycaster, eventSystem)
-        {
-            viveRole = ViveRoleProperty.New(hand);
-            this.viveButton = viveButton;
-            button = mouseButton;
+            this.button = mouseButton;
         }
 
         public override bool GetPress() { return ViveInput.GetPressEx(viveRole.roleType, viveRole.roleValue, viveButton); }

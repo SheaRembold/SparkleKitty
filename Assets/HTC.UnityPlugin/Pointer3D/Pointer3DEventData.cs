@@ -1,4 +1,4 @@
-﻿//========= Copyright 2016-2017, HTC Corporation. All rights reserved. ===========
+﻿//========= Copyright 2016-2018, HTC Corporation. All rights reserved. ===========
 
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -65,6 +65,8 @@ namespace HTC.UnityPlugin.Pointer3D
         public Quaternion pressRotation;
 
         public float pressDistance;
+        public GameObject pressEnter;
+        public bool pressPrecessed;
 
         public Pointer3DEventData(Pointer3DRaycaster ownerRaycaster, EventSystem eventSystem) : base(eventSystem)
         {
@@ -77,5 +79,17 @@ namespace HTC.UnityPlugin.Pointer3D
         public virtual bool GetPressDown() { return false; }
 
         public virtual bool GetPressUp() { return false; }
+
+        public override string ToString()
+        {
+            var str = string.Empty;
+            str += "eligibleForClick: " + eligibleForClick + "\n";
+            str += "pointerEnter: " + Pointer3DInputModule.PrintGOPath(pointerEnter) + "\n";
+            str += "pointerPress: " + Pointer3DInputModule.PrintGOPath(pointerPress) + "\n";
+            str += "lastPointerPress: " + Pointer3DInputModule.PrintGOPath(lastPress) + "\n";
+            str += "pressEnter: " + Pointer3DInputModule.PrintGOPath(pressEnter) + "\n";
+            str += "pointerDrag: " + Pointer3DInputModule.PrintGOPath(pointerDrag) + "\n";
+            return str;
+        }
     }
 }

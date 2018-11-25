@@ -1,10 +1,10 @@
-﻿//========= Copyright 2016-2017, HTC Corporation. All rights reserved. ===========
+﻿//========= Copyright 2016-2018, HTC Corporation. All rights reserved. ===========
 
+using HTC.UnityPlugin.Utility;
 using UnityEngine;
 
 namespace HTC.UnityPlugin.PoseTracker
 {
-    [AddComponentMenu("HTC/Pose Tracker/Pose Freezer")]
     public class PoseFreezer : BasePoseModifier
     {
         public bool freezePositionX = false;
@@ -15,7 +15,7 @@ namespace HTC.UnityPlugin.PoseTracker
         public bool freezeRotationY = false;
         public bool freezeRotationZ = true;
 
-        public override void ModifyPose(ref Pose pose, Transform origin)
+        public override void ModifyPose(ref RigidPose pose, Transform origin)
         {
             Vector3 freezePos;
             Vector3 freezeEuler;

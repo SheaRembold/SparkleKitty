@@ -1,4 +1,4 @@
-﻿//========= Copyright 2016-2017, HTC Corporation. All rights reserved. ===========
+﻿//========= Copyright 2016-2018, HTC Corporation. All rights reserved. ===========
 
 using System;
 using System.Collections;
@@ -75,20 +75,7 @@ namespace HTC.UnityPlugin.Utility
             m_ValueList = new List<TValue>(capacity);
         }
 
-        public int Count
-        {
-            get
-            {
-                if (m_Dictionary.Count != m_KeyList.Count || m_Dictionary.Count != m_ValueList.Count)
-                {
-                    UnityEngine.Debug.LogWarning("m_Dictionary.Count=" + m_Dictionary.Count + " m_KeyList.Count=" + m_KeyList.Count + " m_ValueList.Count=" + m_ValueList.Count);
-                    UnityEngine.Debug.LogWarning(m_Dictionary.ToString());
-                    UnityEngine.Debug.LogWarning(m_KeyList.ToString());
-                    UnityEngine.Debug.LogWarning(m_ValueList.ToString());
-                }
-                return m_Dictionary.Count;
-            }
-        }
+        public int Count { get { return m_Dictionary.Count; } }
 
         public bool IsReadOnly { get { return false; } }
 
@@ -112,6 +99,11 @@ namespace HTC.UnityPlugin.Utility
         public TValue GetValueByIndex(int index)
         {
             return m_ValueList[index];
+        }
+
+        public void SetValueByIndex(int index, TValue value)
+        {
+            m_ValueList[index] = value;
         }
 
         public KeyValuePair<TKey, TValue> GetKeyValuePairByIndex(int index)
@@ -269,7 +261,7 @@ namespace HTC.UnityPlugin.Utility
                 }
                 else
                 {
-                    if (removed != 0)
+                    if (removed > 0)
                     {
                         m_Dictionary[m_KeyList[i]] = i - removed;
                         m_KeyList[i - removed] = m_KeyList[i];
@@ -278,16 +270,27 @@ namespace HTC.UnityPlugin.Utility
                 }
             }
 
-            for (; removed > 0; --removed)
+            if (removed == 0)
             {
-                m_KeyList.RemoveAt(m_KeyList.Count - 1);
-                m_ValueList.RemoveAt(m_ValueList.Count - 1);
+                return;
+            }
+            else if (removed == Count)
+            {
+                Clear();
+            }
+            else
+            {
+                for (; removed > 0; --removed)
+                {
+                    m_KeyList.RemoveAt(m_KeyList.Count - 1);
+                    m_ValueList.RemoveAt(m_ValueList.Count - 1);
+                }
             }
         }
 
         private class Enumerator : IEnumerator<KeyValuePair<TKey, TValue>>
         {
-            private int iterator = 0;
+            private int iterator = -1;
             private IndexedTable<TKey, TValue> container;
 
             public Enumerator(IndexedTable<TKey, TValue> c) { container = c; }

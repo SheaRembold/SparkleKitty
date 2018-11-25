@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.Experimental.XR;
 
 public enum AreaType { None, Play, Build, Cook }
 
@@ -46,6 +47,7 @@ public class PlacementManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
     }
 
     private void Start()
@@ -98,13 +100,13 @@ public class PlacementManager : MonoBehaviour
         HelpUI.gameObject.SetActive(false);
         LoadingUI.SetActive(true);
 
-        GoogleARCore.AsyncTask<GoogleARCore.ApkAvailabilityStatus> availTask = GoogleARCore.Session.CheckApkAvailability();
+        /*GoogleARCore.AsyncTask<GoogleARCore.ApkAvailabilityStatus> availTask = GoogleARCore.Session.CheckApkAvailability();
         yield return availTask.WaitForCompletion();
 
         if (availTask.Result == GoogleARCore.ApkAvailabilityStatus.SupportedInstalled)
-        {
+        {*/
             provider = new ARPlacementProvider();
-        }
+        /*}
         else if (availTask.Result == GoogleARCore.ApkAvailabilityStatus.SupportedApkTooOld || availTask.Result == GoogleARCore.ApkAvailabilityStatus.SupportedNotInstalled)
         {
             GoogleARCore.AsyncTask<GoogleARCore.ApkInstallationStatus> installTask = GoogleARCore.Session.RequestApkInstallation(false);
@@ -122,7 +124,7 @@ public class PlacementManager : MonoBehaviour
         else
         {
             provider = new TestPlacementProvider();
-        }
+        }*/
 
         yield return new WaitUntil(() => provider.IsReady());
 
@@ -134,6 +136,7 @@ public class PlacementManager : MonoBehaviour
     private void StartPlacement()
     {
         playArea = Instantiate(PlayAreaPrefab).GetComponent<PlayArea>();
+        playArea.transform.SetParent(provider.GetRoot());
         currentArea = playArea;
         currentAreaType = AreaType.Play;
         //buildArea = BuildAreaPrefab.GetComponent<BuildArea>();
@@ -385,12 +388,12 @@ public class PlacementManager : MonoBehaviour
 
         if (placingArea)
         {
-            UnityARInterface.BoundedPlane plane;
+            BoundedPlane plane;
             if (provider.GetPlane(out plane))
             {
-                playArea.transform.position = plane.center;
-                playArea.transform.rotation = plane.rotation;
-                float scale = Mathf.Min(1f, plane.extents.x, plane.extents.y);
+                playArea.transform.position = plane.Center;
+                playArea.transform.rotation = plane.Pose.rotation;
+                float scale = Mathf.Min(1f, plane.Size.x, plane.Size.y);
                 playArea.transform.localScale = Vector3.one * scale;
                 playArea.gameObject.SetActive(true);
 

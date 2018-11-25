@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.XR;
 
 public abstract class PlacementProvider
 {
@@ -28,7 +29,12 @@ public abstract class PlacementProvider
         return true;
     }
 
-    public abstract bool GetPlane(out UnityARInterface.BoundedPlane plane);
+    public virtual Transform GetRoot()
+    {
+        return null;
+    }
+
+    public abstract bool GetPlane(out BoundedPlane plane);
 
     public virtual bool GetClickDown()
     {

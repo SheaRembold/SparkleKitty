@@ -1,8 +1,7 @@
-﻿//========= Copyright 2016-2017, HTC Corporation. All rights reserved. ===========
+﻿//========= Copyright 2016-2018, HTC Corporation. All rights reserved. ===========
 
 using HTC.UnityPlugin.Utility;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -225,8 +224,8 @@ namespace HTC.UnityPlugin.ColliderEvent
             for (int i = 0, imax = axisEventDataList.Count; i < imax; ++i)
             {
                 var eventData = axisEventDataList[i];
-
-                if (!eventData.IsValueChangedThisFrame()) { continue; }
+                
+                if ((eventData.v4 = eventData.GetDelta()) == Vector4.zero) { continue; }
 
                 var handlers = GetAxisHandlers(i);
 

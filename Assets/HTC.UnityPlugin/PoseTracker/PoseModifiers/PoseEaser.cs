@@ -1,10 +1,10 @@
-﻿//========= Copyright 2016-2017, HTC Corporation. All rights reserved. ===========
+﻿//========= Copyright 2016-2018, HTC Corporation. All rights reserved. ===========
 
+using HTC.UnityPlugin.Utility;
 using UnityEngine;
 
 namespace HTC.UnityPlugin.PoseTracker
 {
-    [AddComponentMenu("HTC/Pose Tracker/Pose Easer")]
     public class PoseEaser : BasePoseModifier
     {
         // similar to equation y=1-(0.01^x) where 0<x<1
@@ -15,11 +15,10 @@ namespace HTC.UnityPlugin.PoseTracker
             new Keyframe(1f, 0.99f, 0f, 0f),
         });
 
-        public float duration = 0.2f;
+        public float duration = 0.15f;
 
         private bool firstPose = true;
-        private Pose prevPose;
-        private float prevPoseTime;
+        private RigidPose prevPose;
 
         public bool easePositionX = true;
         public bool easePositionY = true;
@@ -35,7 +34,7 @@ namespace HTC.UnityPlugin.PoseTracker
             ResetFirstPose();
         }
 
-        public override void ModifyPose(ref Pose pose, Transform origin)
+        public override void ModifyPose(ref RigidPose pose, Transform origin)
         {
             if (firstPose)
             {
@@ -43,10 +42,10 @@ namespace HTC.UnityPlugin.PoseTracker
             }
             else
             {
-                var deltaTime = Time.time - prevPoseTime;
+                var deltaTime = Time.unscaledDeltaTime;
                 if (deltaTime < duration)
                 {
-                    var easedPose = Pose.Lerp(prevPose, pose, curve.Evaluate(deltaTime / duration));
+                    var easedPose = RigidPose.Lerp(prevPose, pose, curve.Evaluate(deltaTime / duration));
 
                     if (!easePositionX || !easePositionY || !easePositionZ)
                     {
@@ -73,7 +72,6 @@ namespace HTC.UnityPlugin.PoseTracker
             }
 
             prevPose = pose;
-            prevPoseTime = Time.time;
         }
 
         public void ResetFirstPose() { firstPose = true; }
