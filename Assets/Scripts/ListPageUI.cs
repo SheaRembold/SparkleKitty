@@ -51,6 +51,7 @@ public class ListPageUI : MonoBehaviour
             }
             PlacableButton image = button.GetComponent<PlacableButton>();
             image.SetPlacable(itemData);
+            button.onClick.RemoveAllListeners();
             button.onClick.AddListener(new UnityEngine.Events.UnityAction(() => { ShowItem(itemData); }));
         }
 
@@ -80,6 +81,8 @@ public class ListPageUI : MonoBehaviour
                 buttons[i].interactable = true;
             Book.SetInteractable(true);
         }
+
+        Book.ShowPage(PlacableDataType);
     }
 
     protected void ShowItem(PlacableData item)

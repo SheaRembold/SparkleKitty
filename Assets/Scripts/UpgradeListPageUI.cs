@@ -24,7 +24,10 @@ public class UpgradeListPageUI : ListPageUI
             PlacableButton image = obj.GetComponent<PlacableButton>();
             image.SetPlacable(itemData);
             Button button = obj.GetComponent<Button>();
+            button.onClick.RemoveAllListeners();
             button.onClick.AddListener(new UnityEngine.Events.UnityAction(() => { ShowItem(itemData); }));
         }
+
+        Book.ShowPage(PlacableDataType);
     }
 }

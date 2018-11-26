@@ -68,6 +68,8 @@ public class ItemPageUI : MonoBehaviour
     {
         PlayerManager.Instance.onInventoryChange += UpdateRecipe;
         UpdateRecipe();
+
+        Book.ShowPage(currentType);
     }
 
     private void OnDisable()

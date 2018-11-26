@@ -19,6 +19,9 @@ public class BookController : Clickable
     CanvasRaycastTarget canvasRaycastTarget;
     Animator animator;
 
+    [System.NonSerialized]
+    public MoveParticles letterParticles;
+
     private void Awake()
     {
         Instance = this;
@@ -72,6 +75,12 @@ public class BookController : Clickable
     {
         //helpParticle.SetActive(false);
         helpOutline.enabled = false;
+
+        if (letterParticles != null)
+        {
+            letterParticles.StartPlaying();
+            letterParticles = null;
+        }
 
         CloseBook();
         PlacementManager.Instance.GrabBook(this);

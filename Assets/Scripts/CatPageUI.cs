@@ -66,6 +66,7 @@ public class CatPageUI : ItemPageUI
         PlacableButton image = requs[i].GetComponent<PlacableButton>();
         image.SetPlacable(itemData);
         Button button = requs[i].GetComponent<Button>();
+        button.onClick.RemoveAllListeners();
         button.onClick.AddListener(new UnityEngine.Events.UnityAction(() => { Book.ShowItem(itemData); }));
     }
 }

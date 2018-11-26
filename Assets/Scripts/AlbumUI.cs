@@ -31,6 +31,7 @@ public class AlbumUI : MonoBehaviour
             Button button = obj.GetComponent<Button>();
             if (File.Exists(Application.persistentDataPath + "/" + catData.name + ".png"))
             {
+                button.onClick.RemoveAllListeners();
                 button.onClick.AddListener(new UnityEngine.Events.UnityAction(() => { ShowPhoto(catData); }));
                 image.color = Color.white;
             }

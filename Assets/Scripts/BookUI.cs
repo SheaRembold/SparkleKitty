@@ -48,9 +48,10 @@ public class BookUI : MonoBehaviour
         }
     }
 
+    bool silentToggle;
     public void OnToggleTab(bool value)
     {
-        if (value)
+        if (value && !silentToggle)
         {
             for (int i = 0; i < tabs.Length; i++)
             {
@@ -63,13 +64,25 @@ public class BookUI : MonoBehaviour
         }
     }
 
+    public void ShowPage(PlacableDataType dataType)
+    {
+        for (int i = 0; i < tabs.Length; i++)
+        {
+            if (tabs[i].PlacableDataType == dataType)
+            {
+                silentToggle = true;
+                tabs[i].Tab.isOn = true;
+                silentToggle = false;
+            }
+        }
+    }
+
     public void ShowItem(PlacableData item)
     {
         for (int i = 0; i < tabs.Length; i++)
         {
             if (tabs[i].PlacableDataType == item.DataType)
             {
-                tabs[i].Tab.isOn = true;
                 tabs[i].ItemPage.SetItem(item);
                 uiManager.ShowUI(tabs[i].ItemPage.gameObject);
                 break;

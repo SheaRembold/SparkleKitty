@@ -6,11 +6,11 @@ using UnityEngine.EventSystems;
 
 public class UIButttonAudio : MonoBehaviour, IPointerClickHandler
 {
-    Button button;
+    Selectable button;
 
     void Awake()
     {
-        button = GetComponent<Button>();
+        button = GetComponent<Selectable>();
     }
 
     public void OnPointerClick(PointerEventData eventData)

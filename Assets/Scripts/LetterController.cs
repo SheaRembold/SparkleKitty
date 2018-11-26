@@ -18,7 +18,12 @@ public class LetterController : MonoBehaviour
     {
         GameObject obj = Instantiate(acceptParticle, transform.position, transform.rotation);
         obj.transform.localScale = transform.lossyScale;
-        obj.GetComponent<MoveParticles>().StartMoving(book.transform);
+        MoveParticles moveParticles = obj.GetComponent<MoveParticles>();
+        moveParticles.StartMoving(book.transform);
+        if (HelpManager.Instance.CurrentStep <= TutorialStep.Mail)
+            book.letterParticles = moveParticles;
+        else
+            moveParticles.StartPlaying();
         gameObject.SetActive(false);
     }
 }
