@@ -3,7 +3,7 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -13,8 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Butterfly on a String
   DataType: 2
-  Icon: {fileID: 21300000, guid: 6d27d751ae82a054f954b29050a6ca73, type: 3}
-  Prefab: {fileID: 1023022131551718, guid: 1d693f9e94efc10478001a5903cde09d, type: 2}
+  Icon: {fileID: 21300000, guid: 7c21f38d95c68544f9060bc13f32fd1a, type: 3}
+  Prefab: {fileID: 1023022131551718, guid: 6cf122a5ce5a4114f89a54a610b3f01c, type: 2}
   Attached: 1
   Unlimited: 0
   BuildRequirements:

@@ -230,6 +230,11 @@ public class CatController : Clickable
             hasBeenPet = false;
             //added audio
             //controller.StartEatingAudio();
+
+            //if (controller.HelpParticles != null)
+            //controller.HelpParticles.SetActive(false);
+            if (controller.HelpOutline != null)
+                controller.HelpOutline.enabled = false;
         }
 
         public override void OnUpdate()
@@ -242,10 +247,6 @@ public class CatController : Clickable
             else if (hasBeenPet)
             {
                 controller.AddMood(1f / (CatManager.Instance.MoodColors.Length - 1));
-                //if (controller.HelpParticles != null)
-                    //controller.HelpParticles.SetActive(false);
-                if (controller.HelpOutline != null)
-                    controller.HelpOutline.enabled = false;
                 if (HelpManager.Instance.CurrentStep == TutorialStep.Start)
                 {
                     HelpManager.Instance.CompleteTutorialStep(TutorialStep.Start);

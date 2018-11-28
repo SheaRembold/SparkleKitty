@@ -24,7 +24,7 @@ public class MailboxManager : Clickable
     public static MailboxManager Instance;
 
     [SerializeField]
-    GameObject[] mailboxes;
+    Mailbox[] mailboxes;
     [SerializeField]
     LetterController letterRoot;
     [SerializeField]
@@ -34,7 +34,9 @@ public class MailboxManager : Clickable
     [SerializeField]
     Outline helpOutline;
 
+    Mailbox currentMailbox;
     Animator animator;
+    AudioSource audioSource;
     List<Letter> letters = new List<Letter>();
     bool IsOpen;
 
@@ -50,9 +52,11 @@ public class MailboxManager : Clickable
     public void SetMailbox(MaterialType type)
     {
         for (int i = 0; i < mailboxes.Length; i++)
-            mailboxes[i].SetActive(i == (int)type);
-        animator = mailboxes[(int)type].GetComponent<Animator>();
-        letterRoot.transform.SetParent(mailboxes[(int)type].transform);
+            mailboxes[i].gameObject.SetActive(i == (int)type);
+        currentMailbox = mailboxes[(int)type];
+        animator = currentMailbox.GetComponent<Animator>();
+        audioSource = currentMailbox.GetComponent<AudioSource>();
+        letterRoot.transform.SetParent(currentMailbox.transform);
         animator.SetBool("IsFull", letters.Count > 0);
         animator.SetBool("IsOpen", IsOpen);
     }
@@ -61,24 +65,42 @@ public class MailboxManager : Clickable
     {
         animator.SetBool("IsFull", letters.Count > 0);
 
-        if (HelpManager.Instance.CurrentStep == TutorialStep.Mail)
+        if (letters.Count > 0)
         {
             TurnOnHelp();
         }
+        else
+        {
+            TurnOffHelp();
+        }
     }
-
-    public void TurnOnHelp()
-    {
-        //helpParticles.SetActive(true);
-        helpOutline.enabled = true;
-    }
-
+    
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.M))
         {
             AddRandomLetter();
         }
+    }
+
+    void TurnOnHelp()
+    {
+        if (HelpManager.Instance.CurrentStep == TutorialStep.Mail)
+        {
+            //helpParticles.SetActive(true);
+            helpOutline.enabled = true;
+        }
+        else
+        {
+            currentMailbox.flagOutline.enabled = true;
+        }
+    }
+
+    void TurnOffHelp()
+    {
+        //helpParticles.SetActive(false);
+        helpOutline.enabled = false;
+        currentMailbox.flagOutline.enabled = false;
     }
 
     public override void Click(RaycastHit hit)
@@ -88,6 +110,9 @@ public class MailboxManager : Clickable
             letterUI.SetLetter(letters[0], this);
             animator.SetBool("IsOpen", true);
             IsOpen = true;
+            audioSource.Play();
+
+            TurnOffHelp();
         }
     }
 
@@ -109,6 +134,7 @@ public class MailboxManager : Clickable
         letters.Add(letter);
         animator.SetBool("IsFull", true);
         Save();
+        TurnOnHelp();
     }
 
     public void RemoveLetter(Letter letter)
@@ -118,10 +144,12 @@ public class MailboxManager : Clickable
         animator.SetBool("IsOpen", false);
         letterRoot.AcceptLetter();
         IsOpen = false;
-        //helpParticles.SetActive(false);
-        helpOutline.enabled = false;
         HelpManager.Instance.CompleteTutorialStep(TutorialStep.Mail);
         Save();
+        if (letters.Count > 0)
+        {
+            TurnOnHelp();
+        }
     }
 
     public void ShowLetter(Transform from)

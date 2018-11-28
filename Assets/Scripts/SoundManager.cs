@@ -72,23 +72,20 @@ public class SoundManager : MonoBehaviour
 
     public void SimpleButtonClick()
     {
-        if (FXEnabled)
-        {
-            PlayGroup("ButtonClick");
-        }
+        PlayGroup("ButtonClick");
     }
 
     public void SimpleMapClick()
     {
-        if (FXEnabled)
-        {
-            PlayGroup("MapClick");
-        }
+        PlayGroup("MapClick");
     }
 
     public void PlayGroup(string name)
     {
-        SoundGroup group = Groups.Find((x) => x.Name == name);
-        FxSource.PlayOneShot(group.Clips[Random.Range(0, group.Clips.Count)]);
+        if (FXEnabled)
+        {
+            SoundGroup group = Groups.Find((x) => x.Name == name);
+            FxSource.PlayOneShot(group.Clips[Random.Range(0, group.Clips.Count)]);
+        }
     }
 }

@@ -12,6 +12,12 @@ public class StringToy : MonoBehaviour, IChasable
     private void Start()
     {
         rope.SetParent(null);
+        /*CharacterJoint[] joints = rope.GetComponentsInChildren<CharacterJoint>();
+        for (int i = 0; i < joints.Length; i++)
+        {
+            joints[i].autoConfigureConnectedAnchor = false;
+            joints[i].connectedAnchor = Vector3.Scale(joints[i].connectedAnchor, rope.transform.localScale);
+        }*/
         PlacementManager.Instance.chasables.Add(this);
     }
     

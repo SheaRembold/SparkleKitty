@@ -18,7 +18,7 @@ public class TestPlacementProvider : PlacementProvider
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("ARGameObject")))
         {
-            plane = new BoundedPlane() { Center = hit.point, Pose = new Pose(hit.point, hit.transform.rotation), Size = new Vector2(10, 10) };
+            plane = new BoundedPlane() { Center = hit.point, Pose = new Pose(hit.point, hit.transform.rotation), Size = new Vector2(0.5f, 0.5f) };
             return true;
         }
 

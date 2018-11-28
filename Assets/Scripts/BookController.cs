@@ -14,10 +14,15 @@ public class BookController : Clickable
     GameObject helpParticle;
     [SerializeField]
     Outline helpOutline;
+    [SerializeField]
+    AudioClip openAudio;
+    [SerializeField]
+    AudioClip closeAudio;
 
     GraphicRaycaster graphicRaycaster;
     CanvasRaycastTarget canvasRaycastTarget;
     Animator animator;
+    AudioSource audioSource;
 
     [System.NonSerialized]
     public MoveParticles letterParticles;
@@ -29,6 +34,7 @@ public class BookController : Clickable
         graphicRaycaster = uiRoot.GetComponent<GraphicRaycaster>();
         canvasRaycastTarget = uiRoot.GetComponent<CanvasRaycastTarget>();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
 
         if (HelpManager.Instance.CurrentStep <= TutorialStep.GrabBook)
             CloseBook();
@@ -59,6 +65,9 @@ public class BookController : Clickable
             canvasRaycastTarget.enabled = false;
         else
             graphicRaycaster.enabled = false;
+
+        audioSource.clip = closeAudio;
+        audioSource.Play();
     }
 
     public void OpenBook()
@@ -69,6 +78,9 @@ public class BookController : Clickable
             canvasRaycastTarget.enabled = true;
         else
             graphicRaycaster.enabled = true;
+        
+        audioSource.clip = openAudio;
+        audioSource.Play();
     }
 
     public override void Click(RaycastHit hit)

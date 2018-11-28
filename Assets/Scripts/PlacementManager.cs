@@ -513,6 +513,7 @@ public class PlacementManager : MonoBehaviour
                     else if (HelpManager.Instance.CurrentStep == TutorialStep.PlaceToy)
                         HelpManager.Instance.CompleteTutorialStep(TutorialStep.PlaceToy);
                     placingDown = false;
+                    SoundManager.Instance.PlayGroup("PlaceItem");
                 }
                 /*else
                 {

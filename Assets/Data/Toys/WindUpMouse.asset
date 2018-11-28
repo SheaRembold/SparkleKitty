@@ -3,7 +3,7 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -13,8 +13,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Wind-up Mouse
   DataType: 2
-  Icon: {fileID: 21300000, guid: 522a91859f909fe47bb9d8e0a73d94c7, type: 3}
-  Prefab: {fileID: 1503557152046656, guid: 0a5dea58657a95b4c871fb2c40541b5f, type: 2}
+  Icon: {fileID: 21300000, guid: db03e30200b9994418a910c2b74bfff7, type: 3}
+  Prefab: {fileID: 1890243767426146, guid: 5a2ea98fed7e6aa47b81e0e2d4abddff, type: 2}
   Attached: 0
   Unlimited: 0
   BuildRequirements:

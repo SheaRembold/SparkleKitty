@@ -85,7 +85,6 @@ public class HelpManager : MonoBehaviour
                         gifts.Add(firstGifts[i], 1);
                 }
                 MailboxManager.Instance.AddLetter(new Letter(DataManager.Instance.Cats[0], gifts));
-                MailboxManager.Instance.TurnOnHelp();
             }
             if (onCompleteTutorialStep != null)
                 onCompleteTutorialStep(CurrentStep);
