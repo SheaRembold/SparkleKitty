@@ -10,7 +10,7 @@ public class CatManager : MonoBehaviour
 
     public Color[] MoodColors;
     [SerializeField]
-    float GiftFrequency = 60f;
+    float[] GiftFrequency;
     
     public class CatStatus
     {
@@ -18,6 +18,8 @@ public class CatManager : MonoBehaviour
         public float MoodValue;
         public int Mood;
         public TimeSpan LastGift;
+        public TimeSpan LastLeave;
+        public TimeSpan LastEnter;
     }
 
     Dictionary<CatData, CatStatus> statuses = new Dictionary<CatData, CatStatus>();
@@ -34,14 +36,17 @@ public class CatManager : MonoBehaviour
 
     private void Update()
     {
-        TimeSpan now = new TimeSpan(DateTime.UtcNow.Ticks);
-        foreach (KeyValuePair<CatData, CatStatus> pair in statuses)
+        if (HelpManager.Instance.CurrentStep > TutorialStep.Start)
         {
-            if (pair.Value.Found && pair.Value.Mood >= MoodColors.Length / 2 && now.Subtract(pair.Value.LastGift).TotalSeconds >= GiftFrequency)
+            TimeSpan now = new TimeSpan(DateTime.UtcNow.Ticks);
+            foreach (KeyValuePair<CatData, CatStatus> pair in statuses)
             {
-                MailboxManager.Instance.AddRandomLetter(pair.Key);
-                pair.Value.LastGift = now;
-                statusDirty = true;
+                if (pair.Value.Found && pair.Value.Mood >= MoodColors.Length / 2 && now.Subtract(pair.Value.LastGift).TotalSeconds >= GiftFrequency[pair.Value.Mood])
+                {
+                    MailboxManager.Instance.AddRandomLetter(pair.Key);
+                    pair.Value.LastGift = now;
+                    statusDirty = true;
+                }
             }
         }
     }
@@ -72,10 +77,7 @@ public class CatManager : MonoBehaviour
 
     public int GetMood(CatData cat)
     {
-        if (statuses[cat].Found)
-            return statuses[cat].Mood;
-
-        return -1;
+        return statuses[cat].Mood;
     }
 
     public void MarkFound(CatData cat)
@@ -93,6 +95,34 @@ public class CatManager : MonoBehaviour
         return statuses[cat].Found;
     }
 
+    public void LeaveArea(CatData cat)
+    {
+        statuses[cat].LastLeave = new TimeSpan(DateTime.UtcNow.Ticks);
+        statusDirty = true;
+    }
+    
+    public void LeftAreaAfter(CatData cat, float length)
+    {
+        statuses[cat].LastLeave = statuses[cat].LastEnter.Add(TimeSpan.FromSeconds(length));
+        statusDirty = true;
+    }
+
+    public float TimeSinceLeave(CatData cat)
+    {
+        return (float)(new TimeSpan(DateTime.UtcNow.Ticks).Subtract(statuses[cat].LastLeave).TotalSeconds);
+    }
+
+    public void EnterArea(CatData cat)
+    {
+        statuses[cat].LastEnter = new TimeSpan(DateTime.UtcNow.Ticks);
+        statusDirty = true;
+    }
+
+    public float TimeSinceEnter(CatData cat)
+    {
+        return (float)(new TimeSpan(DateTime.UtcNow.Ticks).Subtract(statuses[cat].LastEnter).TotalSeconds);
+    }
+
     void Save()
     {
         System.Text.StringBuilder builder = new System.Text.StringBuilder();
@@ -102,6 +132,8 @@ public class CatManager : MonoBehaviour
             builder.AppendLine(pair.Value.Found.ToString());
             builder.AppendLine(pair.Value.MoodValue.ToString());
             builder.AppendLine(pair.Value.LastGift.Ticks.ToString());
+            builder.AppendLine(pair.Value.LastLeave.Ticks.ToString());
+            builder.AppendLine(pair.Value.LastEnter.Ticks.ToString());
         }
         File.WriteAllText(Application.persistentDataPath + "/cats_" + DataManager.saveVersion + ".txt", builder.ToString());
         statusDirty = false;
@@ -112,12 +144,14 @@ public class CatManager : MonoBehaviour
         if (File.Exists(Application.persistentDataPath + "/cats_" + DataManager.saveVersion + ".txt"))
         {
             string[] catsData = File.ReadAllLines(Application.persistentDataPath + "/cats_" + DataManager.saveVersion + ".txt");
-            for (int i = 0; i < catsData.Length; i += 4)
+            for (int i = 0; i < catsData.Length; i += 6)
             {
                 CatData cat = DataManager.Instance.GetData(catsData[i]) as CatData;
                 statuses[cat].Found = bool.Parse(catsData[i + 1]);
                 statuses[cat].MoodValue = float.Parse(catsData[i + 2]);
                 statuses[cat].LastGift = new TimeSpan(long.Parse(catsData[i + 3]));
+                statuses[cat].LastLeave = new TimeSpan(long.Parse(catsData[i + 4]));
+                statuses[cat].LastEnter = new TimeSpan(long.Parse(catsData[i + 5]));
                 statuses[cat].Mood = Mathf.RoundToInt(statuses[cat].MoodValue * (MoodColors.Length - 1));
             }
         }

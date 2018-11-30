@@ -12,8 +12,10 @@ public class PlacementLocation : Clickable
     protected string buildUI;
     [System.NonSerialized]
     public PlacementArea Owner;
+    [SerializeField]
+    ParticleSystem placeEfect;
 
-    public void SetPlacable(PlacableData placable)
+    public void SetPlacable(PlacableData placable, bool showEffect = false)
     {
         if (CurrentPlacable != null)
         {
@@ -24,6 +26,9 @@ public class PlacementLocation : Clickable
         {
             CurrentPlacable = PlacementManager.Instance.PlaceAt(Owner, placable, transform.localPosition);
             CurrentPlacable.gameObject.AddComponent<RelayClickable>().ParentClickable = this;
+            if (showEffect && placeEfect != null)
+                placeEfect.Play();
+                
         }
     }
 

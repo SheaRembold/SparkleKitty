@@ -3,7 +3,7 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -20,8 +20,8 @@ MonoBehaviour:
   RequiredTowerType: 0
   RequiredTowerLevel: 3
   OtherRequirements:
-  - {fileID: 11400000, guid: 8ff14f0193424214a8ddc41fe8c988bf, type: 2}
   - {fileID: 11400000, guid: a24e55c6ffed6b9449bbf7215d40eba9, type: 2}
+  - {fileID: 11400000, guid: 8ff14f0193424214a8ddc41fe8c988bf, type: 2}
   CatSounds:
-  - {fileID: 8300000, guid: 7ee783ec0394d244eac9a7edfc842bbf, type: 3}
+  - {fileID: 0}
   EatingSound: {fileID: 8300000, guid: a5e6acf319e5e86429486dddc2c5b23f, type: 3}

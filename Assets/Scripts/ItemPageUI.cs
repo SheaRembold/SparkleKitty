@@ -120,21 +120,22 @@ public class ItemPageUI : MonoBehaviour
         else if (current >= buildables.Length)
             current = 0;
 
+        bool hasRecipe = PlayerManager.Instance.HasRecipe(buildables[current]);
+
         NameLabel.text = buildables[current].Name;
         ItemImage.sprite = buildables[current].Icon;
+        ItemImage.color = (hasRecipe || buildables[current].Unlimited) ? Color.white : Color.black;
         PageLabel.text = (current + 1) + " / " + buildables.Length;
         int count = PlayerManager.Instance.GetInventoryCount(buildables[current]);
+        int areaCount = 0;
         CountLabel.text = buildables[current].Unlimited ? "\u221E" : count.ToString();
-        if (count == 0 && !buildables[current].Unlimited)
-            HealthImage.fillAmount = 1f;
-        else
-            HealthImage.fillAmount = 1f - PlayerManager.Instance.GetItemHealth(buildables[current]);
         if (buildables[current].Attached)
         {
             if (PlacementManager.Instance.CurrentAttached != null && PlacementManager.Instance.CurrentAttached.Data == buildables[current])
             {
                 SetUseButton("Return");
                 UseButton.interactable = true;
+                areaCount = 1;
             }
             else
             {
@@ -148,6 +149,7 @@ public class ItemPageUI : MonoBehaviour
             {
                 SetUseButton("Return");
                 UseButton.interactable = true;
+                areaCount = 1;
             }
             else
             {
@@ -155,6 +157,11 @@ public class ItemPageUI : MonoBehaviour
                 UseButton.interactable = count > 0 || buildables[current].Unlimited;
             }
         }
+
+        if (buildables[current].Unlimited)
+            HealthImage.fillAmount = 0f;
+        else
+            HealthImage.fillAmount = 1f - (PlayerManager.Instance.GetItemHealth(buildables[current]) - (count + areaCount - 1));
 
         if (buildables[current].Unlimited)
         {
@@ -166,17 +173,6 @@ public class ItemPageUI : MonoBehaviour
         }
         else
         {
-            bool hasRecipe = false;
-            for (int i = 0; i < PlayerManager.Instance.InventoryCount; i++)
-            {
-                RecipeData recipe = PlayerManager.Instance.GetInventory(i) as RecipeData;
-                if (recipe != null && recipe.Product == buildables[current])
-                {
-                    hasRecipe = true;
-                    break;
-                }
-            }
-
             if (hasRecipe)
             {
                 UnknownLabel.gameObject.SetActive(false);
@@ -292,6 +288,7 @@ public class ItemPageUI : MonoBehaviour
         {
             PlayerManager.Instance.RemoveInventory(buildables[current].BuildRequirements[i]);
         }
+        PlayerManager.Instance.AddItemHealth(buildables[current], 1f);
         PlayerManager.Instance.AddInventory(buildables[current]);
 
         if (HelpManager.Instance.CurrentStep == TutorialStep.CraftToy)

@@ -16,6 +16,6 @@ public class UIButttonAudio : MonoBehaviour, IPointerClickHandler
     public void OnPointerClick(PointerEventData eventData)
     {
         if (button.interactable)
-            SoundManager.Instance.SimpleButtonClick();
+            SoundManager.Instance.PlayGroup("ButtonClick");
     }
 }

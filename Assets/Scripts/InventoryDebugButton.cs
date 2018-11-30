@@ -20,6 +20,8 @@ public class InventoryDebugButton : MonoBehaviour, IPointerDownHandler
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (Placable.Prefab.GetComponent<ItemController>() != null)
+            PlayerManager.Instance.AddItemHealth(Placable, 1f);
         PlayerManager.Instance.AddInventory(Placable);
     }
 

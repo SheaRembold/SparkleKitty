@@ -8,7 +8,7 @@ public class DataManager : MonoBehaviour
 {
     public static DataManager Instance;
 
-    public const int saveVersion = 4;
+    public const int saveVersion = 5;
 
     public CatData[] Cats;
     public UpgradableData[] Towers;

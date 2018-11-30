@@ -36,9 +36,6 @@ public class BookController : Clickable
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
 
-        if (HelpManager.Instance.CurrentStep <= TutorialStep.GrabBook)
-            CloseBook();
-
         if (HelpManager.Instance.CurrentStep == TutorialStep.GrabBook)
         {
             //helpParticle.SetActive(true);
@@ -46,6 +43,12 @@ public class BookController : Clickable
         }
 
         HelpManager.Instance.onCompleteTutorialStep += OnCompleteTutorialStep;
+    }
+
+    private void Start()
+    {
+        if (HelpManager.Instance.CurrentStep <= TutorialStep.GrabBook)
+            CloseBook();
     }
 
     void OnCompleteTutorialStep(TutorialStep currentStep)

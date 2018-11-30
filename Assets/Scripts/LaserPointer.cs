@@ -53,5 +53,6 @@ public class LaserPointer : MonoBehaviour, IChasable
     }
 
     public Vector3 ChasePosition { get { return hitPoint.HasValue ? hitPoint.Value : Vector3.zero; } }
+    public ToyController Controller { get { return GetComponent<ToyController>(); } }
     public float Attraction(CatController cat) { return hitPoint.HasValue ? 1f : 0f; }
 }

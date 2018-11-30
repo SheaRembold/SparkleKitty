@@ -37,6 +37,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4710420183428834}
   - component: {fileID: 114135341548473274}
+  - component: {fileID: 114105269169611860}
   m_Layer: 10
   m_Name: rubberBall
   m_TagString: Untagged
@@ -160,6 +161,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &114105269169611860
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1632954494711690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9064c358f8bbfc84db127b309e41baa6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destroyEffect: {fileID: 1397980480401696, guid: 250a2293053501c4492da2728b8e1dc2,
+    type: 2}
+  damageRate: 0.05
 --- !u!114 &114135341548473274
 MonoBehaviour:
   m_ObjectHideFlags: 1

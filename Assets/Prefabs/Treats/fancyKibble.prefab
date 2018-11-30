@@ -872,8 +872,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4315441853809816}
-  - component: {fileID: 114882069568901606}
   - component: {fileID: 65506460451716944}
+  - component: {fileID: 114882069568901606}
   - component: {fileID: 114010533873291684}
   m_Layer: 10
   m_Name: fancyKibble
@@ -8413,6 +8413,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdb250a398d054d4b8449364b0a14041, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destroyEffect: {fileID: 1440341452825018, guid: 64c94ba951a75174c9c7f39eb067c65c,
+    type: 2}
   piecesParent: {fileID: 4153181774397602}
   eatRate: 0.01
 --- !u!114 &114882069568901606

@@ -241,6 +241,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdb250a398d054d4b8449364b0a14041, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destroyEffect: {fileID: 1440341452825018, guid: 64c94ba951a75174c9c7f39eb067c65c,
+    type: 2}
   piecesParent: {fileID: 4308165446949690}
   eatRate: 0.01
 --- !u!114 &114939059373436876

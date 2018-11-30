@@ -189,6 +189,7 @@ GameObject:
   - component: {fileID: 65775051942453410}
   - component: {fileID: 54042753176257208}
   - component: {fileID: 114807369975857802}
+  - component: {fileID: 114897150317243786}
   m_Layer: 10
   m_Name: windUpMouse
   m_TagString: Untagged
@@ -449,6 +450,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
+--- !u!114 &114897150317243786
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1890243767426146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9064c358f8bbfc84db127b309e41baa6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destroyEffect: {fileID: 1397980480401696, guid: 250a2293053501c4492da2728b8e1dc2,
+    type: 2}
+  damageRate: 0.05
 --- !u!137 &137813399950395234
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

@@ -152,6 +152,9 @@ public class PlacementManager : MonoBehaviour
 
         CurrentAttached = Instantiate(placable.Prefab).GetComponent<Placable>();
         CurrentAttached.Data = placable;
+        ItemController itemController = CurrentAttached.GetComponent<ItemController>();
+        if (itemController != null)
+            itemController.SetAmountLeft(PlayerManager.Instance.GetItemHealth(placable) - (PlayerManager.Instance.GetInventoryCount(placable) - 1));
         CurrentAttached.transform.SetParent(provider.holdAttachPoint);
         CurrentAttached.transform.localPosition = Vector3.zero;
         CurrentAttached.transform.localRotation = placable.Prefab.transform.rotation;
@@ -226,6 +229,9 @@ public class PlacementManager : MonoBehaviour
             Destroy(currentPlacing.gameObject);
         currentPlacing = Instantiate(placable.Prefab).GetComponent<Placable>();
         currentPlacing.Data = placable;
+        ItemController itemController = currentPlacing.GetComponent<ItemController>();
+        if (itemController != null)
+            itemController.SetAmountLeft(PlayerManager.Instance.GetItemHealth(placable) - (PlayerManager.Instance.GetInventoryCount(placable) - 1));
         lastPos = null;
         HelpUI.gameObject.SetActive(true);
         playArea.ShowPlacing(true);

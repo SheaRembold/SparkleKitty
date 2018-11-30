@@ -24,7 +24,7 @@ public class CatPageUI : ItemPageUI
         int currentMood = CatManager.Instance.GetMood(DataManager.Instance.Cats[current]);
         for (int i = 0; i < CatManager.Instance.MoodColors.Length; i++)
         {
-            if (i == currentMood)
+            if (found && i == currentMood)
                 moods[i].color = CatManager.Instance.MoodColors[i];
             else
                 moods[i].color = CatManager.Instance.MoodColors[i] * new Color(0.25f, 0.25f, 0.25f, 1f);

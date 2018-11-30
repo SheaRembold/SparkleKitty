@@ -5247,22 +5247,21 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e1f67c4d836710b4cb0d538e1cb790f9, type: 2}
   - {fileID: 11400000, guid: 261f554cf1335f34aa0fd14cd1daebd4, type: 2}
   ToyComponents:
-  - {fileID: 11400000, guid: 45205ae5da1979e419e860c21625fdd1, type: 2}
   - {fileID: 11400000, guid: db54f92e652b01f4dbe5df8633a42d6d, type: 2}
   - {fileID: 11400000, guid: c37f3da60a4aba04e9f942dcad924c67, type: 2}
+  - {fileID: 11400000, guid: 45205ae5da1979e419e860c21625fdd1, type: 2}
   - {fileID: 11400000, guid: de47dd02f39edc94daa0ac1b27d7939c, type: 2}
-  - {fileID: 11400000, guid: 486dcb76121dceb48902c61d6b650508, type: 2}
   - {fileID: 11400000, guid: 85943bcf0d9b0f2449530c5a929e7741, type: 2}
+  - {fileID: 11400000, guid: 486dcb76121dceb48902c61d6b650508, type: 2}
   - {fileID: 11400000, guid: 5b96408ccbf157845bc7eba69ca9df18, type: 2}
-  - {fileID: 11400000, guid: a4883f43141359540bafd45547f65365, type: 2}
   TreatComponents:
   - {fileID: 11400000, guid: 16447e4cce6384b469fe5697c93bc7d5, type: 2}
   - {fileID: 11400000, guid: 846eafd11b1502d4eb9fcd599f106779, type: 2}
   - {fileID: 11400000, guid: db4792c77108bb64293e0aabb11c858f, type: 2}
   - {fileID: 11400000, guid: 615e05e66033cae488c587168fac920b, type: 2}
   - {fileID: 11400000, guid: 16825c51c2e7190409e3c03cbe51be7f, type: 2}
-  - {fileID: 11400000, guid: 866f2ad6a2b0ce144b992d1eb34290ed, type: 2}
   - {fileID: 11400000, guid: 69de5e3c76c10fc46b09cf9a1817c992, type: 2}
+  - {fileID: 11400000, guid: 866f2ad6a2b0ce144b992d1eb34290ed, type: 2}
   TowerRecipes: []
   ToyRecipes:
   - {fileID: 11400000, guid: 0dbfa6fe8da418a4ea1a527f9bf5ba3d, type: 2}
@@ -5353,7 +5352,14 @@ MonoBehaviour:
   - {r: 0, g: 1, b: 1, a: 1}
   - {r: 0, g: 0, b: 1, a: 1}
   - {r: 1, g: 0, b: 0.49803922, a: 1}
-  GiftFrequency: 600
+  GiftFrequency:
+  - 600
+  - 500
+  - 400
+  - 300
+  - 210
+  - 120
+  - 60
 --- !u!114 &365429570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5367,9 +5373,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firstStep: 0
   firstGifts:
-  - {fileID: 11400000, guid: 5e30062e81c9dde47854e4dd5dd3c766, type: 2}
+  - {fileID: 11400000, guid: 0dbfa6fe8da418a4ea1a527f9bf5ba3d, type: 2}
   - {fileID: 11400000, guid: db54f92e652b01f4dbe5df8633a42d6d, type: 2}
-  - {fileID: 11400000, guid: 45205ae5da1979e419e860c21625fdd1, type: 2}
+  - {fileID: 11400000, guid: c37f3da60a4aba04e9f942dcad924c67, type: 2}
   - {fileID: 11400000, guid: c37f3da60a4aba04e9f942dcad924c67, type: 2}
 --- !u!1 &366516236
 GameObject:
@@ -10113,7 +10119,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4491366112258530, guid: 3e06b46700415a140ab03399aecde551, type: 2}
       propertyPath: m_RootOrder
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4491366112258530, guid: 3e06b46700415a140ab03399aecde551, type: 2}
       propertyPath: m_LocalScale.x
@@ -10746,7 +10752,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400064, guid: e773d72263fadd64fb2e5f59aa975ed3, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 9500000, guid: e773d72263fadd64fb2e5f59aa975ed3, type: 3}
       propertyPath: m_Controller

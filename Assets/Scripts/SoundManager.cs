@@ -69,17 +69,7 @@ public class SoundManager : MonoBehaviour
 
         lastBackChange = Time.time;
     }
-
-    public void SimpleButtonClick()
-    {
-        PlayGroup("ButtonClick");
-    }
-
-    public void SimpleMapClick()
-    {
-        PlayGroup("MapClick");
-    }
-
+    
     public void PlayGroup(string name)
     {
         if (FXEnabled)

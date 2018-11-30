@@ -20,6 +20,7 @@ public class PlayerManager : MonoBehaviour
     bool invDirty;
 
     Dictionary<PlacableData, Texture2D> catPhotos = new Dictionary<PlacableData, Texture2D>();
+    Dictionary<PlacableData, float> itemHealth = new Dictionary<PlacableData, float>();
 
     private void Awake()
     {
@@ -85,9 +86,36 @@ public class PlayerManager : MonoBehaviour
         return count;
     }
 
+    public bool HasRecipe(PlacableData data)
+    {
+        for (int i = 0; i < inventory.Count; i++)
+        {
+            RecipeData recipe = inventory[i] as RecipeData;
+            if (recipe != null && recipe.Product == data)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void AddItemHealth(PlacableData data, float health)
+    {
+        if (itemHealth.ContainsKey(data))
+            itemHealth[data] += health;
+        else
+            itemHealth[data] = health;
+
+        if (itemHealth[data] < 0f)
+            itemHealth[data] = 0f;
+    }
+    
     public float GetItemHealth(PlacableData data)
     {
-        return 1f;
+        if (itemHealth.ContainsKey(data))
+            return itemHealth[data];
+
+        return 0f;
     }
 
     private void LateUpdate()
@@ -98,6 +126,11 @@ public class PlayerManager : MonoBehaviour
                 onInventoryChange();
             Save();
         }
+    }
+
+    public void MarkAsDirty()
+    {
+        invDirty = true;
     }
 
     void Save()

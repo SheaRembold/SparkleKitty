@@ -19,6 +19,15 @@ public class PlacableButton : MonoBehaviour//, IPointerDownHandler
             Label.gameObject.SetActive(false);
             Icon.gameObject.SetActive(true);
             Icon.sprite = Placable.Icon;
+            if ((placable.DataType == PlacableDataType.Cat && !CatManager.Instance.IsFound(placable as CatData))
+                || ((placable.DataType == PlacableDataType.Toy || placable.DataType == PlacableDataType.Treat) && !PlayerManager.Instance.HasRecipe(placable)))
+            {
+                Icon.color = Color.black;
+            }
+            else
+            {
+                Icon.color = Color.white;
+            }
         }
         else
         {

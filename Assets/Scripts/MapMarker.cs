@@ -32,11 +32,11 @@ public class MapMarker : MonoBehaviour, IPointerClickHandler, IFeaturePropertySe
     public void OnPointerClick(PointerEventData eventData)
     {
         PlacesManager.Instance.ShowInteraction(this);
-        SoundManager.Instance.SimpleMapClick();
+        SoundManager.Instance.PlayGroup("MapClick");
+
         /*foreach (var prop in _props)
         {
             Debug.Log(prop.Key + ":" + prop.Value);
         }*/
-
     }
 }

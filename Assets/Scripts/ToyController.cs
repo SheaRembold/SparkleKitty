@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TreatController : ItemController
+public class ToyController : ItemController
 {
     [SerializeField]
-    Transform piecesParent;
-    [SerializeField]
-    float eatRate = 0.1f;
+    float damageRate = 0.1f;
     
-    public void Eat()
+    public void Play()
     {
         float oldAmount = _amountLeft;
-        _amountLeft -= eatRate * Time.deltaTime;
+        _amountLeft -= damageRate * Time.deltaTime;
         _amountLeft = Mathf.Clamp01(_amountLeft);
         PlayerManager.Instance.AddItemHealth(placable.Data, oldAmount - _amountLeft);
         UpdateAmountLeft();
@@ -22,18 +20,13 @@ public class TreatController : ItemController
     {
         base.UpdateAmountLeft();
 
-        for (int i = 0; i < piecesParent.childCount; i++)
-        {
-            if ((float)i / piecesParent.childCount < _amountLeft)
-                piecesParent.GetChild(i).gameObject.SetActive(true);
-            else
-                piecesParent.GetChild(i).gameObject.SetActive(false);
-        }
-
         if (_amountLeft <= 0)
         {
             Instantiate(destroyEffect, transform.position, transform.rotation, transform.parent);
-            PlacementManager.Instance.Remove(placable);
+            if (placable.Data.Attached)
+                PlacementManager.Instance.RemoveAttached();
+            else
+                PlacementManager.Instance.Remove(placable);
         }
     }
 }

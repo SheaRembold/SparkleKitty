@@ -21,8 +21,9 @@ GameObject:
   - component: {fileID: 4871325875078426}
   - component: {fileID: 114258883016196032}
   - component: {fileID: 114677056672430216}
+  - component: {fileID: 114395192548040086}
   m_Layer: 0
-  m_Name: stickerString
+  m_Name: featherStringA
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -731,6 +732,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0698264ae42ef3b4ebe7f0cd23504ba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114395192548040086
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1023022131551718}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9064c358f8bbfc84db127b309e41baa6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destroyEffect: {fileID: 1397980480401696, guid: 250a2293053501c4492da2728b8e1dc2,
+    type: 2}
+  damageRate: 0.05
 --- !u!114 &114677056672430216
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -772,7 +787,7 @@ SkinnedMeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 26f9c7fddabb0ae45be2db95c86049b9, type: 3}
+  - {fileID: 2100012, guid: 8bb9ca770a35a6b42b97c7901e39eb45, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

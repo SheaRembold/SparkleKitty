@@ -30,5 +30,6 @@ public class StringToy : MonoBehaviour, IChasable
     }
 
     public Vector3 ChasePosition { get { return target.position; } }
+    public ToyController Controller { get { return GetComponent<ToyController>(); } }
     public float Attraction(CatController cat) { return (1.1f - Vector3.Distance(target.position, cat.transform.position) / cat.transform.lossyScale.y); }
 }

@@ -8,13 +8,15 @@ public class PlayArea : PlacementArea
     [SerializeField]
     PlacementLocation[] placementLocations;
     public Transform CatSpawnPoint;
-    public float SpawnDelay = 5f;
+    //public float SpawnDelay = 5f;
     [SerializeField]
     GameObject placingGrid;
     [SerializeField]
     GameObject[] fences;
     [SerializeField]
     MailboxManager mailbox;
+    [SerializeField]
+    GameObject book;
 
     List<CatData> validCats = new List<CatData>();
     CatData waitingCat;
@@ -29,6 +31,7 @@ public class PlayArea : PlacementArea
         Load();
         for (int i = 0; i < placedInArea.Count; i++)
             placedInArea[i].gameObject.SetActive(false);
+        book.SetActive(false);
         UpgradableData currentTower = placementLocations[0].CurrentPlacable.Data as UpgradableData;
         DataManager.Instance.SetTowerLevel(currentTower.MaterialType, currentTower.Level);
         SetTower(currentTower);
@@ -54,8 +57,16 @@ public class PlayArea : PlacementArea
                 PlacableData item = DataManager.Instance.GetData(placedNames[i]);
                 if (item != null)
                 {
-                    Vector3 pos = new Vector3(float.Parse(placedNames[i + 1]), float.Parse(placedNames[i + 2]), float.Parse(placedNames[i + 3]));
-                    PlacementManager.Instance.PlaceAt(this, item, pos);
+                    CatController cat = item.Prefab.GetComponent<CatController>();
+                    if (cat == null || cat.StayForever || CatManager.Instance.TimeSinceEnter(item as CatData) < cat.StayLength[CatManager.Instance.GetMood(item as CatData)])
+                    {
+                        Vector3 pos = new Vector3(float.Parse(placedNames[i + 1]), float.Parse(placedNames[i + 2]), float.Parse(placedNames[i + 3]));
+                        PlacementManager.Instance.PlaceAt(this, item, pos);
+                    }
+                    else
+                    {
+                        CatManager.Instance.LeftAreaAfter(item as CatData, cat.StayLength[CatManager.Instance.GetMood(item as CatData)]);
+                    }
                 }
             }
         }
@@ -78,6 +89,7 @@ public class PlayArea : PlacementArea
     {
         for (int i = 0; i < placedInArea.Count; i++)
             placedInArea[i].gameObject.SetActive(true);
+        book.SetActive(true);
 
         CheckForCats();
         if (!HelpManager.Instance.HasShownHelp("IntroAR"))
@@ -114,13 +126,13 @@ public class PlayArea : PlacementArea
 
     void CheckForCats()
     {
-        if (GetInArea(PlacableDataType.Cat).Count < 2 && waitingCat == null)
+        if (/*GetInArea(PlacableDataType.Cat).Count < 2 &&*/ waitingCat == null)
         {
             UpdateValidCats();
             if (validCats.Count > 0)
             {
                 waitingCat = validCats[Random.Range(0, validCats.Count)];
-                PlacementManager.Instance.StartCoroutine(WaitToSpawnCat());
+                StartCoroutine(WaitToSpawnCat());
             }
         }
     }
@@ -140,7 +152,7 @@ public class PlayArea : PlacementArea
                 }
                 else
                 {
-                    PlacementManager.Instance.StopAllCoroutines();
+                    StopAllCoroutines();
                 }
             }
         }
@@ -148,11 +160,15 @@ public class PlayArea : PlacementArea
 
     IEnumerator WaitToSpawnCat()
     {
-        if (HelpManager.Instance.CurrentStep != TutorialStep.PlaceToy)
-            yield return new WaitForSeconds(SpawnDelay);
+        if (HelpManager.Instance.CurrentStep == TutorialStep.PlaceToy)
+            yield return new WaitForSeconds(1f);
+        else
+            yield return new WaitForSeconds(waitingCat.Prefab.GetComponent<CatController>().SpawnWait[CatManager.Instance.GetMood(waitingCat)]);
 
         PlacementManager.Instance.PlaceAt(this, waitingCat, CatSpawnPoint.localPosition);
+        CatManager.Instance.EnterArea(waitingCat);
         waitingCat = null;
+        CheckForCats();
     }
 
     void UpdateValidCats()
@@ -160,7 +176,7 @@ public class PlayArea : PlacementArea
         validCats.Clear();
         for (int i = 1; i < DataManager.Instance.Cats.Length; i++)
         {
-            if (HasRequ(DataManager.Instance.Cats[i]))
+            if (GetInArea(DataManager.Instance.Cats[i]).Count == 0 && HasRequ(DataManager.Instance.Cats[i]))
             {
                 validCats.Add(DataManager.Instance.Cats[i]);
             }
@@ -169,6 +185,9 @@ public class PlayArea : PlacementArea
 
     bool HasRequ(CatData cat)
     {
+        if (CatManager.Instance.TimeSinceLeave(cat) < cat.Prefab.GetComponent<CatController>().AwayLength[CatManager.Instance.GetMood(cat)])
+            return false;
+
         List<Placable> towers = GetInArea(PlacableDataType.Tower);
         bool hasTower = false;
         for (int i = 0; i < towers.Count; i++)

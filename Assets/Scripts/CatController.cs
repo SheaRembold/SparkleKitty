@@ -39,8 +39,8 @@ public class CatController : Clickable
         {
             base.OnEnter();
             controller.animator.SetTrigger("Sit");
-            if (Random.value < controller.MeowProbability)
-                controller.MeowMaker();
+            if (Random.value < controller.MeowProbability[controller.mood])
+                controller.Meow();
         }
 
         public override void OnUpdate()
@@ -63,8 +63,11 @@ public class CatController : Clickable
 
             if (stateTime > controller.SitTime)
             {
-                if (Random.value < controller.InteractProbability)
+                controller.AddMood(controller.MoodDec);
+                if (controller.StayForever || CatManager.Instance.TimeSinceEnter(controller.catData) < controller.StayLength[controller.mood])
                 {
+                    controller.isLeaving = false;
+
                     List<Placable> favorites = controller.playArea.GetInArea(controller.catData.OtherRequirements);
                     for (int i = 0; i < favorites.Count; i++)
                     {
@@ -76,24 +79,30 @@ public class CatController : Clickable
                     }
                     if (favorites.Count > 0)
                     {
-                        controller.target = favorites[Random.Range(0, favorites.Count)];
-                        controller.targetPos = controller.target.transform.localPosition;
+                        int pick = Random.Range(0, favorites.Count);
+                        if ((favorites[pick].Data.DataType == PlacableDataType.Treat && Random.value < controller.EatProbability)
+                            || (favorites[pick].Data.DataType == PlacableDataType.Toy && Random.value < controller.PlayProbability))
+                        {
+                            controller.target = favorites[pick];
+                            controller.targetPos = controller.target.transform.localPosition;
+                        }
+                        else
+                        {
+                            controller.target = null;
+                            controller.targetPos = PlacementManager.Instance.GetRandomInArea();
+                        }
                     }
                     else
                     {
                         controller.target = null;
-                        controller.isLeaving = !controller.StayForever;
-                        if (controller.isLeaving)
-                            controller.targetPos = controller.playArea.CatSpawnPoint.localPosition;
-                        else
-                            controller.targetPos = PlacementManager.Instance.GetRandomInArea();
+                        controller.targetPos = PlacementManager.Instance.GetRandomInArea();
                     }
                 }
                 else
                 {
+                    controller.isLeaving = true;
                     controller.target = null;
-                    controller.isLeaving = false;
-                    controller.targetPos = PlacementManager.Instance.GetRandomInArea();
+                    controller.targetPos = controller.playArea.CatSpawnPoint.localPosition;
                 }
                 controller.SetState<WalkState>();
             }
@@ -143,6 +152,7 @@ public class CatController : Clickable
                 }
                 else if (controller.isLeaving)
                 {
+                    CatManager.Instance.LeaveArea(controller.catData);
                     controller.playArea.RemoveFromArea(controller.GetComponent<Placable>());
                     Destroy(controller.gameObject);
                 }
@@ -201,8 +211,6 @@ public class CatController : Clickable
         {
             base.OnEnter();
             controller.animator.SetTrigger("Sit");
-            if (Random.value < controller.MeowProbability)
-                controller.MeowMaker();
             if (HelpManager.Instance.CurrentStep == TutorialStep.Start)
             {
                 //if (controller.HelpParticles != null)
@@ -229,7 +237,8 @@ public class CatController : Clickable
             controller.animator.SetTrigger("Pet");
             hasBeenPet = false;
             //added audio
-            //controller.StartEatingAudio();
+            if (Random.value < controller.PurrProbability)
+                controller.Purr();
 
             //if (controller.HelpParticles != null)
             //controller.HelpParticles.SetActive(false);
@@ -246,13 +255,14 @@ public class CatController : Clickable
             }
             else if (hasBeenPet)
             {
-                controller.AddMood(1f / (CatManager.Instance.MoodColors.Length - 1));
                 if (HelpManager.Instance.CurrentStep == TutorialStep.Start)
                 {
+                controller.AddMood(1f / (CatManager.Instance.MoodColors.Length - 1));
                     HelpManager.Instance.CompleteTutorialStep(TutorialStep.Start);
                 }
                 else
                 {
+                    controller.AddMood(controller.PetMoodInc);
                     controller.SetState<SitState>();
                 }
             }
@@ -279,11 +289,12 @@ public class CatController : Clickable
         {
             base.OnUpdate();
             TreatController treatController = controller.target == null ? null : controller.target.GetComponent<TreatController>();
-            if (treatController == null || !treatController.AnyLeft() || stateTime > controller.InteractTime)
+            if (treatController == null || !treatController.AnyLeft() || stateTime > controller.EatTime)
             {
-                if (stateTime > controller.InteractTime)
-                    controller.AddMood(1f / (CatManager.Instance.MoodColors.Length - 1));
+                if (stateTime > controller.EatTime)
+                    controller.AddMood(controller.EatMoodInc);
                 PlacementManager.Instance.GetPlayArea().MarkAsDirty();
+                PlayerManager.Instance.MarkAsDirty();
                 controller.SetState<SitState>();
             }
             else
@@ -310,10 +321,18 @@ public class CatController : Clickable
         public override void OnUpdate()
         {
             base.OnUpdate();
-            if (stateTime > controller.InteractTime)
+            ToyController toyController = controller.target == null ? null : controller.target.GetComponent<ToyController>();
+            if (toyController == null || !toyController.AnyLeft() || stateTime > controller.PlayTime)
             {
-                controller.AddMood(1f / (CatManager.Instance.MoodColors.Length - 1));
+                if (stateTime > controller.PlayTime)
+                    controller.AddMood(controller.PlayMoodInc);
+                PlacementManager.Instance.GetPlayArea().MarkAsDirty();
+                PlayerManager.Instance.MarkAsDirty();
                 controller.SetState<SitState>();
+            }
+            else
+            {
+                toyController.Play();
             }
         }
 
@@ -375,10 +394,13 @@ public class CatController : Clickable
         public override void OnUpdate()
         {
             base.OnUpdate();
-            if (controller.chaseTarget == null || controller.chaseTarget.ChasePosition == Vector3.zero || stateTime > controller.InteractTime)
+            ToyController toyController = controller.chaseTarget == null ? null : controller.chaseTarget.Controller;
+            if (toyController == null || controller.chaseTarget.ChasePosition == Vector3.zero || !toyController.AnyLeft() || stateTime > controller.PlayTime)
             {
-                if (stateTime > controller.InteractTime)
-                    controller.AddMood(1f / (CatManager.Instance.MoodColors.Length - 1));
+                if (stateTime > controller.PlayTime)
+                    controller.AddMood(controller.PlayMoodInc);
+                PlacementManager.Instance.GetPlayArea().MarkAsDirty();
+                PlayerManager.Instance.MarkAsDirty();
                 controller.chaseTarget = null;
                 controller.SetState<SitState>();
             }
@@ -392,24 +414,42 @@ public class CatController : Clickable
                 {
                     controller.SetState<ChaseState>();
                 }
+                else
+                {
+                    toyController.Play();
+                }
             }
         }
     }
 
     public float WalkSpeed = 1f;
     public float RunSpeed = 2f;
-    public float SitTime = 5f;
     public float StopDistance = 1f;
-    public float InteractTime = 5f;
-    public float InteractProbability = 1f;
-    public float MeowProbability = 1f;
+    public float SitTime = 5f;
+    public float EatTime = 5f;
+    public float PlayTime = 5f;
+    public float EatProbability = 1f;
+    public float PlayProbability = 1f;
+    public float[] MeowProbability;
+    public float PurrProbability = 1f;
     public bool StayForever;
+    public float[] StayLength;
+    public float[] SpawnWait;
+    public float[] AwayLength;
+    public float PetMoodInc;
+    public float EatMoodInc;
+    public float PlayMoodInc;
+    public float MoodDec;
+    public AudioClip[] MeowSounds;
+    public AudioClip[] PurrSounds;
+    public AudioClip EatingSound;
     public Renderer[] MoodRenderers;
     public GameObject HelpParticles;
     public Outline HelpOutline;
 
     protected CatData catData;
     protected Animator animator;
+    protected AudioSource ASource;
     protected PlayArea playArea;
     protected Placable target;
     protected Vector3 targetPos;
@@ -418,8 +458,8 @@ public class CatController : Clickable
     List<CatState> states = new List<CatState>();
     CatState currentState;
     Material moodMat;
-    AudioSource ASource;
     float moodValue = 0.5f;
+    int mood = 0;
     
     protected void AddState<T>() where T : CatState, new()
     {
@@ -466,7 +506,8 @@ public class CatController : Clickable
         
         CatManager.Instance.MarkFound(catData);
         moodValue = CatManager.Instance.GetMoodValue(catData);
-        moodMat.color = CatManager.Instance.MoodColors[CatManager.Instance.GetMood(catData)];
+        mood = CatManager.Instance.GetMood(catData);
+        moodMat.color = CatManager.Instance.MoodColors[mood];
 
         if (HelpManager.Instance.CurrentStep == TutorialStep.Start)
         {
@@ -521,29 +562,36 @@ public class CatController : Clickable
             currentState.OnUpdate();
     }
 
-    protected void MeowMaker()
+    protected void Meow()
     {
-        //int i = Random.Range(0, data.CatSounds.Count);
-        //ASource.PlayOneShot(data.CatSounds[i]);
+        int i = Random.Range(0, MeowSounds.Length);
+        ASource.PlayOneShot(MeowSounds[i]);
+    }
+
+    protected void Purr()
+    {
+        int i = Random.Range(0, PurrSounds.Length);
+        ASource.PlayOneShot(PurrSounds[i]);
     }
 
     protected void StartEatingAudio()
     {
         ASource.loop = true;
-        ASource.clip = catData.EatingSound;
+        ASource.clip = EatingSound;
         ASource.Play();
     }
 
     protected void StopEatingAudio()
     {
-        ASource.Play();
+        ASource.Stop();
     }
 
     protected void AddMood(float amount)
     {
         moodValue = Mathf.Clamp01(moodValue + amount);
         CatManager.Instance.UpdateMood(catData, moodValue);
-        moodMat.color = CatManager.Instance.MoodColors[CatManager.Instance.GetMood(catData)];
+        mood = CatManager.Instance.GetMood(catData);
+        moodMat.color = CatManager.Instance.MoodColors[mood];
     }
     
     public override void Click(RaycastHit hit)

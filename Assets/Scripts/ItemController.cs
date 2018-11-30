@@ -4,8 +4,18 @@ using UnityEngine;
 
 public class ItemController : MonoBehaviour
 {
-    protected float _amountLeft = 1f;
+    [SerializeField]
+    protected GameObject destroyEffect;
+
     public float AmountLeft { get { return _amountLeft; } }
+
+    protected Placable placable;
+    protected float _amountLeft = 1f;
+
+    protected virtual void Awake()
+    {
+        placable = GetComponent<Placable>();
+    }
 
     public void SetAmountLeft(float amount)
     {
