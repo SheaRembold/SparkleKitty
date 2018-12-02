@@ -15,6 +15,8 @@ public class BookController : Clickable
     [SerializeField]
     Outline helpOutline;
     [SerializeField]
+    Outline helpOutlinePart2;
+    [SerializeField]
     AudioClip openAudio;
     [SerializeField]
     AudioClip closeAudio;
@@ -88,8 +90,12 @@ public class BookController : Clickable
 
     public override void Click(RaycastHit hit)
     {
-        //helpParticle.SetActive(false);
-        helpOutline.enabled = false;
+        if (HelpManager.Instance.CurrentStep == TutorialStep.GrabBook)
+        {
+            //helpParticle.SetActive(false);
+            helpOutline.enabled = false;
+            helpOutlinePart2.enabled = true;
+        }
 
         if (letterParticles != null)
         {
@@ -103,6 +109,7 @@ public class BookController : Clickable
 
     public void PlaceBook()
     {
+        helpOutlinePart2.enabled = false;
         HelpManager.Instance.CompleteTutorialStep(TutorialStep.GrabBook);
         if (HelpManager.Instance.CurrentStep > TutorialStep.GrabBook)
             OpenBook();

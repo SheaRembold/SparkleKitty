@@ -17,6 +17,8 @@ public class PlayArea : PlacementArea
     MailboxManager mailbox;
     [SerializeField]
     GameObject book;
+    [SerializeField]
+    GameObject placeArrow;
 
     List<CatData> validCats = new List<CatData>();
     CatData waitingCat;
@@ -32,6 +34,7 @@ public class PlayArea : PlacementArea
         for (int i = 0; i < placedInArea.Count; i++)
             placedInArea[i].gameObject.SetActive(false);
         book.SetActive(false);
+        mailbox.gameObject.SetActive(false);
         UpgradableData currentTower = placementLocations[0].CurrentPlacable.Data as UpgradableData;
         DataManager.Instance.SetTowerLevel(currentTower.MaterialType, currentTower.Level);
         SetTower(currentTower);
@@ -90,6 +93,8 @@ public class PlayArea : PlacementArea
         for (int i = 0; i < placedInArea.Count; i++)
             placedInArea[i].gameObject.SetActive(true);
         book.SetActive(true);
+        mailbox.gameObject.SetActive(true);
+        placeArrow.SetActive(false);
 
         CheckForCats();
         if (!HelpManager.Instance.HasShownHelp("IntroAR"))
@@ -165,8 +170,9 @@ public class PlayArea : PlacementArea
         else
             yield return new WaitForSeconds(waitingCat.Prefab.GetComponent<CatController>().SpawnWait[CatManager.Instance.GetMood(waitingCat)]);
 
-        PlacementManager.Instance.PlaceAt(this, waitingCat, CatSpawnPoint.localPosition);
+        Placable cat = PlacementManager.Instance.PlaceAt(this, waitingCat, CatSpawnPoint.localPosition);
         CatManager.Instance.EnterArea(waitingCat);
+        cat.GetComponent<CatController>().EnterArea();
         waitingCat = null;
         CheckForCats();
     }

@@ -745,7 +745,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   destroyEffect: {fileID: 1397980480401696, guid: 250a2293053501c4492da2728b8e1dc2,
     type: 2}
-  damageRate: 0.05
+  damageRate: 0.005
 --- !u!114 &114677056672430216
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -80,11 +80,12 @@ public class CatController : Clickable
                     if (favorites.Count > 0)
                     {
                         int pick = Random.Range(0, favorites.Count);
-                        if ((favorites[pick].Data.DataType == PlacableDataType.Treat && Random.value < controller.EatProbability)
+                        if (controller.justEntered || (favorites[pick].Data.DataType == PlacableDataType.Treat && Random.value < controller.EatProbability)
                             || (favorites[pick].Data.DataType == PlacableDataType.Toy && Random.value < controller.PlayProbability))
                         {
                             controller.target = favorites[pick];
                             controller.targetPos = controller.target.transform.localPosition;
+                            controller.justEntered = false;
                         }
                         else
                         {
@@ -460,6 +461,7 @@ public class CatController : Clickable
     Material moodMat;
     float moodValue = 0.5f;
     int mood = 0;
+    bool justEntered;
     
     protected void AddState<T>() where T : CatState, new()
     {
@@ -560,6 +562,11 @@ public class CatController : Clickable
     {
         if (currentState != null)
             currentState.OnUpdate();
+    }
+
+    public void EnterArea()
+    {
+        justEntered = true;
     }
 
     protected void Meow()

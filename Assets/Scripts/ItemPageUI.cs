@@ -160,8 +160,10 @@ public class ItemPageUI : MonoBehaviour
 
         if (buildables[current].Unlimited)
             HealthImage.fillAmount = 0f;
-        else
+        else if (count + areaCount > 0)
             HealthImage.fillAmount = 1f - (PlayerManager.Instance.GetItemHealth(buildables[current]) - (count + areaCount - 1));
+        else
+            HealthImage.fillAmount = 1f;
 
         if (buildables[current].Unlimited)
         {

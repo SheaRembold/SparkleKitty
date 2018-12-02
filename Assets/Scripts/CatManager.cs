@@ -36,14 +36,14 @@ public class CatManager : MonoBehaviour
 
     private void Update()
     {
-        if (HelpManager.Instance.CurrentStep > TutorialStep.Start)
+        if (PlacementManager.Instance.IsReady && HelpManager.Instance.CurrentStep > TutorialStep.Start)
         {
             TimeSpan now = new TimeSpan(DateTime.UtcNow.Ticks);
             foreach (KeyValuePair<CatData, CatStatus> pair in statuses)
             {
                 if (pair.Value.Found && pair.Value.Mood >= MoodColors.Length / 2 && now.Subtract(pair.Value.LastGift).TotalSeconds >= GiftFrequency[pair.Value.Mood])
                 {
-                    MailboxManager.Instance.AddRandomLetter(pair.Key);
+                    MailboxManager.Instance.AddWeightedRandomLetter(pair.Key);
                     pair.Value.LastGift = now;
                     statusDirty = true;
                 }

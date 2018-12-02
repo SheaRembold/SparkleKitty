@@ -44,6 +44,8 @@ public class PlacementManager : MonoBehaviour
     public List<IChasable> chasables = new List<IChasable>();
     BookController heldBook;
 
+    public bool IsReady { get { return provider != null && !placingArea; } }
+
     private void Awake()
     {
         Instance = this;

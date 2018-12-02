@@ -14,7 +14,7 @@ public class TreatController : ItemController
         float oldAmount = _amountLeft;
         _amountLeft -= eatRate * Time.deltaTime;
         _amountLeft = Mathf.Clamp01(_amountLeft);
-        PlayerManager.Instance.AddItemHealth(placable.Data, oldAmount - _amountLeft);
+        PlayerManager.Instance.AddItemHealth(placable.Data, _amountLeft - oldAmount);
         UpdateAmountLeft();
     }
 

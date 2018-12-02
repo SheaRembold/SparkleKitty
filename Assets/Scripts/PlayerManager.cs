@@ -29,11 +29,21 @@ public class PlayerManager : MonoBehaviour
         if (File.Exists(Application.persistentDataPath + "/inventory_" + DataManager.saveVersion + ".txt"))
         {
             string[] invNames = File.ReadAllLines(Application.persistentDataPath + "/inventory_" + DataManager.saveVersion + ".txt");
-            for (int i = 0; i < invNames.Length; i++)
+            int i = 0;
+            while (i < invNames.Length && invNames[i] != "----")
             {
                 PlacableData item = DataManager.Instance.GetData(invNames[i]);
                 if (item != null)
                     inventory.Add(item);
+                i++;
+            }
+            i++;
+            while (i < invNames.Length)
+            {
+                PlacableData item = DataManager.Instance.GetData(invNames[i]);
+                if (item != null)
+                    itemHealth.Add(item, float.Parse(invNames[i + 1]));
+                i += 2;
             }
         }
         else
@@ -139,6 +149,12 @@ public class PlayerManager : MonoBehaviour
         for (int i = 0; i < inventory.Count; i++)
         {
             builder.AppendLine(inventory[i].name);
+        }
+        builder.AppendLine("----");
+        foreach (KeyValuePair<PlacableData, float> pair in itemHealth)
+        {
+            builder.AppendLine(pair.Key.name);
+            builder.AppendLine(pair.Value.ToString());
         }
         File.WriteAllText(Application.persistentDataPath + "/inventory_" + DataManager.saveVersion + ".txt", builder.ToString());
 

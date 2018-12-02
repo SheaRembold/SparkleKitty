@@ -1,29 +1,14 @@
 fileFormatVersion: 2
-guid: f4a2fb7815d07bc40aa332492054c3c5
+guid: 3191314112f2a514bb04c592e497b150
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
-    100002: Cube
-    100004: Cube.001
-    100006: Cube.002
     400000: //RootNode
-    400002: Cube
-    400004: Cube.001
-    400006: Cube.002
-    2100000: Material
-    2100002: Material.001
-    2100004: No Name
-    2100006: Material.002
-    2300000: Cube
-    2300002: Cube.001
-    2300004: Cube.002
-    3300000: Cube
-    3300002: Cube.001
-    3300004: Cube.002
-    4300000: Cube
-    4300002: Cube.001
-    4300004: Cube.002
+    2100000: No Name
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: Cylinder
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -55,7 +40,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 0.2
     meshCompression: 0
     addColliders: 0
     importVisibility: 1
