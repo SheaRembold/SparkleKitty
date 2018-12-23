@@ -59,6 +59,10 @@ public class MailboxManager : Clickable
         letterRoot.transform.SetParent(currentMailbox.transform);
         animator.SetBool("IsFull", letters.Count > 0);
         animator.SetBool("IsOpen", IsOpen);
+        if (letters.Count > 0)
+        {
+            TurnOnHelp();
+        }
     }
 
     private void OnEnable()
@@ -157,7 +161,7 @@ public class MailboxManager : Clickable
                 weight = 7;
             else if (unfoundCats.Count > 2 && DataManager.Instance.Cats[i] == unfoundCats[2])
                 weight = 2;
-            AddWeight(weights, DataManager.Instance.TowerComponents[(int)DataManager.Instance.Cats[i].RequiredTowerType], weight, ref totalWeight);
+            AddWeight(weights, DataManager.Instance.TowerComponents[(int)DataManager.Instance.Cats[i].RequiredTowerType], weight * DataManager.Instance.GetTowerMatAmount(DataManager.Instance.Cats[i].RequiredTowerType, DataManager.Instance.Cats[i].RequiredTowerLevel) / 2, ref totalWeight);
             for (int j = 0; j < DataManager.Instance.Cats[i].OtherRequirements.Length; j++)
             {
                 BuildableData buildable = DataManager.Instance.Cats[i].OtherRequirements[j] as BuildableData;

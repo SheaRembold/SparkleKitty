@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayArea : PlacementArea
 {
@@ -25,6 +26,10 @@ public class PlayArea : PlacementArea
 
     bool finishedLoading;
 
+    NavMeshData m_NavMesh;
+    NavMeshDataInstance m_Instance;
+    List<NavMeshBuildSource> m_Sources = new List<NavMeshBuildSource>();
+
     private void Awake()
     {
         for (int i = 0; i < placementLocations.Length; i++)
@@ -38,6 +43,20 @@ public class PlayArea : PlacementArea
         UpgradableData currentTower = placementLocations[0].CurrentPlacable.Data as UpgradableData;
         DataManager.Instance.SetTowerLevel(currentTower.MaterialType, currentTower.Level);
         SetTower(currentTower);
+    }
+
+    void OnEnable()
+    {
+        // Construct and add navmesh
+        m_NavMesh = new NavMeshData();
+        m_Instance = NavMesh.AddNavMeshData(m_NavMesh, transform.position, transform.rotation);
+        UpdateNavMesh();
+    }
+
+    void OnDisable()
+    {
+        // Unload navmesh and clear handle
+        m_Instance.Remove();
     }
 
     public void Load()
@@ -114,6 +133,17 @@ public class PlayArea : PlacementArea
         for (int i = 0; i < fences.Length; i++)
             fences[i].SetActive(i == (int)tower.MaterialType);
         mailbox.SetMailbox(tower.MaterialType);
+
+        if (m_NavMesh != null)
+            UpdateNavMesh();
+    }
+
+    void UpdateNavMesh()
+    {
+        NavMeshSourceTag.Collect(ref m_Sources);
+        NavMeshBuildSettings defaultBuildSettings = NavMesh.GetSettingsByID(0);
+        Bounds bounds = new Bounds(Vector3.zero, Vector3.Scale(new Vector3(2f, 2f, 2f), transform.lossyScale));
+        NavMeshBuilder.UpdateNavMeshData(m_NavMesh, defaultBuildSettings, m_Sources, bounds);
     }
 
     public override void AddToArea(Placable placable)
@@ -129,7 +159,7 @@ public class PlayArea : PlacementArea
         placingGrid.SetActive(show);
     }
 
-    void CheckForCats()
+    public void CheckForCats()
     {
         if (/*GetInArea(PlacableDataType.Cat).Count < 2 &&*/ waitingCat == null)
         {
@@ -141,11 +171,16 @@ public class PlayArea : PlacementArea
             }
         }
     }
-    
+
     public override void RemoveFromArea(Placable placable)
     {
         base.RemoveFromArea(placable);
 
+        CheckWaitingCat();
+    }
+
+    public void CheckWaitingCat()
+    {
         if (waitingCat != null)
         {
             UpdateValidCats();
@@ -211,13 +246,20 @@ public class PlayArea : PlacementArea
         for (int i = 0; i < cat.OtherRequirements.Length; i++)
         {
             bool hasRequ = false;
-            for (int j = 0; j < placedInArea.Count; j++)
+            if (PlacementManager.Instance.CurrentAttached != null && PlacementManager.Instance.CurrentAttached.Data == cat.OtherRequirements[i])
             {
-                if (placedInArea[j].Data == cat.OtherRequirements[i]
-                    && (placedInArea[i].GetComponent<ItemController>() == null || placedInArea[i].GetComponent<ItemController>().AnyLeft()))
+                hasRequ = true;
+            }
+            else
+            {
+                for (int j = 0; j < placedInArea.Count; j++)
                 {
-                    hasRequ = true;
-                    break;
+                    if (placedInArea[j].Data == cat.OtherRequirements[i]
+                        && (placedInArea[i].GetComponent<ItemController>() == null || placedInArea[i].GetComponent<ItemController>().AnyLeft()))
+                    {
+                        hasRequ = true;
+                        break;
+                    }
                 }
             }
             if (!hasRequ)

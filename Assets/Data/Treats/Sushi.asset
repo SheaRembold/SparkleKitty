@@ -20,4 +20,7 @@ MonoBehaviour:
   BuildRequirements:
   - {fileID: 11400000, guid: db4792c77108bb64293e0aabb11c858f, type: 2}
   - {fileID: 11400000, guid: db4792c77108bb64293e0aabb11c858f, type: 2}
+  - {fileID: 11400000, guid: db4792c77108bb64293e0aabb11c858f, type: 2}
+  - {fileID: 11400000, guid: 866f2ad6a2b0ce144b992d1eb34290ed, type: 2}
+  - {fileID: 11400000, guid: 866f2ad6a2b0ce144b992d1eb34290ed, type: 2}
   - {fileID: 11400000, guid: 866f2ad6a2b0ce144b992d1eb34290ed, type: 2}

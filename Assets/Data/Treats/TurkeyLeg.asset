@@ -19,4 +19,7 @@ MonoBehaviour:
   Unlimited: 0
   BuildRequirements:
   - {fileID: 11400000, guid: 16825c51c2e7190409e3c03cbe51be7f, type: 2}
+  - {fileID: 11400000, guid: 16825c51c2e7190409e3c03cbe51be7f, type: 2}
+  - {fileID: 11400000, guid: 16825c51c2e7190409e3c03cbe51be7f, type: 2}
+  - {fileID: 11400000, guid: 69de5e3c76c10fc46b09cf9a1817c992, type: 2}
   - {fileID: 11400000, guid: 69de5e3c76c10fc46b09cf9a1817c992, type: 2}

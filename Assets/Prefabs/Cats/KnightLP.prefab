@@ -495,6 +495,7 @@ GameObject:
   - component: {fileID: 95775545941662208}
   - component: {fileID: 114127623184507510}
   - component: {fileID: 82122529042043656}
+  - component: {fileID: 195137925758403038}
   m_Layer: 10
   m_Name: KnightLP
   m_TagString: Untagged
@@ -2990,3 +2991,24 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.0000055450946, y: -0.008277215, z: -0.03483255}
     m_Extent: {x: 0.02539826, y: 0.05296406, z: 0.03652196}
   m_DirtyAABB: 0
+--- !u!195 &195137925758403038
+NavMeshAgent:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1436853899390780}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.2
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 0.33
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 0

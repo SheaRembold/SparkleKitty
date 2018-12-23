@@ -3,7 +3,7 @@
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -21,6 +21,12 @@ MonoBehaviour:
   MaterialType: 1
   Level: 2
   UpgradeRequirements:
+  - {fileID: 11400000, guid: 261f554cf1335f34aa0fd14cd1daebd4, type: 2}
+  - {fileID: 11400000, guid: 261f554cf1335f34aa0fd14cd1daebd4, type: 2}
+  - {fileID: 11400000, guid: 261f554cf1335f34aa0fd14cd1daebd4, type: 2}
+  - {fileID: 11400000, guid: 261f554cf1335f34aa0fd14cd1daebd4, type: 2}
+  - {fileID: 11400000, guid: 261f554cf1335f34aa0fd14cd1daebd4, type: 2}
+  - {fileID: 11400000, guid: 261f554cf1335f34aa0fd14cd1daebd4, type: 2}
   - {fileID: 11400000, guid: 261f554cf1335f34aa0fd14cd1daebd4, type: 2}
   - {fileID: 11400000, guid: 261f554cf1335f34aa0fd14cd1daebd4, type: 2}
   Upgrade: {fileID: 11400000, guid: b1b0f48df67aee443887daef0208e913, type: 2}

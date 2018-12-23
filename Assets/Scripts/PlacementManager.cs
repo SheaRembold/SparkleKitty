@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Experimental.XR;
@@ -25,6 +26,8 @@ public class PlacementManager : MonoBehaviour
     GameObject BuildAreaPrefab;
     [SerializeField]
     GameObject CookAreaPrefab;
+
+    public bool IsNonXR;
 
     public bool IsUsingSteamVR { get; private set; }
 
@@ -62,27 +65,39 @@ public class PlacementManager : MonoBehaviour
         //UIManager.Instance.ShowUI(MainUI);
         if (provider == null)
         {
-#if UNITY_EDITOR || UNITY_STANDALONE
-            if (UseSteamVR && UnityEngine.XR.XRDevice.isPresent)
+            if (IsNonXR)
             {
-                IsUsingSteamVR = true;
-                provider = new SteamVRPlacementProvider();
+                provider = new NonXRPlacementProvider();
                 StartPlacement();
+                placingArea = false;
+                HelpUI.gameObject.SetActive(false);
+                playArea.SetArea();
+                provider.FinishInit();
             }
             else
             {
-                provider = new TestPlacementProvider();
-                StartPlacement();
-            }
+#if UNITY_EDITOR || UNITY_STANDALONE
+                if (UseSteamVR && UnityEngine.XR.XRDevice.isPresent)
+                {
+                    IsUsingSteamVR = true;
+                    provider = new SteamVRPlacementProvider();
+                    StartPlacement();
+                }
+                else
+                {
+                    provider = new TestPlacementProvider();
+                    StartPlacement();
+                }
 #elif VUFORIA
-            provider = new VuforiaPlacementProvider();
-            StartPlacement();
+                provider = new VuforiaPlacementProvider();
+                StartPlacement();
 #elif UNITY_ANDROID
-            StartCoroutine(WaitToStart());
+                StartCoroutine(WaitToStart());
 #else
-            provider = new ARPlacementProvider();
-            StartPlacement();
+                provider = new ARPlacementProvider();
+                StartPlacement();
 #endif
+            }
         }
         else
         {
@@ -107,7 +122,7 @@ public class PlacementManager : MonoBehaviour
 
         if (availTask.Result == GoogleARCore.ApkAvailabilityStatus.SupportedInstalled)
         {*/
-            provider = new ARPlacementProvider();
+        provider = new ARPlacementProvider();
         /*}
         else if (availTask.Result == GoogleARCore.ApkAvailabilityStatus.SupportedApkTooOld || availTask.Result == GoogleARCore.ApkAvailabilityStatus.SupportedNotInstalled)
         {
@@ -147,7 +162,7 @@ public class PlacementManager : MonoBehaviour
         LoadingUI.SetActive(false);
         HelpUI.gameObject.SetActive(true);
     }
-    
+
     public void SetAttached(PlacableData placable)
     {
         RemoveAttached();
@@ -156,11 +171,18 @@ public class PlacementManager : MonoBehaviour
         CurrentAttached.Data = placable;
         ItemController itemController = CurrentAttached.GetComponent<ItemController>();
         if (itemController != null)
-            itemController.SetAmountLeft(PlayerManager.Instance.GetItemHealth(placable) - (PlayerManager.Instance.GetInventoryCount(placable) - 1));
+        {
+            if (placable.Unlimited)
+                itemController.SetAmountLeft(1f);
+            else
+                itemController.SetAmountLeft(PlayerManager.Instance.GetItemHealth(placable) - (PlayerManager.Instance.GetInventoryCount(placable) - 1));
+        }
         CurrentAttached.transform.SetParent(provider.holdAttachPoint);
         CurrentAttached.transform.localPosition = Vector3.zero;
         CurrentAttached.transform.localRotation = placable.Prefab.transform.rotation;
         CurrentAttached.transform.localScale = Vector3.one;
+
+        playArea.CheckForCats();
     }
 
     public void RemoveAttached()
@@ -169,6 +191,8 @@ public class PlacementManager : MonoBehaviour
         {
             Destroy(CurrentAttached.gameObject);
             CurrentAttached = null;
+
+            playArea.CheckWaitingCat();
         }
     }
 
@@ -219,7 +243,7 @@ public class PlacementManager : MonoBehaviour
         lastAreaType = currentAreaType;
         currentAreaType = areaType;
     }
-    
+
     public void ResetLastArea()
     {
         SetArea(lastAreaType);
@@ -233,12 +257,19 @@ public class PlacementManager : MonoBehaviour
         currentPlacing.Data = placable;
         ItemController itemController = currentPlacing.GetComponent<ItemController>();
         if (itemController != null)
-            itemController.SetAmountLeft(PlayerManager.Instance.GetItemHealth(placable) - (PlayerManager.Instance.GetInventoryCount(placable) - 1));
+        {
+            if (placable.Unlimited)
+                itemController.SetAmountLeft(1f);
+            else
+                itemController.SetAmountLeft(PlayerManager.Instance.GetItemHealth(placable) - (PlayerManager.Instance.GetInventoryCount(placable) - 1));
+        }
         lastPos = null;
         HelpUI.gameObject.SetActive(true);
         playArea.ShowPlacing(true);
         PlaceCurrent();
         placingDown = false;
+        if (IsNonXR)
+            BookController.Instance.ReturnBook();
     }
 
     public void GrabBook(BookController book)
@@ -246,11 +277,21 @@ public class PlacementManager : MonoBehaviour
         heldBook = book;
 
         heldBook.transform.SetParent(provider.holdAttachPoint);
-        heldBook.transform.localPosition = new Vector3(0f, 0f, 0.3f);
+        heldBook.transform.localPosition = provider.BookOffset;
         heldBook.transform.localRotation = Quaternion.identity;
 
-        HelpUI.gameObject.SetActive(true);
-        HelpUI.ShowPlaceItem();
+        if(IsNonXR)
+        {
+            heldBook.transform.SetParent(playArea.transform);
+            heldBook.PlaceBook();
+            heldBook = null;
+        }
+        else
+        {
+            heldBook.CloseBook();
+            HelpUI.gameObject.SetActive(true);
+            HelpUI.ShowPlaceItem();
+        }
     }
 
     Coroutine moveLetterCoroutine;
@@ -271,7 +312,7 @@ public class PlacementManager : MonoBehaviour
         while (time < moveLetterTime)
         {
             time += Time.deltaTime;
-            letter.transform.position = Vector3.Lerp(startPos, provider.viewAttachPoint.position + provider.viewAttachPoint.forward * (0.3f * provider.viewAttachPoint.localScale.z), time / moveLetterTime);
+            letter.transform.position = Vector3.Lerp(startPos, provider.viewAttachPoint.position + provider.viewAttachPoint.up * (provider.BookOffset.y * provider.viewAttachPoint.localScale.y) + provider.viewAttachPoint.forward * (provider.BookOffset.z * provider.viewAttachPoint.localScale.z), time / moveLetterTime);
             letter.transform.rotation = Quaternion.Lerp(startRot, provider.viewAttachPoint.rotation, time / moveLetterTime);
             yield return null;
         }
@@ -349,17 +390,25 @@ public class PlacementManager : MonoBehaviour
         currentArea.AddToArea(currentPlacing);
         currentPlacing = null;
     }
-    
+
     public Vector3 GetRandomInArea()
     {
-        return new Vector3(Random.Range(-1f, 1f), 0f, Random.Range(-1f, 1f));
+        return new Vector3(Random.Range(-1f, 1f), Random.Range(0f, 0.5f), Random.Range(-1f, 1f));
     }
 
-    public Vector3 GetWorldPos(Vector3 areaPos)
+    public Vector3 GetWorldNavPos(Vector3 areaPos)
     {
         Vector3 worldPos = currentArea.transform.TransformPoint(areaPos);
-        Plane plane = new Plane(currentArea.transform.up, currentArea.transform.position);
-        return plane.ClosestPointOnPlane(worldPos);
+        NavMeshHit hit;
+        NavMesh.SamplePosition(worldPos, out hit, 10f, NavMesh.AllAreas);
+        return hit.position;
+    }
+
+    public Vector3 GetNavPos(Vector3 worldPos)
+    {
+        NavMeshHit hit;
+        NavMesh.SamplePosition(worldPos, out hit, 10f, NavMesh.AllAreas);
+        return hit.position;
     }
 
     void PlaceCurrent()
@@ -491,7 +540,7 @@ public class PlacementManager : MonoBehaviour
         }
         else
         {
-                PlaceCurrent();
+            PlaceCurrent();
             if (provider.GetClickDown())
             {
                 placingDown = true;
@@ -522,6 +571,8 @@ public class PlacementManager : MonoBehaviour
                         HelpManager.Instance.CompleteTutorialStep(TutorialStep.PlaceToy);
                     placingDown = false;
                     SoundManager.Instance.PlayGroup("PlaceItem");
+                    if (IsNonXR)
+                        GrabBook(BookController.Instance);
                 }
                 /*else
                 {
@@ -533,6 +584,25 @@ public class PlacementManager : MonoBehaviour
                     PlayerManager.Instance.AddInventory(currentPlacing.Data);
                     Destroy(currentPlacing.gameObject);
                 }*/
+            }
+        }
+
+        if (currentClickable == null)
+        {
+#if UNITY_EDITOR || UNITY_STANDALONE
+            if (provider.GetClickDown())
+#else
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && !EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+#endif
+            {
+                RaycastHit hit;
+                if (Physics.Raycast(provider.GetClickRay(), out hit, Mathf.Infinity))
+                {
+                    if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Base"))
+                    {
+                        BookController.Instance.ReturnBook();
+                    }
+                }
             }
         }
     }

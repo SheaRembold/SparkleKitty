@@ -20,14 +20,18 @@ public class BookController : Clickable
     AudioClip openAudio;
     [SerializeField]
     AudioClip closeAudio;
+    [SerializeField]
+    GameObject[] bookColliders;
+
+    [System.NonSerialized]
+    public MoveParticles letterParticles;
 
     GraphicRaycaster graphicRaycaster;
     CanvasRaycastTarget canvasRaycastTarget;
     Animator animator;
     AudioSource audioSource;
-
-    [System.NonSerialized]
-    public MoveParticles letterParticles;
+    Vector3 startPos;
+    Quaternion startRot;
 
     private void Awake()
     {
@@ -45,11 +49,14 @@ public class BookController : Clickable
         }
 
         HelpManager.Instance.onCompleteTutorialStep += OnCompleteTutorialStep;
+
+        startPos = transform.position;
+        startRot = transform.rotation;
     }
 
     private void Start()
     {
-        if (HelpManager.Instance.CurrentStep <= TutorialStep.GrabBook)
+        if (HelpManager.Instance.CurrentStep <= TutorialStep.GrabBook || PlacementManager.Instance.IsNonXR)
             CloseBook();
     }
 
@@ -73,6 +80,9 @@ public class BookController : Clickable
 
         audioSource.clip = closeAudio;
         audioSource.Play();
+
+        for (int i = 0; i < bookColliders.Length; i++)
+            bookColliders[i].layer = LayerMask.NameToLayer("Placable");
     }
 
     public void OpenBook()
@@ -86,6 +96,9 @@ public class BookController : Clickable
         
         audioSource.clip = openAudio;
         audioSource.Play();
+
+        for (int i = 0; i < bookColliders.Length; i++)
+            bookColliders[i].layer = LayerMask.NameToLayer("UI");
     }
 
     public override void Click(RaycastHit hit)
@@ -102,8 +115,7 @@ public class BookController : Clickable
             letterParticles.StartPlaying();
             letterParticles = null;
         }
-
-        CloseBook();
+        
         PlacementManager.Instance.GrabBook(this);
     }
 
@@ -113,5 +125,12 @@ public class BookController : Clickable
         HelpManager.Instance.CompleteTutorialStep(TutorialStep.GrabBook);
         if (HelpManager.Instance.CurrentStep > TutorialStep.GrabBook)
             OpenBook();
+    }
+
+    public void ReturnBook()
+    {
+        CloseBook();
+        transform.position = startPos;
+        transform.rotation = startRot;
     }
 }

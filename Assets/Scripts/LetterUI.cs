@@ -48,6 +48,8 @@ public class LetterUI : MonoBehaviour
             gift.GetComponentInChildren<Text>().text = pair.Value.ToString();
             giftIndex++;
         }
+        for (int i = giftIndex; i < gifts.Count; i++)
+            gifts[i].SetActive(false);
         acceptButton.interactable = true;
         if (HelpManager.Instance.CurrentStep == TutorialStep.Mail)
         {

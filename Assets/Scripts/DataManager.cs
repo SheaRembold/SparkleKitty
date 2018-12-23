@@ -105,4 +105,29 @@ public class DataManager : MonoBehaviour
     {
         return towerLevels[type];
     }
+
+    public int GetTowerMatAmount(MaterialType type, int level)
+    {
+        for (int i = 0; i < Towers.Length; i++)
+        {
+            if (Towers[i].MaterialType == type && Towers[i].Level == level)
+            {
+                if (Towers[i].BuildRequirements.Length > 0)
+                {
+                    return Towers[i].BuildRequirements.Length;
+                }
+                else
+                {
+                    for (int j = 0; j < Towers.Length; j++)
+                    {
+                        if (Towers[j].Upgrade == Towers[i])
+                        {
+                            return Towers[j].UpgradeRequirements.Length;
+                        }
+                    }
+                }
+            }
+        }
+        return 0;
+    }
 }

@@ -55,4 +55,6 @@ public abstract class PlacementProvider
     {
         return new Ray(Camera.main.transform.position, Camera.main.transform.forward);
     }
+
+    public virtual Vector3 BookOffset { get { return new Vector3(0f, 0f, 0.3f); } }
 }

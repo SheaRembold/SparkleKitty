@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class CatController : Clickable
 {
@@ -116,6 +117,10 @@ public class CatController : Clickable
         {
             base.OnEnter();
             controller.animator.SetTrigger("Walk");
+            controller.navAgent.speed = controller.WalkSpeed * controller.transform.lossyScale.x;
+            //controller.navAgent.stoppingDistance = controller.StopDistance * controller.transform.lossyScale.x;
+            controller.navAgent.isStopped = false;
+            controller.navAgent.updatePosition = true;
         }
 
         public override void OnUpdate()
@@ -138,12 +143,15 @@ public class CatController : Clickable
 
             if (controller.target != null)
                 controller.targetPos = controller.target.transform.localPosition;
-            Vector3 targetWorldPos = PlacementManager.Instance.GetWorldPos(controller.targetPos);
-            controller.transform.LookAt(targetWorldPos, PlacementManager.Instance.GetPlayArea().transform.up);
+            Vector3 targetWorldPos = PlacementManager.Instance.GetWorldNavPos(controller.targetPos);
+            controller.navAgent.SetDestination(targetWorldPos);
             float distToTarget = Vector3.Distance(controller.transform.position, targetWorldPos);
             float worldStopDist = controller.StopDistance * controller.transform.lossyScale.x;
-            if (Mathf.Abs(distToTarget - worldStopDist) < 0.01f)
+            if (distToTarget <= worldStopDist)
             {
+                controller.navAgent.isStopped = true;
+                controller.navAgent.updatePosition = false;
+                controller.transform.LookAt(targetWorldPos, PlacementManager.Instance.GetPlayArea().transform.up);
                 if (controller.target != null)
                 {
                     if (controller.target.Data.DataType == PlacableDataType.Treat)
@@ -164,11 +172,13 @@ public class CatController : Clickable
             }
             else
             {
-                float movement = controller.WalkSpeed * controller.transform.lossyScale.x * Time.deltaTime;
+                /*float movement = controller.WalkSpeed * controller.transform.lossyScale.x * Time.deltaTime;
                 if (movement < distToTarget - worldStopDist)
                     controller.transform.position += controller.transform.forward * movement;
                 else
-                    controller.transform.position += controller.transform.forward * (distToTarget - worldStopDist);
+                    controller.transform.position += controller.transform.forward * (distToTarget - worldStopDist);*/
+                if (controller.navAgent.desiredVelocity.magnitude > 0)
+                    controller.transform.rotation = Quaternion.LookRotation(controller.navAgent.desiredVelocity.normalized, PlacementManager.Instance.GetPlayArea().transform.up);
             }
         }
     }
@@ -179,6 +189,10 @@ public class CatController : Clickable
         {
             base.OnEnter();
             controller.animator.SetTrigger("Walk");
+            controller.navAgent.speed = controller.WalkSpeed * controller.transform.lossyScale.x;
+            //controller.navAgent.stoppingDistance = controller.StopDistance * controller.transform.lossyScale.x;
+            controller.navAgent.isStopped = false;
+            controller.navAgent.updatePosition = true;
         }
 
         public override void OnUpdate()
@@ -187,21 +201,26 @@ public class CatController : Clickable
             
             if (controller.target != null)
                 controller.targetPos = controller.target.transform.localPosition;
-            Vector3 targetWorldPos = PlacementManager.Instance.GetWorldPos(controller.targetPos);
-            controller.transform.LookAt(targetWorldPos, PlacementManager.Instance.GetPlayArea().transform.up);
+            Vector3 targetWorldPos = PlacementManager.Instance.GetWorldNavPos(controller.targetPos);
+            controller.navAgent.SetDestination(targetWorldPos);
             float distToTarget = Vector3.Distance(controller.transform.position, targetWorldPos);
             float worldStopDist = controller.StopDistance * controller.transform.lossyScale.x;
-            if (Mathf.Abs(distToTarget - worldStopDist) < 0.01f)
+            if (distToTarget <= worldStopDist)
             {
+                controller.navAgent.isStopped = true;
+                controller.navAgent.updatePosition = false;
+                controller.transform.LookAt(targetWorldPos, PlacementManager.Instance.GetPlayArea().transform.up);
                 controller.SetState<TutorialSitState>();
             }
             else
             {
-                float movement = controller.WalkSpeed * controller.transform.lossyScale.x * Time.deltaTime;
+                /*float movement = controller.WalkSpeed * controller.transform.lossyScale.x * Time.deltaTime;
                 if (movement < distToTarget - worldStopDist)
                     controller.transform.position += controller.transform.forward * movement;
                 else
-                    controller.transform.position += controller.transform.forward * (distToTarget - worldStopDist);
+                    controller.transform.position += controller.transform.forward * (distToTarget - worldStopDist);*/
+                if (controller.navAgent.desiredVelocity.magnitude > 0)
+                    controller.transform.rotation = Quaternion.LookRotation(controller.navAgent.desiredVelocity.normalized, PlacementManager.Instance.GetPlayArea().transform.up);
             }
         }
     }
@@ -353,6 +372,10 @@ public class CatController : Clickable
         {
             base.OnEnter();
             controller.animator.SetTrigger("Run");
+            controller.navAgent.speed = controller.RunSpeed * controller.transform.lossyScale.x;
+            //controller.navAgent.stoppingDistance = controller.StopDistance * controller.transform.lossyScale.x;
+            controller.navAgent.isStopped = false;
+            controller.navAgent.updatePosition = true;
         }
 
         public override void OnUpdate()
@@ -364,21 +387,26 @@ public class CatController : Clickable
             }
             else
             {
-                Vector3 targetWorldPos = controller.chaseTarget.ChasePosition;
-                controller.transform.LookAt(targetWorldPos, PlacementManager.Instance.GetPlayArea().transform.up);
+                Vector3 targetWorldPos = PlacementManager.Instance.GetNavPos(controller.chaseTarget.ChasePosition);
+                controller.navAgent.SetDestination(targetWorldPos);
                 float distToTarget = Vector3.Distance(controller.transform.position, targetWorldPos);
                 float worldStopDist = controller.StopDistance * controller.transform.lossyScale.x;
-                if (Mathf.Abs(distToTarget - worldStopDist) < 0.01f)
+                if (distToTarget <= worldStopDist)
                 {
+                    controller.navAgent.isStopped = true;
+                    controller.navAgent.updatePosition = false;
+                    controller.transform.LookAt(targetWorldPos, PlacementManager.Instance.GetPlayArea().transform.up);
                     controller.SetState<ChasePlayState>();
                 }
                 else
                 {
-                    float movement = controller.RunSpeed * controller.transform.lossyScale.x * Time.deltaTime;
+                    /*float movement = controller.RunSpeed * controller.transform.lossyScale.x * Time.deltaTime;
                     if (movement < distToTarget - worldStopDist)
                         controller.transform.position += controller.transform.forward * movement;
                     else
-                        controller.transform.position += controller.transform.forward * (distToTarget - worldStopDist);
+                        controller.transform.position += controller.transform.forward * (distToTarget - worldStopDist);*/
+                    if (controller.navAgent.desiredVelocity.magnitude > 0)
+                        controller.transform.rotation = Quaternion.LookRotation(controller.navAgent.desiredVelocity.normalized, PlacementManager.Instance.GetPlayArea().transform.up);
                 }
             }
         }
@@ -407,7 +435,7 @@ public class CatController : Clickable
             }
             else
             {
-                Vector3 targetWorldPos = controller.chaseTarget.ChasePosition;
+                Vector3 targetWorldPos = PlacementManager.Instance.GetNavPos(controller.chaseTarget.ChasePosition);
                 controller.transform.LookAt(targetWorldPos, PlacementManager.Instance.GetPlayArea().transform.up);
                 float distToTarget = Vector3.Distance(controller.transform.position, targetWorldPos);
                 float worldStopDist = controller.StopDistance * controller.transform.lossyScale.x;
@@ -417,6 +445,7 @@ public class CatController : Clickable
                 }
                 else
                 {
+                    //controller.transform.LookAt(targetWorldPos, PlacementManager.Instance.GetPlayArea().transform.up);
                     toyController.Play();
                 }
             }
@@ -451,6 +480,7 @@ public class CatController : Clickable
     protected CatData catData;
     protected Animator animator;
     protected AudioSource ASource;
+    protected NavMeshAgent navAgent;
     protected PlayArea playArea;
     protected Placable target;
     protected Vector3 targetPos;
@@ -483,6 +513,9 @@ public class CatController : Clickable
     {
         animator = GetComponent<Animator>();
         ASource = GetComponent<AudioSource>();
+
+        navAgent = GetComponent<NavMeshAgent>();
+        navAgent.updateRotation = false;
 
         moodMat = new Material(MoodRenderers[0].sharedMaterial);
         for (int i=0;i<MoodRenderers.Length;i++)
