@@ -49,6 +49,7 @@ public class PlacementArea : MonoBehaviour
 
     public virtual void MoveInArea(Placable placable)
     {
+        placable.MoveInArea();
         areaDirty = true;
     }
     

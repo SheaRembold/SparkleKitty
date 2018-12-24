@@ -414,12 +414,17 @@ public class PlacementManager : MonoBehaviour
     void PlaceCurrent()
     {
         RaycastHit hit;
-        //if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Ground")))
-        if (Physics.Raycast(provider.GetPlaceRay(), out hit, Mathf.Infinity, 1 << LayerMask.NameToLayer("Ground")))
+        NavMeshHit navHit = new NavMeshHit();
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Ground")) | (1 << LayerMask.NameToLayer("Tower"))))
+        {
+            NavMesh.SamplePosition(hit.point, out navHit, 0.05f * currentArea.transform.localScale.x, NavMesh.AllAreas);
+        }
+
+        if (navHit.hit)
         {
             currentPlacing.gameObject.SetActive(true);
-            currentPlacing.transform.SetParent(hit.transform.parent);
-            currentPlacing.transform.position = hit.point;
+            currentPlacing.transform.SetParent(currentArea.transform);
+            currentPlacing.transform.position = navHit.position;
             currentPlacing.transform.localRotation = Quaternion.identity;
             currentPlacing.transform.localScale = Vector3.one;
             placed = true;
@@ -513,7 +518,11 @@ public class PlacementManager : MonoBehaviour
                         {
                             currentClickable = hit.transform.GetComponentInParent<Clickable>();
 
-                            if (currentClickable == null && currentArea.AllowMovement)
+                            if (currentClickable != null)
+                            {
+                                currentClickable.ClickDown(hit);
+                            }
+                            else if (currentArea.AllowMovement)
                             {
                                 currentPlacing = hit.transform.GetComponentInParent<Placable>();
                                 lastPos = currentPlacing.transform.localPosition;
@@ -534,6 +543,7 @@ public class PlacementManager : MonoBehaviour
                         if (upClickable == currentClickable)
                             currentClickable.Click(hit);
                     }
+                    currentClickable.ClickUp(hit);
                     currentClickable = null;
                 }
             }

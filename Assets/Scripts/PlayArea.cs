@@ -144,6 +144,15 @@ public class PlayArea : PlacementArea
         NavMeshBuildSettings defaultBuildSettings = NavMesh.GetSettingsByID(0);
         Bounds bounds = new Bounds(Vector3.zero, Vector3.Scale(new Vector3(2f, 2f, 2f), transform.lossyScale));
         NavMeshBuilder.UpdateNavMeshData(m_NavMesh, defaultBuildSettings, m_Sources, bounds);
+
+        for (int i = 0; i < placedInArea.Count; i++)
+        {
+            if (placedInArea[i].GetComponent<NavMeshSourceTag>() == null)
+            {
+                placedInArea[i].transform.position = PlacementManager.Instance.GetNavPos(placedInArea[i].transform.position);
+                MoveInArea(placedInArea[i]);
+            }
+        }
     }
 
     public override void AddToArea(Placable placable)

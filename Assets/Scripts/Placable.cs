@@ -15,4 +15,8 @@ public class Placable : MonoBehaviour
     public virtual void RemovedFromArea()
     {
     }
+
+    public virtual void MoveInArea()
+    {
+    }
 }

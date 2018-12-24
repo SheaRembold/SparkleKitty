@@ -35,6 +35,14 @@ public class BallClickable : Clickable, IChasable
         PlacementManager.Instance.chasables.Remove(this);
     }
 
+    public override void MoveInArea()
+    {
+        rigidbody.velocity = Vector3.zero;
+        rigidbody.angularVelocity = Vector3.zero;
+        rigidbody.transform.localPosition = Vector3.zero;
+        rigidbody.position = transform.position;
+    }
+
     public Vector3 ChasePosition { get { return rigidbody.position; } }
     public ToyController Controller { get { return GetComponent<ToyController>(); } }
     public float Attraction(CatController cat) { return rigidbody.velocity.magnitude / (speed / 2f); }

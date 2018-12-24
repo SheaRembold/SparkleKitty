@@ -1,42 +1,82 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class MouseClickable : Clickable, IChasable
 {
     [SerializeField]
-    float speed = 1f;
+    float chargeRate = 2f;
+    [SerializeField]
+    float useRate = 1f;
 
-    Rigidbody rigidbody;
     Animator animator;
+    NavMeshAgent navAgent;
+    bool charging;
+    float charge;
 
     private void Awake()
     {
-        rigidbody = GetComponentInChildren<Rigidbody>();
-        rigidbody.isKinematic = true;
         animator = GetComponentInChildren<Animator>();
+        navAgent = GetComponentInChildren<NavMeshAgent>();
     }
 
-    public override void Click(RaycastHit hit)
+    public override void ClickDown(RaycastHit hit)
     {
-        Vector3 dir = PlacementManager.Instance.GetPlayArea().transform.position - rigidbody.position;
-        dir.y = 0f;
-        if (dir.magnitude == 0)
-            dir = new Vector3(Random.value, 0f, Random.value);
-        rigidbody.velocity = dir.normalized * speed;
+        animator.SetInteger("State", 1);
+        navAgent.isStopped = true;
+        navAgent.updatePosition = false;
+        navAgent.updateRotation = false;
+        charging = true;
+    }
+
+    public override void ClickUp(RaycastHit hit)
+    {
+        charging = false;
+        if (charge > 0)
+        {
+            animator.SetInteger("State", 2);
+            navAgent.isStopped = false;
+            navAgent.updatePosition = true;
+            navAgent.updateRotation = true;
+            navAgent.SetDestination(PlacementManager.Instance.GetWorldNavPos(PlacementManager.Instance.GetRandomInArea()));
+        }
+        else
+        {
+            animator.SetInteger("State", 0);
+        }
     }
 
     void Update()
     {
-        if (rigidbody.velocity.magnitude > 0.001f)
-            animator.SetInteger("State", 2);
+        if (charging)
+        {
+            charge += chargeRate * Time.deltaTime;
+        }
         else
-            animator.SetInteger("State", 0);
+        {
+            if (charge > 0)
+            {
+                charge -= useRate * Time.deltaTime;
+                if (charge <= 0)
+                {
+                    charge = 0;
+                    animator.SetInteger("State", 0);
+                    navAgent.isStopped = true;
+                    navAgent.updatePosition = false;
+                    navAgent.updateRotation = false;
+                }
+                else if (Vector3.Distance(transform.position, navAgent.destination) < 0.01f * transform.lossyScale.x)
+                {
+                    navAgent.SetDestination(PlacementManager.Instance.GetWorldNavPos(PlacementManager.Instance.GetRandomInArea()));
+                }
+            }
+        }
     }
     
     public override void AddedToArea()
     {
-        rigidbody.isKinematic = false;
+        navAgent.enabled = true;
         PlacementManager.Instance.chasables.Add(this);
     }
 
@@ -45,7 +85,7 @@ public class MouseClickable : Clickable, IChasable
         PlacementManager.Instance.chasables.Remove(this);
     }
 
-    public Vector3 ChasePosition { get { return rigidbody.position; } }
+    public Vector3 ChasePosition { get { return transform.position; } }
     public ToyController Controller { get { return GetComponent<ToyController>(); } }
-    public float Attraction(CatController cat) { return rigidbody.velocity.magnitude / (speed / 2f); }
+    public float Attraction(CatController cat) { return navAgent.velocity.magnitude / (navAgent.speed); }
 }
