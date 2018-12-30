@@ -15,14 +15,14 @@ public class MainMenu : MonoBehaviour
 
     private void Awake()
     {
-        if (!File.Exists(Application.persistentDataPath + "/cats_" + DataManager.saveVersion + ".txt")
+        /*if (!File.Exists(Application.persistentDataPath + "/cats_" + DataManager.saveVersion + ".txt")
             && !File.Exists(Application.persistentDataPath + "/help_" + DataManager.saveVersion + ".txt")
             && !File.Exists(Application.persistentDataPath + "/mailbox_" + DataManager.saveVersion + ".txt")
             && !File.Exists(Application.persistentDataPath + "/PlayArea(Clone)_" + DataManager.saveVersion + ".txt")
             && !File.Exists(Application.persistentDataPath + "/inventory_" + DataManager.saveVersion + ".txt"))
         {
             contButton.SetActive(false);
-        }
+        }*/
         loading.SetActive(false);
     }
 

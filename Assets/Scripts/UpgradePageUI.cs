@@ -147,7 +147,7 @@ public class UpgradePageUI : ItemPageUI
             }
             if (PlacementManager.Instance.GetPlayArea().GetPlacementLocation().CurrentPlacable.Data == upgradable)
             {
-                PlacementManager.Instance.GetPlayArea().GetPlacementLocation().SetPlacable(upgradable.Upgrade, true);
+                PlacementManager.Instance.GetPlayArea().SetTower(upgradable.Upgrade, true);
             }
             else
             {

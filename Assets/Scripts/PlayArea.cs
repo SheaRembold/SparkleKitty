@@ -127,9 +127,9 @@ public class PlayArea : PlacementArea
         return placementLocations[0];
     }
 
-    public void SetTower(UpgradableData tower)
+    public void SetTower(UpgradableData tower, bool showEffect = false)
     {
-        placementLocations[0].SetPlacable(tower);
+        placementLocations[0].SetPlacable(tower, showEffect);
         for (int i = 0; i < fences.Length; i++)
             fences[i].SetActive(i == (int)tower.MaterialType);
         mailbox.SetMailbox(tower.MaterialType);

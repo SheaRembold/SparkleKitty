@@ -476,6 +476,8 @@ public class CatController : Clickable
     public Renderer[] MoodRenderers;
     public GameObject HelpParticles;
     public Outline HelpOutline;
+    public ParticleSystem MoodUpParticles;
+    public ParticleSystem MoodDownParticles;
 
     protected CatData catData;
     protected Animator animator;
@@ -630,8 +632,24 @@ public class CatController : Clickable
     {
         moodValue = Mathf.Clamp01(moodValue + amount);
         CatManager.Instance.UpdateMood(catData, moodValue);
-        mood = CatManager.Instance.GetMood(catData);
-        moodMat.color = CatManager.Instance.MoodColors[mood];
+        int newMood = CatManager.Instance.GetMood(catData);
+        if (newMood != mood)
+        {
+            moodMat.color = CatManager.Instance.MoodColors[newMood];
+            if (newMood > mood)
+            {
+                ParticleSystem.MainModule mainModule = MoodUpParticles.main;
+                mainModule.startColor = CatManager.Instance.MoodColors[newMood];
+                MoodUpParticles.Emit(20);
+            }
+            else
+            {
+                ParticleSystem.MainModule mainModule = MoodDownParticles.main;
+                mainModule.startColor = CatManager.Instance.MoodColors[newMood];
+                MoodDownParticles.Emit(20);
+            }
+            mood = newMood;
+        }
     }
     
     public override void Click(RaycastHit hit)
