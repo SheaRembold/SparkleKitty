@@ -25,4 +25,9 @@ public class TestPlacementProvider : PlacementProvider
         plane = new BoundedPlane();
         return false;
     }
+
+    public override Transform GetRoot()
+    {
+        return sceneObj.transform;
+    }
 }

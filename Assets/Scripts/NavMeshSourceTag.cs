@@ -65,7 +65,7 @@ public class NavMeshSourceTag : MonoBehaviour
     }
 
     // Collect all the navmesh build sources for enabled objects tagged by this component
-    public static void Collect(ref List<NavMeshBuildSource> sources)
+    public static void Collect(ref List<NavMeshBuildSource> sources, Transform world = null)
     {
         sources.Clear();
 
@@ -77,10 +77,14 @@ public class NavMeshSourceTag : MonoBehaviour
             var m = mf.sharedMesh;
             if (m == null) continue;
 
+            Matrix4x4 worldMat = Matrix4x4.identity;
+            if (world != null)
+                worldMat = Matrix4x4.TRS(world.position, world.rotation, Vector3.one).inverse;
+
             var s = new NavMeshBuildSource();
             s.shape = NavMeshBuildSourceShape.Mesh;
             s.sourceObject = m;
-            s.transform = mf.transform.localToWorldMatrix;
+            s.transform = worldMat * mf.transform.localToWorldMatrix;
             s.area = 0;
             sources.Add(s);
         }
@@ -90,11 +94,15 @@ public class NavMeshSourceTag : MonoBehaviour
             var t = m_Terrains[i];
             if (t == null) continue;
 
+            Matrix4x4 worldMat = Matrix4x4.identity;
+            if (world != null)
+                worldMat = Matrix4x4.TRS(world.position, world.rotation, Vector3.one).inverse;
+
             var s = new NavMeshBuildSource();
             s.shape = NavMeshBuildSourceShape.Terrain;
             s.sourceObject = t.terrainData;
             // Terrain system only supports translation - so we pass translation only to back-end
-            s.transform = Matrix4x4.TRS(t.transform.position, Quaternion.identity, Vector3.one);
+            s.transform = worldMat * Matrix4x4.TRS(t.transform.position, Quaternion.identity, Vector3.one);
             s.area = 0;
             sources.Add(s);
         }
@@ -104,10 +112,14 @@ public class NavMeshSourceTag : MonoBehaviour
             var c = m_Colliders[i];
             if (c == null) continue;
 
+            Matrix4x4 worldMat = Matrix4x4.identity;
+            if (world != null)
+                worldMat = Matrix4x4.TRS(world.position, world.rotation, Vector3.one).inverse;
+
             var s = new NavMeshBuildSource();
             s.shape = NavMeshBuildSourceShape.Box;
             s.size = c.size;
-            s.transform = Matrix4x4.TRS(c.transform.TransformPoint(c.center), c.transform.rotation, c.transform.lossyScale);
+            s.transform = worldMat * Matrix4x4.TRS(c.transform.TransformPoint(c.center), c.transform.rotation, c.transform.lossyScale);
             s.area = 0;
             sources.Add(s);
         }

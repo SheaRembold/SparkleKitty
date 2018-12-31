@@ -455,6 +455,9 @@ public class CatController : Clickable
     public float WalkSpeed = 1f;
     public float RunSpeed = 2f;
     public float StopDistance = 1f;
+    public float Acceleration = 8f;
+    public float Radius = 0.1f;
+    public float Height = .33f;
     public float SitTime = 5f;
     public float EatTime = 5f;
     public float PlayTime = 5f;
@@ -525,7 +528,14 @@ public class CatController : Clickable
             MoodRenderers[i].material = moodMat;
         }
     }
-    
+
+    protected virtual void OnEnable()
+    {
+        navAgent.acceleration = Acceleration * transform.lossyScale.x;
+        navAgent.radius = Radius * transform.lossyScale.x;
+        navAgent.height = Height * transform.lossyScale.x;
+    }
+
     protected virtual void Start()
     {
         playArea = GetComponentInParent<PlayArea>();

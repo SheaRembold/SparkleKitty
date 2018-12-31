@@ -346,17 +346,27 @@ public class PlacementManager : MonoBehaviour
         currentArea = tempArea;
     }
 
-    public Placable PlaceAt(PlacementArea area, PlacableData placable, Vector3 position)
+    public Placable PlaceAt(PlacementArea area, PlacableData placable, Vector3 position, bool onNav = false)
     {
-        return PlaceAt(area, placable, position, Vector3.zero);
+        return PlaceAt(area, placable, position, Vector3.zero, onNav);
     }
 
-    public Placable PlaceAt(PlacementArea area, PlacableData placable, Vector3 position, Vector3 rotation)
+    public Placable PlaceAt(PlacementArea area, PlacableData placable, Vector3 position, Vector3 rotation, bool onNav = false)
     {
-        Placable newPlacable = Instantiate(placable.Prefab).GetComponent<Placable>();
-        newPlacable.Data = placable;
-        newPlacable.transform.SetParent(area.Contents);
-        newPlacable.transform.localPosition = position;
+        Placable newPlacable = null;
+        if (onNav)
+        {
+            newPlacable = Instantiate(placable.Prefab, GetWorldNavPos(position), Quaternion.identity).GetComponent<Placable>();
+            newPlacable.Data = placable;
+            newPlacable.transform.SetParent(area.Contents);
+        }
+        else
+        {
+            newPlacable = Instantiate(placable.Prefab).GetComponent<Placable>();
+            newPlacable.Data = placable;
+            newPlacable.transform.SetParent(area.Contents);
+            newPlacable.transform.localPosition = position;
+        }
         newPlacable.transform.localRotation = Quaternion.Euler(rotation);
         newPlacable.transform.localScale = Vector3.one;
 
@@ -415,7 +425,7 @@ public class PlacementManager : MonoBehaviour
     {
         RaycastHit hit;
         NavMeshHit navHit = new NavMeshHit();
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Ground")) | (1 << LayerMask.NameToLayer("Tower"))))
+        if (Physics.Raycast(provider.GetPlaceRay(), out hit, Mathf.Infinity, (1 << LayerMask.NameToLayer("Ground")) | (1 << LayerMask.NameToLayer("Tower"))))
         {
             NavMesh.SamplePosition(hit.point, out navHit, 0.05f * currentArea.transform.localScale.x, NavMesh.AllAreas);
         }

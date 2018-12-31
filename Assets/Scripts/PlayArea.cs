@@ -25,10 +25,15 @@ public class PlayArea : PlacementArea
     CatData waitingCat;
 
     bool finishedLoading;
+    bool isPlaced;
 
     NavMeshData m_NavMesh;
     NavMeshDataInstance m_Instance;
     List<NavMeshBuildSource> m_Sources = new List<NavMeshBuildSource>();
+
+    [SerializeField]
+    MeshFilter navMeshVis;
+
 
     private void Awake()
     {
@@ -44,21 +49,7 @@ public class PlayArea : PlacementArea
         DataManager.Instance.SetTowerLevel(currentTower.MaterialType, currentTower.Level);
         SetTower(currentTower);
     }
-
-    void OnEnable()
-    {
-        // Construct and add navmesh
-        m_NavMesh = new NavMeshData();
-        m_Instance = NavMesh.AddNavMeshData(m_NavMesh, transform.position, transform.rotation);
-        UpdateNavMesh();
-    }
-
-    void OnDisable()
-    {
-        // Unload navmesh and clear handle
-        m_Instance.Remove();
-    }
-
+    
     public void Load()
     {
         if (File.Exists(Application.persistentDataPath + "/" + gameObject.name + "_" + DataManager.saveVersion + ".txt"))
@@ -115,6 +106,11 @@ public class PlayArea : PlacementArea
         mailbox.gameObject.SetActive(true);
         placeArrow.SetActive(false);
 
+        m_NavMesh = new NavMeshData();
+        m_Instance = NavMesh.AddNavMeshData(m_NavMesh, transform.position, transform.rotation);
+        UpdateNavMesh();
+
+        isPlaced = true;
         CheckForCats();
         if (!HelpManager.Instance.HasShownHelp("IntroAR"))
         {
@@ -140,11 +136,25 @@ public class PlayArea : PlacementArea
 
     void UpdateNavMesh()
     {
-        NavMeshSourceTag.Collect(ref m_Sources);
+        NavMeshSourceTag.Collect(ref m_Sources, transform);
         NavMeshBuildSettings defaultBuildSettings = NavMesh.GetSettingsByID(0);
-        Bounds bounds = new Bounds(Vector3.zero, Vector3.Scale(new Vector3(2f, 2f, 2f), transform.lossyScale));
+        defaultBuildSettings.agentClimb *= transform.lossyScale.x;
+        defaultBuildSettings.agentHeight *= transform.lossyScale.x;
+        defaultBuildSettings.agentRadius *= transform.lossyScale.x;
+        defaultBuildSettings.minRegionArea *= transform.lossyScale.x;
+        defaultBuildSettings.overrideVoxelSize = true;
+        defaultBuildSettings.voxelSize = defaultBuildSettings.agentRadius / 3f;
+        Bounds bounds = new Bounds(Vector3.zero, Vector3.Scale(new Vector3(3f, 3f, 3f), transform.lossyScale));
         NavMeshBuilder.UpdateNavMeshData(m_NavMesh, defaultBuildSettings, m_Sources, bounds);
-
+        /*
+        navMeshVis.transform.SetParent(null, false);
+        NavMeshTriangulation triangulation = NavMesh.CalculateTriangulation();
+        Mesh mesh = navMeshVis.mesh;
+        mesh.Clear();
+        mesh.vertices = triangulation.vertices;
+        mesh.triangles = triangulation.indices;
+        mesh.RecalculateNormals();
+        */
         for (int i = 0; i < placedInArea.Count; i++)
         {
             if (placedInArea[i].GetComponent<NavMeshSourceTag>() == null)
@@ -159,7 +169,7 @@ public class PlayArea : PlacementArea
     {
         base.AddToArea(placable);
 
-        if (finishedLoading)
+        if (isPlaced)
             CheckForCats();
     }
 
@@ -214,7 +224,7 @@ public class PlayArea : PlacementArea
         else
             yield return new WaitForSeconds(waitingCat.Prefab.GetComponent<CatController>().SpawnWait[CatManager.Instance.GetMood(waitingCat)]);
 
-        Placable cat = PlacementManager.Instance.PlaceAt(this, waitingCat, CatSpawnPoint.localPosition);
+        Placable cat = PlacementManager.Instance.PlaceAt(this, waitingCat, CatSpawnPoint.localPosition, true);
         CatManager.Instance.EnterArea(waitingCat);
         cat.GetComponent<CatController>().EnterArea();
         waitingCat = null;
