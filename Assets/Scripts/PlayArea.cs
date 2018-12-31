@@ -41,6 +41,8 @@ public class PlayArea : PlacementArea
             placementLocations[i].Owner = this;
         placingGrid.SetActive(false);
         Load();
+        if (placementLocations[0].CurrentPlacable == null)
+            placementLocations[0].SetPlacable(placementLocations[0].StartingPlacable);
         for (int i = 0; i < placedInArea.Count; i++)
             placedInArea[i].gameObject.SetActive(false);
         book.SetActive(false);
